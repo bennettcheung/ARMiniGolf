@@ -1,0 +1,595 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		912C0757215440BA009704B2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912C0756215440BA009704B2 /* AppDelegate.swift */; };
+		912C0759215440BA009704B2 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 912C0758215440BA009704B2 /* art.scnassets */; };
+		912C075B215440BA009704B2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912C075A215440BA009704B2 /* ViewController.swift */; };
+		912C075E215440BA009704B2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 912C075C215440BA009704B2 /* Main.storyboard */; };
+		912C0760215440BD009704B2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 912C075F215440BD009704B2 /* Assets.xcassets */; };
+		912C0763215440BD009704B2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 912C0761215440BD009704B2 /* LaunchScreen.storyboard */; };
+		912C076E215440BD009704B2 /* ARMiniGolfTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912C076D215440BD009704B2 /* ARMiniGolfTests.swift */; };
+		912C0779215440BD009704B2 /* ARMiniGolfUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912C0778215440BD009704B2 /* ARMiniGolfUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		912C076A215440BD009704B2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 912C074B215440BA009704B2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 912C0752215440BA009704B2;
+			remoteInfo = ARMiniGolf;
+		};
+		912C0775215440BD009704B2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 912C074B215440BA009704B2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 912C0752215440BA009704B2;
+			remoteInfo = ARMiniGolf;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		912C0753215440BA009704B2 /* ARMiniGolf.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ARMiniGolf.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		912C0756215440BA009704B2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		912C0758215440BA009704B2 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
+		912C075A215440BA009704B2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		912C075D215440BA009704B2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		912C075F215440BD009704B2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		912C0762215440BD009704B2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		912C0764215440BD009704B2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		912C0769215440BD009704B2 /* ARMiniGolfTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ARMiniGolfTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		912C076D215440BD009704B2 /* ARMiniGolfTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARMiniGolfTests.swift; sourceTree = "<group>"; };
+		912C076F215440BD009704B2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		912C0774215440BD009704B2 /* ARMiniGolfUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ARMiniGolfUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		912C0778215440BD009704B2 /* ARMiniGolfUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARMiniGolfUITests.swift; sourceTree = "<group>"; };
+		912C077A215440BD009704B2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		912C0750215440BA009704B2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		912C0766215440BD009704B2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		912C0771215440BD009704B2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		912C074A215440BA009704B2 = {
+			isa = PBXGroup;
+			children = (
+				912C0755215440BA009704B2 /* ARMiniGolf */,
+				912C076C215440BD009704B2 /* ARMiniGolfTests */,
+				912C0777215440BD009704B2 /* ARMiniGolfUITests */,
+				912C0754215440BA009704B2 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		912C0754215440BA009704B2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				912C0753215440BA009704B2 /* ARMiniGolf.app */,
+				912C0769215440BD009704B2 /* ARMiniGolfTests.xctest */,
+				912C0774215440BD009704B2 /* ARMiniGolfUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		912C0755215440BA009704B2 /* ARMiniGolf */ = {
+			isa = PBXGroup;
+			children = (
+				912C0756215440BA009704B2 /* AppDelegate.swift */,
+				912C0758215440BA009704B2 /* art.scnassets */,
+				912C075A215440BA009704B2 /* ViewController.swift */,
+				912C075C215440BA009704B2 /* Main.storyboard */,
+				912C075F215440BD009704B2 /* Assets.xcassets */,
+				912C0761215440BD009704B2 /* LaunchScreen.storyboard */,
+				912C0764215440BD009704B2 /* Info.plist */,
+			);
+			path = ARMiniGolf;
+			sourceTree = "<group>";
+		};
+		912C076C215440BD009704B2 /* ARMiniGolfTests */ = {
+			isa = PBXGroup;
+			children = (
+				912C076D215440BD009704B2 /* ARMiniGolfTests.swift */,
+				912C076F215440BD009704B2 /* Info.plist */,
+			);
+			path = ARMiniGolfTests;
+			sourceTree = "<group>";
+		};
+		912C0777215440BD009704B2 /* ARMiniGolfUITests */ = {
+			isa = PBXGroup;
+			children = (
+				912C0778215440BD009704B2 /* ARMiniGolfUITests.swift */,
+				912C077A215440BD009704B2 /* Info.plist */,
+			);
+			path = ARMiniGolfUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		912C0752215440BA009704B2 /* ARMiniGolf */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 912C077D215440BD009704B2 /* Build configuration list for PBXNativeTarget "ARMiniGolf" */;
+			buildPhases = (
+				912C074F215440BA009704B2 /* Sources */,
+				912C0750215440BA009704B2 /* Frameworks */,
+				912C0751215440BA009704B2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ARMiniGolf;
+			productName = ARMiniGolf;
+			productReference = 912C0753215440BA009704B2 /* ARMiniGolf.app */;
+			productType = "com.apple.product-type.application";
+		};
+		912C0768215440BD009704B2 /* ARMiniGolfTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 912C0780215440BD009704B2 /* Build configuration list for PBXNativeTarget "ARMiniGolfTests" */;
+			buildPhases = (
+				912C0765215440BD009704B2 /* Sources */,
+				912C0766215440BD009704B2 /* Frameworks */,
+				912C0767215440BD009704B2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				912C076B215440BD009704B2 /* PBXTargetDependency */,
+			);
+			name = ARMiniGolfTests;
+			productName = ARMiniGolfTests;
+			productReference = 912C0769215440BD009704B2 /* ARMiniGolfTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		912C0773215440BD009704B2 /* ARMiniGolfUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 912C0783215440BD009704B2 /* Build configuration list for PBXNativeTarget "ARMiniGolfUITests" */;
+			buildPhases = (
+				912C0770215440BD009704B2 /* Sources */,
+				912C0771215440BD009704B2 /* Frameworks */,
+				912C0772215440BD009704B2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				912C0776215440BD009704B2 /* PBXTargetDependency */,
+			);
+			name = ARMiniGolfUITests;
+			productName = ARMiniGolfUITests;
+			productReference = 912C0774215440BD009704B2 /* ARMiniGolfUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		912C074B215440BA009704B2 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1000;
+				LastUpgradeCheck = 1000;
+				ORGANIZATIONNAME = "iNomad Studio";
+				TargetAttributes = {
+					912C0752215440BA009704B2 = {
+						CreatedOnToolsVersion = 10.0;
+					};
+					912C0768215440BD009704B2 = {
+						CreatedOnToolsVersion = 10.0;
+						TestTargetID = 912C0752215440BA009704B2;
+					};
+					912C0773215440BD009704B2 = {
+						CreatedOnToolsVersion = 10.0;
+						TestTargetID = 912C0752215440BA009704B2;
+					};
+				};
+			};
+			buildConfigurationList = 912C074E215440BA009704B2 /* Build configuration list for PBXProject "ARMiniGolf" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 912C074A215440BA009704B2;
+			productRefGroup = 912C0754215440BA009704B2 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				912C0752215440BA009704B2 /* ARMiniGolf */,
+				912C0768215440BD009704B2 /* ARMiniGolfTests */,
+				912C0773215440BD009704B2 /* ARMiniGolfUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		912C0751215440BA009704B2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				912C0759215440BA009704B2 /* art.scnassets in Resources */,
+				912C0763215440BD009704B2 /* LaunchScreen.storyboard in Resources */,
+				912C0760215440BD009704B2 /* Assets.xcassets in Resources */,
+				912C075E215440BA009704B2 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		912C0767215440BD009704B2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		912C0772215440BD009704B2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		912C074F215440BA009704B2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				912C075B215440BA009704B2 /* ViewController.swift in Sources */,
+				912C0757215440BA009704B2 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		912C0765215440BD009704B2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				912C076E215440BD009704B2 /* ARMiniGolfTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		912C0770215440BD009704B2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				912C0779215440BD009704B2 /* ARMiniGolfUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		912C076B215440BD009704B2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 912C0752215440BA009704B2 /* ARMiniGolf */;
+			targetProxy = 912C076A215440BD009704B2 /* PBXContainerItemProxy */;
+		};
+		912C0776215440BD009704B2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 912C0752215440BA009704B2 /* ARMiniGolf */;
+			targetProxy = 912C0775215440BD009704B2 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		912C075C215440BA009704B2 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				912C075D215440BA009704B2 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		912C0761215440BD009704B2 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				912C0762215440BD009704B2 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		912C077B215440BD009704B2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		912C077C215440BD009704B2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		912C077E215440BD009704B2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4MNU75ZBC4;
+				INFOPLIST_FILE = ARMiniGolf/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.inomadstudio.ARMiniGolf;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		912C077F215440BD009704B2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4MNU75ZBC4;
+				INFOPLIST_FILE = ARMiniGolf/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.inomadstudio.ARMiniGolf;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		912C0781215440BD009704B2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4MNU75ZBC4;
+				INFOPLIST_FILE = ARMiniGolfTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.inomadstudio.ARMiniGolfTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ARMiniGolf.app/ARMiniGolf";
+			};
+			name = Debug;
+		};
+		912C0782215440BD009704B2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4MNU75ZBC4;
+				INFOPLIST_FILE = ARMiniGolfTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.inomadstudio.ARMiniGolfTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ARMiniGolf.app/ARMiniGolf";
+			};
+			name = Release;
+		};
+		912C0784215440BD009704B2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4MNU75ZBC4;
+				INFOPLIST_FILE = ARMiniGolfUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.inomadstudio.ARMiniGolfUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = ARMiniGolf;
+			};
+			name = Debug;
+		};
+		912C0785215440BD009704B2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4MNU75ZBC4;
+				INFOPLIST_FILE = ARMiniGolfUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.inomadstudio.ARMiniGolfUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = ARMiniGolf;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		912C074E215440BA009704B2 /* Build configuration list for PBXProject "ARMiniGolf" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				912C077B215440BD009704B2 /* Debug */,
+				912C077C215440BD009704B2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		912C077D215440BD009704B2 /* Build configuration list for PBXNativeTarget "ARMiniGolf" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				912C077E215440BD009704B2 /* Debug */,
+				912C077F215440BD009704B2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		912C0780215440BD009704B2 /* Build configuration list for PBXNativeTarget "ARMiniGolfTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				912C0781215440BD009704B2 /* Debug */,
+				912C0782215440BD009704B2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		912C0783215440BD009704B2 /* Build configuration list for PBXNativeTarget "ARMiniGolfUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				912C0784215440BD009704B2 /* Debug */,
+				912C0785215440BD009704B2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 912C074B215440BA009704B2 /* Project object */;
+}
