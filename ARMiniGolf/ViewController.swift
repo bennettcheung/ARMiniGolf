@@ -5,141 +5,231 @@
 //  Created by Bennett on 2018-09-20.
 //  Copyright © 2018 iNomad Studio. All rights reserved.
 //
+//
 
 import UIKit
-import SceneKit
 import ARKit
 
+
 class ViewController: UIViewController {
-
-    @IBOutlet var sceneView: ARSCNView!
-    var ground: SCNNode!
-    var grids = [Grid]()
+  
+  @IBOutlet weak var sceneView: ARSCNView!
+  
+  var planeNode = SCNNode()
+  
+  var gameManager = GameManager()
+  
+  // TODO: Declare rocketship node name constant
+  let courseNodeName = "course"
+  
+  // TODO: Initialize an empty array of type SCNNode
+  
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    addTapGestureToSceneView()
+    configureLighting()
+    addSwipeGesturesToSceneView()
+  }
+  
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    setUpSceneView()
+  }
+  
+  override func viewWillDisappear(_ animated: Bool) {
+    super.viewWillDisappear(animated)
+    sceneView.session.pause()
+  }
+  
+  func setUpSceneView() {
+    let configuration = ARWorldTrackingConfiguration()
+    configuration.planeDetection = .horizontal
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        // Set the view's delegate
-        sceneView.delegate = self
-        
-        // Show statistics such as fps and timing information
-        sceneView.showsStatistics = true
-        //configure lighting
-      configureLighting()
-      
-        // Create a new scene
-      let scene = SCNScene(named: "art.scnassets/ball.scn")!
-        
-        // Set the scene to the view
-        sceneView.scene = scene
-        sceneView.debugOptions = ARSCNDebugOptions.showFeaturePoints
-      
-      //add gesture recognizer
-      let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapped))
-      sceneView.addGestureRecognizer(gestureRecognizer)
-    }
+    sceneView.session.run(configuration)
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        // Create a session configuration
-        let configuration = ARWorldTrackingConfiguration()
-        configuration.planeDetection = .horizontal
-
-        // Run the view's session
-        sceneView.session.run(configuration)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        // Pause the view's session
-        sceneView.session.pause()
-    }
+    sceneView.delegate = self
+  }
   
   func configureLighting() {
     sceneView.autoenablesDefaultLighting = true
     sceneView.automaticallyUpdatesLighting = true
   }
-
-
-    
-    func session(_ session: ARSession, didFailWithError error: Error) {
-        // Present an error message to the user
-        
-    }
-    
-    func sessionWasInterrupted(_ session: ARSession) {
-        // Inform the user that the session has been interrupted, for example, by presenting an overlay
-        
-    }
-    
-    func sessionInterruptionEnded(_ session: ARSession) {
-        // Reset tracking and/or remove existing anchors if consistent tracking is required
-        
-    }
   
-  // 1.
-  @objc func tapped(gesture: UITapGestureRecognizer) {
-    // Get exact position where touch happened on screen of iPhone (2D coordinate)
-    let touchPosition = gesture.location(in: sceneView)
-    // 2.
-    let hitTestResult = sceneView.hitTest(touchPosition, types: .featurePoint)
-    
-    if !hitTestResult.isEmpty {
-      
-      guard let hitResult = hitTestResult.first else {
-        return
-      }
-      
-      addBall(hitTestResult: hitResult)
-    }
+  func addTapGestureToSceneView() {
+    let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.addCourseToSceneView(withGestureRecognizer:)))
+    sceneView.addGestureRecognizer(tapGestureRecognizer)
   }
   
-  // 1.
-  func addBall(hitTestResult: ARHitTestResult) {
-    let scene = SCNScene(named: "art.scnassets/ball.scn")!
-    let grassNode = scene.rootNode.childNode(withName: "ball", recursively: true)
-    grassNode?.position = SCNVector3(hitTestResult.worldTransform.columns.3.x,hitTestResult.worldTransform.columns.3.y, hitTestResult.worldTransform.columns.3.z)
-
-    // 2.
-    self.sceneView.scene.rootNode.addChildNode(grassNode!)
+  // TODO: Create add swipe gestures to scene view method
+  func addSwipeGesturesToSceneView() {
+    let swipeUpGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(ViewController.applyForceToRocketship(withGestureRecognizer:)))
+    swipeUpGestureRecognizer.direction = .up
+    sceneView.addGestureRecognizer(swipeUpGestureRecognizer)
+    
+    let swipeDownGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(ViewController.launchRocketship(withGestureRecognizer:)))
+    swipeDownGestureRecognizer.direction = .down
+    sceneView.addGestureRecognizer(swipeDownGestureRecognizer)
   }
   
-  func addBall(position: SCNVector3){
-    let scene = SCNScene(named: "art.scnassets/ball.scn")!
-    let ballNode = scene.rootNode.childNode(withName: "ball", recursively: true)
-    ballNode?.position = position
-    self.sceneView.scene.rootNode.addChildNode(ballNode!)
-  }
-
-}
-
-// MARK: - ARSCNViewDelegate
-extension ViewController: ARSCNViewDelegate{
-  // 1.
-  func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
-
-    if grids.count <= 0 {
-      
+  @objc func addCourseToSceneView(withGestureRecognizer recognizer: UIGestureRecognizer) {
     
-      let grid = Grid(anchor: anchor as! ARPlaneAnchor)
-      self.grids.append(grid)
-      node.addChildNode(grid)
-    print("Grid did Add")
-    }
-//    addBall(position: grid.position)
-  }
-  // 2.
-  func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
-    let grid = self.grids.filter { grid in
-      return grid.anchor.identifier == anchor.identifier
-      }.first
-    
-    guard let foundGrid = grid else {
+    //Don't continue if game already started
+    if gameManager.gameStarted(){
       return
     }
     
-    foundGrid.update(anchor: anchor as! ARPlaneAnchor)
+    let tapLocation = recognizer.location(in: sceneView)
+    let hitTestResults = sceneView.hitTest(tapLocation, types: .existingPlaneUsingExtent)
+    guard let hitTestResult = hitTestResults.first else { return }
+    
+    let translation = hitTestResult.worldTransform.translation
+    let x = translation.x
+    let y = translation.y + 0.1
+    let z = translation.z
+    
+    
+    guard let rocketshipScene = SCNScene(named: "art.scnassets/course.scn"),
+      let rocketshipNode = rocketshipScene.rootNode.childNode(withName: "course", recursively: false)
+      else { return }
+    
+    
+    rocketshipNode.position = SCNVector3(x,y,z)
+    
+    // TODO: Attach physics body to rocketship node
+    let physicsBody = SCNPhysicsBody(type: .kinematic, shape: nil)
+    rocketshipNode.physicsBody = physicsBody
+    rocketshipNode.name = courseNodeName
+    
+    sceneView.scene.rootNode.addChildNode(rocketshipNode)
+    
+    //start game, remove the detecting plane node
+    planeNode.removeFromParentNode()
+    gameManager.startGame()
+  }
+  
+  // TODO: Create get rocketship node from swipe location method
+  func getRocketshipNode(from swipeLocation: CGPoint) -> SCNNode? {
+    let hitTestResults = sceneView.hitTest(swipeLocation)
+    guard let parentNode = hitTestResults.first?.node.parent,
+      parentNode.name == courseNodeName
+      else { return nil }
+    return parentNode
+  }
+  
+  // TODO: Create apply force to rocketship method
+  @objc func applyForceToRocketship(withGestureRecognizer recognizer: UIGestureRecognizer) {
+    // 1
+    guard recognizer.state == .ended else { return }
+    // 2
+    let swipeLocation = recognizer.location(in: sceneView)
+    // 3
+    guard let rocketshipNode = getRocketshipNode(from: swipeLocation),
+      let physicsBody = rocketshipNode.physicsBody
+      else { return }
+    // 4
+    let direction = SCNVector3(0, 3, 0)
+    physicsBody.applyForce(direction, asImpulse: true)
+  }
+  
+  // TODO: Create launch rocketship method
+  @objc func launchRocketship(withGestureRecognizer recognizer: UIGestureRecognizer) {
+    // 1
+    //        guard recognizer.state == .ended else { return }
+    //        // 2
+    //        let swipeLocation = recognizer.location(in: sceneView)
+    //        guard let rocketshipNode = getRocketshipNode(from: swipeLocation),
+    //            let physicsBody = rocketshipNode.physicsBody,
+    //            let reactorParticleSystem = SCNParticleSystem(named: "reactor", inDirectory: nil),
+    //            let engineNode = rocketshipNode.childNode(withName: "node2", recursively: false)
+    //            else { return }
+    //        // 3
+    //        physicsBody.isAffectedByGravity = false
+    //        physicsBody.damping = 0
+    //        // 4
+    //        reactorParticleSystem.colliderNodes = [planeNode]
+    //        // 5
+    //        engineNode.addParticleSystem(reactorParticleSystem)
+    //        // 6
+    //        let action = SCNAction.moveBy(x: 0, y: 0.3, z: 0, duration: 3)
+    //        action.timingMode = .easeInEaseOut
+    //        rocketshipNode.runAction(action)
+  }
+}
+
+extension ViewController: ARSCNViewDelegate {
+  
+  func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+    guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
+    
+    let width = CGFloat(planeAnchor.extent.x)
+    let height = CGFloat(planeAnchor.extent.z)
+    let plane = SCNPlane(width: width, height: height)
+    
+    plane.materials.first?.diffuse.contents = UIColor.transparentWhite
+    
+    planeNode = SCNNode(geometry: plane)
+    
+    let x = CGFloat(planeAnchor.center.x)
+    let y = CGFloat(planeAnchor.center.y)
+    let z = CGFloat(planeAnchor.center.z)
+    planeNode.position = SCNVector3(x,y,z)
+    planeNode.eulerAngles.x = -.pi / 2
+    
+    // TODO: Update plane node
+    update(&planeNode, withGeometry: plane, type: .static)
+    
+    node.addChildNode(planeNode)
+    
+    // TODO: Append plane node to plane nodes array if appropriate
+    //        planeNodes.append(planeNode)
+  }
+  
+  // TODO: Remove plane node from plane nodes array if appropriate
+  func renderer(_ renderer: SCNSceneRenderer, didRemove node: SCNNode, for anchor: ARAnchor) {
+    //        guard anchor is ARPlaneAnchor,
+    //            let planeNode = node.childNodes.first
+    //            else { return }
+    //        planeNodes = planeNodes.filter { $0 != planeNode }
+  }
+  
+  func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
+    guard gameManager.gameStarted(), let planeAnchor = anchor as?  ARPlaneAnchor,
+      var planeNode = node.childNodes.first,
+      let plane = planeNode.geometry as? SCNPlane
+      else { return }
+    
+    let width = CGFloat(planeAnchor.extent.x)
+    let height = CGFloat(planeAnchor.extent.z)
+    plane.width = width
+    plane.height = height
+    
+    let x = CGFloat(planeAnchor.center.x)
+    let y = CGFloat(planeAnchor.center.y)
+    let z = CGFloat(planeAnchor.center.z)
+    
+    planeNode.position = SCNVector3(x, y, z)
+    
+    update(&planeNode, withGeometry: plane, type: .static)
+    
+  }
+  
+  // TODO: Create update plane node method
+  func update(_ node: inout SCNNode, withGeometry geometry: SCNGeometry, type: SCNPhysicsBodyType) {
+    let shape = SCNPhysicsShape(geometry: geometry, options: nil)
+    let physicsBody = SCNPhysicsBody(type: type, shape: shape)
+    node.physicsBody = physicsBody
+  }
+}
+
+extension float4x4 {
+  var translation: float3 {
+    let translation = self.columns.3
+    return float3(translation.x, translation.y, translation.z)
+  }
+}
+
+extension UIColor {
+  open class var transparentWhite: UIColor {
+    return UIColor.white.withAlphaComponent(0.20)
   }
 }
