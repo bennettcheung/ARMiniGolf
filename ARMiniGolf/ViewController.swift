@@ -16,11 +16,13 @@ class ViewController: UIViewController {
   @IBOutlet weak var sceneView: ARSCNView!
   
   var planeNode = SCNNode()
+  var ballNode: SCNNode!
   
   var gameManager = GameManager()
   
   // TODO: Declare rocketship node name constant
   let courseNodeName = "course"
+  let rocketNodeName = "ball"
   
   // TODO: Initialize an empty array of type SCNNode
   
@@ -62,7 +64,7 @@ class ViewController: UIViewController {
   
   // TODO: Create add swipe gestures to scene view method
   func addSwipeGesturesToSceneView() {
-    let swipeUpGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(ViewController.applyForceToRocketship(withGestureRecognizer:)))
+    let swipeUpGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(ViewController.applyForceToBall(withGestureRecognizer:)))
     swipeUpGestureRecognizer.direction = .up
     sceneView.addGestureRecognizer(swipeUpGestureRecognizer)
     
@@ -73,10 +75,7 @@ class ViewController: UIViewController {
   
   @objc func addCourseToSceneView(withGestureRecognizer recognizer: UIGestureRecognizer) {
     
-    //Don't continue if game already started
-    if gameManager.gameStarted(){
-      return
-    }
+
     
     let tapLocation = recognizer.location(in: sceneView)
     let hitTestResults = sceneView.hitTest(tapLocation, types: .existingPlaneUsingExtent)
@@ -87,37 +86,64 @@ class ViewController: UIViewController {
     let y = translation.y + 0.1
     let z = translation.z
     
+    //Don't continue if game already started
+    if gameManager.gameStarted(){
+      //add ball if the game already started
+      guard let ballScene = SCNScene(named: "art.scnassets/ball.scn"),
+        let ballNode = ballScene.rootNode.childNode(withName: "ball", recursively: false)
+        else { return }
+      ballNode.position = SCNVector3(x, y, z)
+      sceneView.scene.rootNode.addChildNode(ballNode)
+//      let physicsBody = SCNPhysicsBody(type: .dynamic, shape: )
+//      ballNode.physicsBody = physicsBody
+      return
+    }
     
-    guard let rocketshipScene = SCNScene(named: "art.scnassets/course.scn"),
-      let rocketshipNode = rocketshipScene.rootNode.childNode(withName: "course", recursively: false)
+    
+    guard let courseScene = SCNScene(named: "art.scnassets/course.scn"),
+      let courseNode = courseScene.rootNode.childNode(withName: "course", recursively: false)
       else { return }
+
     
+    courseNode.position = SCNVector3(x,y,z)
     
-    rocketshipNode.position = SCNVector3(x,y,z)
+//    guard let ballScene = SCNScene(named: "art.scnassets/ball.scn"),
+//      let ballNode = ballScene.rootNode.childNode(withName: "ball", recursively: false)
+//      else { return }
+//    ballNode.position = SCNVector3(x,y,z + 1)
+//    sceneView.scene.rootNode.addChildNode(ballNode)
     
     // TODO: Attach physics body to rocketship node
     let physicsBody = SCNPhysicsBody(type: .kinematic, shape: nil)
-    rocketshipNode.physicsBody = physicsBody
-    rocketshipNode.name = courseNodeName
+    courseNode.physicsBody = physicsBody
     
-    sceneView.scene.rootNode.addChildNode(rocketshipNode)
+    courseNode.physicsBody?.isAffectedByGravity = false  //TEST CODE
+    
+    courseNode.name = courseNodeName
+    
+    sceneView.scene.rootNode.addChildNode(courseNode)
+
     
     //start game, remove the detecting plane node
     planeNode.removeFromParentNode()
     gameManager.startGame()
   }
+
   
   // TODO: Create get rocketship node from swipe location method
   func getRocketshipNode(from swipeLocation: CGPoint) -> SCNNode? {
     let hitTestResults = sceneView.hitTest(swipeLocation)
-    guard let parentNode = hitTestResults.first?.node.parent,
-      parentNode.name == courseNodeName
+    guard let parentNode = hitTestResults.first?.node.parent
+    
       else { return nil }
+    guard  parentNode.name == rocketNodeName else{
+      return nil
+    }
     return parentNode
   }
   
   // TODO: Create apply force to rocketship method
-  @objc func applyForceToRocketship(withGestureRecognizer recognizer: UIGestureRecognizer) {
+  @objc func applyForceToBall(withGestureRecognizer recognizer: UIGestureRecognizer) {
     // 1
     guard recognizer.state == .ended else { return }
     // 2
@@ -127,8 +153,15 @@ class ViewController: UIViewController {
       let physicsBody = rocketshipNode.physicsBody
       else { return }
     // 4
-    let direction = SCNVector3(0, 3, 0)
+    let direction = SCNVector3(0, 0, -1)
     physicsBody.applyForce(direction, asImpulse: true)
+//    guard let physicsBody = ballNode.physicsBody
+//      else { return }
+//    // 4
+//    physicsBody.isAffectedByGravity = false
+//    let direction = SCNVector3(0, 0, -1)
+//    physicsBody.applyForce(direction, asImpulse: true)
+        ballNode = rocketshipNode
   }
   
   // TODO: Create launch rocketship method
@@ -154,12 +187,13 @@ class ViewController: UIViewController {
     //        action.timingMode = .easeInEaseOut
     //        rocketshipNode.runAction(action)
   }
+
 }
 
 extension ViewController: ARSCNViewDelegate {
   
   func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
-    guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
+    guard gameManager.gameStarted(), let planeAnchor = anchor as? ARPlaneAnchor else { return }
     
     let width = CGFloat(planeAnchor.extent.x)
     let height = CGFloat(planeAnchor.extent.z)
