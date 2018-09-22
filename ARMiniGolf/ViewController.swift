@@ -15,8 +15,9 @@ class ViewController: UIViewController {
   
   @IBOutlet weak var sceneView: ARSCNView!
   
-  var planeNodes = [SCNNode]()
+  var planeNode = SCNNode()
   var ballNode: SCNNode!
+  var courseNode: SCNNode!
   
   var gameManager = GameManager()
   
@@ -29,7 +30,7 @@ class ViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     //debug code
-    //sceneView.debugOptions = [.showFeaturePoints, .showWorldOrigin, .showPhysicsShapes]
+    sceneView.debugOptions = [.showFeaturePoints, .showWorldOrigin, .showPhysicsShapes]
     
     addTapGestureToSceneView()
     configureLighting()
@@ -78,13 +79,23 @@ class ViewController: UIViewController {
     swipeUpGestureRecognizer.direction = .up
     sceneView.addGestureRecognizer(swipeUpGestureRecognizer)
     
-    let swipeDownGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(ViewController.launchRocketship(withGestureRecognizer:)))
-    swipeDownGestureRecognizer.direction = .down
-    sceneView.addGestureRecognizer(swipeDownGestureRecognizer)
   }
   
   @objc func addCourseToSceneView(withGestureRecognizer recognizer: UIGestureRecognizer) {
-    
+    //Don't continue if game already started
+    if gameManager.gameStarted(){
+      //add ball if the game already started
+      guard let ballScene = SCNScene(named: "art.scnassets/ball.scn"),
+        let ballNode = ballScene.rootNode.childNode(withName: "ball", recursively: false)
+        else { return }
+      
+      
+      ballNode.position = SCNVector3(courseNode.position.x-1, courseNode.position.y + 0.03, courseNode.position.z + 0.02)
+      sceneView.scene.rootNode.addChildNode(ballNode)
+      //      let physicsBody = SCNPhysicsBody(type: .dynamic, shape: )
+      //      ballNode.physicsBody = physicsBody
+      return
+    }
 
     
     let tapLocation = recognizer.location(in: sceneView)
@@ -93,38 +104,21 @@ class ViewController: UIViewController {
     
     let translation = hitTestResult.worldTransform.translation
     let x = translation.x
-    let y = translation.y + 0.1
+    let y = translation.y + 0.05
     let z = translation.z
     
-    //Don't continue if game already started
-    if gameManager.gameStarted(){
-      //add ball if the game already started
-      guard let ballScene = SCNScene(named: "art.scnassets/ball.scn"),
-        let ballNode = ballScene.rootNode.childNode(withName: "ball", recursively: false)
-        else { return }
-      ballNode.position = SCNVector3(0.3, 0.2, 0)
-      sceneView.scene.rootNode.addChildNode(ballNode)
-//      let physicsBody = SCNPhysicsBody(type: .dynamic, shape: )
-//      ballNode.physicsBody = physicsBody
-      return
-    }
-    
-    
+
     guard let courseScene = SCNScene(named: "art.scnassets/course.scn"),
       let courseNode = courseScene.rootNode.childNode(withName: "course", recursively: false)
       else { return }
 
     
     courseNode.position = SCNVector3(x,y,z)
-    
-//    guard let ballScene = SCNScene(named: "art.scnassets/ball.scn"),
-//      let ballNode = ballScene.rootNode.childNode(withName: "ball", recursively: false)
-//      else { return }
-//    ballNode.position = SCNVector3(x,y,z + 1)
-//    sceneView.scene.rootNode.addChildNode(ballNode)
+
     
     // TODO: Attach physics body to rocketship node
     let physicsBody = SCNPhysicsBody(type: .kinematic, shape: nil)
+    physicsBody.restitution = 0.1
     courseNode.physicsBody = physicsBody
     
     courseNode.physicsBody?.isAffectedByGravity = false  //TEST CODE
@@ -132,6 +126,16 @@ class ViewController: UIViewController {
     courseNode.name = courseNodeName
     
     sceneView.scene.rootNode.addChildNode(courseNode)
+    
+    self.courseNode = courseNode
+    
+    //create ball node
+//    guard let ballScene = SCNScene(named: "art.scnassets/ball.scn"),
+//      let ballNode = ballScene.rootNode.childNode(withName: "ball", recursively: false)
+//    else { print("ball not found")
+//      return }
+//    ballNode.position = SCNVector3(x,y,z)
+//    sceneView.scene.rootNode.addChildNode(ballNode)
 
     
     //start game, remove the detecting plane node
@@ -174,29 +178,6 @@ class ViewController: UIViewController {
         ballNode = rocketshipNode
   }
   
-  // TODO: Create launch rocketship method
-  @objc func launchRocketship(withGestureRecognizer recognizer: UIGestureRecognizer) {
-    // 1
-    //        guard recognizer.state == .ended else { return }
-    //        // 2
-    //        let swipeLocation = recognizer.location(in: sceneView)
-    //        guard let rocketshipNode = getRocketshipNode(from: swipeLocation),
-    //            let physicsBody = rocketshipNode.physicsBody,
-    //            let reactorParticleSystem = SCNParticleSystem(named: "reactor", inDirectory: nil),
-    //            let engineNode = rocketshipNode.childNode(withName: "node2", recursively: false)
-    //            else { return }
-    //        // 3
-    //        physicsBody.isAffectedByGravity = false
-    //        physicsBody.damping = 0
-    //        // 4
-    //        reactorParticleSystem.colliderNodes = [planeNode]
-    //        // 5
-    //        engineNode.addParticleSystem(reactorParticleSystem)
-    //        // 6
-    //        let action = SCNAction.moveBy(x: 0, y: 0.3, z: 0, duration: 3)
-    //        action.timingMode = .easeInEaseOut
-    //        rocketshipNode.runAction(action)
-  }
 
 }
 
@@ -211,7 +192,7 @@ extension ViewController: ARSCNViewDelegate {
     
     plane.materials.first?.diffuse.contents = UIColor.transparentWhite
     
-    var planeNode = SCNNode(geometry: plane)
+    planeNode = SCNNode(geometry: plane)
     
     let x = CGFloat(planeAnchor.center.x)
     let y = CGFloat(planeAnchor.center.y)
@@ -225,15 +206,15 @@ extension ViewController: ARSCNViewDelegate {
     node.addChildNode(planeNode)
     
     // TODO: Append plane node to plane nodes array if appropriate
-            planeNodes.append(planeNode)
+            //planeNodes.append(planeNode)
   }
   
   // TODO: Remove plane node from plane nodes array if appropriate
   func renderer(_ renderer: SCNSceneRenderer, didRemove node: SCNNode, for anchor: ARAnchor) {
-            guard anchor is ARPlaneAnchor,
-                let planeNode = node.childNodes.first
-                else { return }
-            planeNodes = planeNodes.filter { $0 != planeNode }
+//            guard anchor is ARPlaneAnchor,
+//                let planeNode = node.childNodes.first
+//                else { return }
+//            planeNodes = planeNodes.filter { $0 != planeNode }
   }
   
   func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
@@ -252,7 +233,6 @@ extension ViewController: ARSCNViewDelegate {
     let z = CGFloat(planeAnchor.center.z)
     
     planeNode.position = SCNVector3(x, y, z)
-            print ("plane X \(x)  y\(y) z\(z)  width \(width) height \(height)")
     
     update(&planeNode, withGeometry: plane, type: .static)
     
