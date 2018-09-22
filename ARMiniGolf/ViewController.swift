@@ -15,7 +15,7 @@ class ViewController: UIViewController {
   
   @IBOutlet weak var sceneView: ARSCNView!
   
-  var planeNode = SCNNode()
+  var planeNodes = [SCNNode]()
   var ballNode: SCNNode!
   
   var gameManager = GameManager()
@@ -28,6 +28,9 @@ class ViewController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    //debug code
+    //sceneView.debugOptions = [.showFeaturePoints, .showWorldOrigin, .showPhysicsShapes]
+    
     addTapGestureToSceneView()
     configureLighting()
     addSwipeGesturesToSceneView()
@@ -50,6 +53,13 @@ class ViewController: UIViewController {
     sceneView.session.run(configuration)
     
     sceneView.delegate = self
+  }
+  
+  func turnoffARPlaneTracking(){
+    let configuration = ARWorldTrackingConfiguration()
+    let options: ARSession.RunOptions = [.resetTracking, .removeExistingAnchors]
+    sceneView.session.run(configuration, options: options)
+
   }
   
   func configureLighting() {
@@ -92,7 +102,7 @@ class ViewController: UIViewController {
       guard let ballScene = SCNScene(named: "art.scnassets/ball.scn"),
         let ballNode = ballScene.rootNode.childNode(withName: "ball", recursively: false)
         else { return }
-      ballNode.position = SCNVector3(x, y, z)
+      ballNode.position = SCNVector3(0.3, 0.2, 0)
       sceneView.scene.rootNode.addChildNode(ballNode)
 //      let physicsBody = SCNPhysicsBody(type: .dynamic, shape: )
 //      ballNode.physicsBody = physicsBody
@@ -125,7 +135,7 @@ class ViewController: UIViewController {
 
     
     //start game, remove the detecting plane node
-    planeNode.removeFromParentNode()
+    turnoffARPlaneTracking()
     gameManager.startGame()
   }
 
@@ -193,7 +203,7 @@ class ViewController: UIViewController {
 extension ViewController: ARSCNViewDelegate {
   
   func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
-    guard gameManager.gameStarted(), let planeAnchor = anchor as? ARPlaneAnchor else { return }
+    guard  let planeAnchor = anchor as? ARPlaneAnchor else { return }
     
     let width = CGFloat(planeAnchor.extent.x)
     let height = CGFloat(planeAnchor.extent.z)
@@ -201,7 +211,7 @@ extension ViewController: ARSCNViewDelegate {
     
     plane.materials.first?.diffuse.contents = UIColor.transparentWhite
     
-    planeNode = SCNNode(geometry: plane)
+    var planeNode = SCNNode(geometry: plane)
     
     let x = CGFloat(planeAnchor.center.x)
     let y = CGFloat(planeAnchor.center.y)
@@ -215,19 +225,19 @@ extension ViewController: ARSCNViewDelegate {
     node.addChildNode(planeNode)
     
     // TODO: Append plane node to plane nodes array if appropriate
-    //        planeNodes.append(planeNode)
+            planeNodes.append(planeNode)
   }
   
   // TODO: Remove plane node from plane nodes array if appropriate
   func renderer(_ renderer: SCNSceneRenderer, didRemove node: SCNNode, for anchor: ARAnchor) {
-    //        guard anchor is ARPlaneAnchor,
-    //            let planeNode = node.childNodes.first
-    //            else { return }
-    //        planeNodes = planeNodes.filter { $0 != planeNode }
+            guard anchor is ARPlaneAnchor,
+                let planeNode = node.childNodes.first
+                else { return }
+            planeNodes = planeNodes.filter { $0 != planeNode }
   }
   
   func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
-    guard gameManager.gameStarted(), let planeAnchor = anchor as?  ARPlaneAnchor,
+    guard let planeAnchor = anchor as?  ARPlaneAnchor,
       var planeNode = node.childNodes.first,
       let plane = planeNode.geometry as? SCNPlane
       else { return }
@@ -242,6 +252,7 @@ extension ViewController: ARSCNViewDelegate {
     let z = CGFloat(planeAnchor.center.z)
     
     planeNode.position = SCNVector3(x, y, z)
+            print ("plane X \(x)  y\(y) z\(z)  width \(width) height \(height)")
     
     update(&planeNode, withGeometry: plane, type: .static)
     
