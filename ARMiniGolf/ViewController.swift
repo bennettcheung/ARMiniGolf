@@ -18,6 +18,13 @@ class ViewController: UIViewController {
   var planeNode = SCNNode()
   var ballNode: SCNNode!
   var courseNode: SCNNode!
+  var longPressGestureRecognizer = UILongPressGestureRecognizer()
+  var tapGestureRecognizer = UITapGestureRecognizer()
+  var ballExists = false
+  var pressStartTime:Date?
+  var timeSinceLastHaptic: Date?
+  let lightFeedback = UIImpactFeedbackGenerator(style: .light)
+  var hapticsInterval = Float()
   
   var gameManager = GameManager()
   
@@ -34,7 +41,7 @@ class ViewController: UIViewController {
     
     addTapGestureToSceneView()
     configureLighting()
-    addSwipeGesturesToSceneView()
+    addLongPressGesturesToSceneView()
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -73,17 +80,17 @@ class ViewController: UIViewController {
     sceneView.addGestureRecognizer(tapGestureRecognizer)
   }
   
-  // TODO: Create add swipe gestures to scene view method
-  func addSwipeGesturesToSceneView() {
-    let swipeUpGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(ViewController.applyForceToBall(withGestureRecognizer:)))
-    swipeUpGestureRecognizer.direction = .up
-    sceneView.addGestureRecognizer(swipeUpGestureRecognizer)
-    
+
+  // Add long press gestures to scene view method
+  func addLongPressGesturesToSceneView() {
+    self.longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(ViewController.applyForceToBall(withGestureRecognizer:)))
+    self.longPressGestureRecognizer.minimumPressDuration = 0.5
+    sceneView.addGestureRecognizer(self.longPressGestureRecognizer)
   }
   
   @objc func addCourseToSceneView(withGestureRecognizer recognizer: UIGestureRecognizer) {
     //Don't continue if game already started
-    if gameManager.gameStarted(){
+    if gameManager.gameStarted() && !ballExists { 
       //add ball if the game already started
       guard let ballScene = SCNScene(named: "art.scnassets/ball.scn"),
         let ballNode = ballScene.rootNode.childNode(withName: "ball", recursively: false)
@@ -92,8 +99,7 @@ class ViewController: UIViewController {
       
       ballNode.position = SCNVector3(courseNode.position.x-1, courseNode.position.y + 0.03, courseNode.position.z + 0.02)
       sceneView.scene.rootNode.addChildNode(ballNode)
-      //      let physicsBody = SCNPhysicsBody(type: .dynamic, shape: )
-      //      ballNode.physicsBody = physicsBody
+      ballExists = true
       return
     }
 
@@ -129,20 +135,10 @@ class ViewController: UIViewController {
     
     self.courseNode = courseNode
     
-    //create ball node
-//    guard let ballScene = SCNScene(named: "art.scnassets/ball.scn"),
-//      let ballNode = ballScene.rootNode.childNode(withName: "ball", recursively: false)
-//    else { print("ball not found")
-//      return }
-//    ballNode.position = SCNVector3(x,y,z)
-//    sceneView.scene.rootNode.addChildNode(ballNode)
-
-    
     //start game, remove the detecting plane node
     turnoffARPlaneTracking()
     gameManager.startGame()
   }
-
   
   // TODO: Create get rocketship node from swipe location method
   func getRocketshipNode(from swipeLocation: CGPoint) -> SCNNode? {
@@ -156,28 +152,92 @@ class ViewController: UIViewController {
     return parentNode
   }
   
-  // TODO: Create apply force to rocketship method
-  @objc func applyForceToBall(withGestureRecognizer recognizer: UIGestureRecognizer) {
-    // 1
-    guard recognizer.state == .ended else { return }
-    // 2
-    let swipeLocation = recognizer.location(in: sceneView)
-    // 3
-    guard let rocketshipNode = getRocketshipNode(from: swipeLocation),
-      let physicsBody = rocketshipNode.physicsBody
-      else { return }
-    // 4
-    let direction = SCNVector3(0, 0, -1)
-    physicsBody.applyForce(direction, asImpulse: true)
-//    guard let physicsBody = ballNode.physicsBody
-//      else { return }
-//    // 4
-//    physicsBody.isAffectedByGravity = false
-//    let direction = SCNVector3(0, 0, -1)
-//    physicsBody.applyForce(direction, asImpulse: true)
-        ballNode = rocketshipNode
+  //*************************************************************************** direction and force for ball path *********************************
+  
+  // Get user vector
+  
+  func getUserVector() -> (SCNVector3) {
+    if let frame = self.sceneView.session.currentFrame {
+      let mat = SCNMatrix4(frame.camera.transform) // 4x4 transform matrix describing camera in world space
+      var direction = SCNVector3(-1 * mat.m31, -1 * mat.m32, -1 * mat.m33) // orientation of camera in world space
+      //let pos = SCNVector3(mat.m41, mat.m42, mat.m43) // location of camera in world space
+      direction.y = 0 //negate height
+      return (direction)
+    }
+    return (SCNVector3(0, 0, -1))
   }
   
+  
+  // Get ball node from long press location method
+  func getBallNode(from longPressLocation: CGPoint) -> SCNNode? {
+    let hitTestResults = sceneView.hitTest(longPressLocation)
+    guard let parentNode  = hitTestResults.first?.node.parent
+      else { return nil }
+    for child in parentNode.childNodes {
+      if child.name == "ball" {
+        return child
+      }
+    }
+    return nil
+  }
+  
+  //Apply force to ball method
+  
+  @objc func applyForceToBall(withGestureRecognizer recognizer: UIGestureRecognizer) {
+    if recognizer.state == .began {
+      pressStartTime = Date()
+    }
+    let longPressLocation = recognizer.location(in: self.view)
+    guard let ballNode = getBallNode(from: longPressLocation),
+      let physicsBody = ballNode.physicsBody
+      else { return }
+    ballNode.geometry?.firstMaterial?.diffuse.contents = UIColor.green
+    var direction = self.getUserVector()
+    let duration = getHoldDuration()
+    hapticsInterval = Float(getAppropriateFeedback(duration: duration))
+    
+    if recognizer.state == .ended {
+      ballNode.geometry?.firstMaterial?.diffuse.contents = UIColor.white
+      let forceMultiplier = (1/hapticsInterval)
+      direction.x = direction.x * forceMultiplier
+      direction.z = direction.z * forceMultiplier
+      print (direction)
+      physicsBody.applyForce(direction, asImpulse: true)
+    }
+  }
+  
+  func getHoldDuration() -> Float {
+    guard let pressStartTime = pressStartTime else {
+      print ("Timer not created")
+      return 0
+    }
+    let duration = -Float(pressStartTime.timeIntervalSinceNow)
+    return duration
+    
+  }
+  func getAppropriateFeedback(duration:Float) -> TimeInterval{
+    let interval: TimeInterval
+    switch duration {
+    case 0.5...1:
+      interval = 0.4
+    case 1...2:
+      interval = 0.2
+    case 2...:
+      interval = 0.1
+    default:
+      interval = 1.0
+    }
+    if let prevTime = timeSinceLastHaptic {
+      if Date().timeIntervalSince(prevTime) > interval {
+        lightFeedback.impactOccurred()
+        timeSinceLastHaptic = Date()
+      }
+    } else {
+      lightFeedback.impactOccurred()
+      timeSinceLastHaptic = Date()
+    }
+    return interval
+  }
 
 }
 
