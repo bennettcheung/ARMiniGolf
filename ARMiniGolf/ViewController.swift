@@ -10,8 +10,12 @@
 import UIKit
 import ARKit
 
+enum bodyType: Int {
+    case ball = 1
+    case hole = 2
+}
 
-class ViewController: UIViewController {
+class ViewController: UIViewController{
   
   @IBOutlet weak var sceneView: ARSCNView!
   @IBOutlet weak var ballHitForceProgressView: UIProgressView!
@@ -144,10 +148,10 @@ class ViewController: UIViewController {
     courseNode.position = SCNVector3(x,y,z)
     
     // TODO: Attach physics body to course node
-    let physicsBody = SCNPhysicsBody(type: .static, shape: nil)
-//    physicsBody.restitution = 0.1
-    courseNode.physicsBody = physicsBody
-    
+//    let physicsBody = SCNPhysicsBody(type: .static, shape: nil)
+////    physicsBody.restitution = 0.1
+//    courseNode.physicsBody = physicsBody
+//    
 //    courseNode.physicsBody?.isAffectedByGravity = false  //TEST CODE
     
     courseNode.name = courseNodeName
@@ -155,6 +159,7 @@ class ViewController: UIViewController {
     sceneView.scene.rootNode.addChildNode(courseNode)
     
     self.courseNode = courseNode
+    sceneView.scene.physicsWorld.contactDelegate = self
     
     //add ball to the course
     guard let ballScene = SCNScene(named: "art.scnassets/ball.scn"),
@@ -297,10 +302,25 @@ class ViewController: UIViewController {
     @IBAction func resetBallLocationButton(_ sender: Any) {
         globalBallNode.position = SCNVector3(courseNode.position.x, courseNode.position.y, courseNode.position.z + 2.1)
     }
-    
 }
 
 //********************************* MARK: Plane Rendering
+
+extension ViewController: SCNPhysicsContactDelegate {
+    
+   
+    func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact) {
+        
+        if contact.nodeA.physicsBody?.categoryBitMask == bodyType.ball.rawValue &&
+            contact.nodeB.physicsBody?.categoryBitMask == bodyType.hole.rawValue {
+            print("collison between ball and hole")
+        }
+        else if contact.nodeB.physicsBody?.categoryBitMask == bodyType.ball.rawValue &&
+            contact.nodeA.physicsBody?.categoryBitMask == bodyType.hole.rawValue {
+            print("collison between hole and ball")
+        }
+    }
+}
 
 extension ViewController: ARSCNViewDelegate {
   
