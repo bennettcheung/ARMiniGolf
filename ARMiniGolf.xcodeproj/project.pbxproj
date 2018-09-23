@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		910D5E70215580B600F06577 /* GameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910D5E6F215580B600F06577 /* GameManager.swift */; };
+		91293C2821573551005F6E70 /* GameBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91293C2721573551005F6E70 /* GameBoard.swift */; };
+		91293C2B215756A5005F6E70 /* golfputt.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 91293C2A215756A5005F6E70 /* golfputt.mp3 */; };
+		91293C2D2157573E005F6E70 /* background.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 91293C2C2157573E005F6E70 /* background.mp3 */; };
 		912C0757215440BA009704B2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912C0756215440BA009704B2 /* AppDelegate.swift */; };
 		912C0759215440BA009704B2 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 912C0758215440BA009704B2 /* art.scnassets */; };
 		912C075B215440BA009704B2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912C075A215440BA009704B2 /* ViewController.swift */; };
@@ -39,6 +42,9 @@
 
 /* Begin PBXFileReference section */
 		910D5E6F215580B600F06577 /* GameManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameManager.swift; sourceTree = "<group>"; };
+		91293C2721573551005F6E70 /* GameBoard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameBoard.swift; sourceTree = "<group>"; };
+		91293C2A215756A5005F6E70 /* golfputt.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = golfputt.mp3; sourceTree = "<group>"; };
+		91293C2C2157573E005F6E70 /* background.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = background.mp3; sourceTree = "<group>"; };
 		912C0753215440BA009704B2 /* ARMiniGolf.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ARMiniGolf.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		912C0756215440BA009704B2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		912C0758215440BA009704B2 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
@@ -82,6 +88,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		91293C2921575696005F6E70 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				91293C2A215756A5005F6E70 /* golfputt.mp3 */,
+				91293C2C2157573E005F6E70 /* background.mp3 */,
+			);
+			path = Sounds;
+			sourceTree = "<group>";
+		};
 		912C074A215440BA009704B2 = {
 			isa = PBXGroup;
 			children = (
@@ -105,6 +120,7 @@
 		912C0755215440BA009704B2 /* ARMiniGolf */ = {
 			isa = PBXGroup;
 			children = (
+				91293C2921575696005F6E70 /* Sounds */,
 				912C0756215440BA009704B2 /* AppDelegate.swift */,
 				912C0758215440BA009704B2 /* art.scnassets */,
 				912C075A215440BA009704B2 /* ViewController.swift */,
@@ -115,6 +131,7 @@
 				91CFC639215458D9007D5DC9 /* SCNVector3Extensions.swift */,
 				912C0764215440BD009704B2 /* Info.plist */,
 				910D5E6F215580B600F06577 /* GameManager.swift */,
+				91293C2721573551005F6E70 /* GameBoard.swift */,
 			);
 			path = ARMiniGolf;
 			sourceTree = "<group>";
@@ -245,6 +262,8 @@
 				912C0763215440BD009704B2 /* LaunchScreen.storyboard in Resources */,
 				912C0760215440BD009704B2 /* Assets.xcassets in Resources */,
 				912C075E215440BA009704B2 /* Main.storyboard in Resources */,
+				91293C2D2157573E005F6E70 /* background.mp3 in Resources */,
+				91293C2B215756A5005F6E70 /* golfputt.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -273,6 +292,7 @@
 				912C075B215440BA009704B2 /* ViewController.swift in Sources */,
 				912C0757215440BA009704B2 /* AppDelegate.swift in Sources */,
 				91CFC64621545F50007D5DC9 /* Grid.swift in Sources */,
+				91293C2821573551005F6E70 /* GameBoard.swift in Sources */,
 				910D5E70215580B600F06577 /* GameManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -25,12 +25,12 @@ class ViewController: UIViewController {
   var timeSinceLastHaptic: Date?
   let lightFeedback = UIImpactFeedbackGenerator(style: .light)
   var hapticsInterval = Float()
+  var sounds:[String:SCNAudioSource] = [:]
   
   var gameManager = GameManager()
   
-  // TODO: Declare rocketship node name constant
+  // TODO: Declare  node name constant
   let courseNodeName = "course"
-  let rocketNodeName = "ball"
   
   // TODO: Initialize an empty array of type SCNNode
   
@@ -61,6 +61,7 @@ class ViewController: UIViewController {
     sceneView.session.run(configuration)
     
     sceneView.delegate = self
+    
   }
   
   func turnoffARPlaneTracking(){
@@ -76,6 +77,25 @@ class ViewController: UIViewController {
     sceneView.automaticallyUpdatesLighting = true
   }
   
+  func setupSounds(){
+    let puttSound = SCNAudioSource(fileNamed: "golfputt.mp3")!
+    puttSound.load()
+    puttSound.volume = 0.6
+    
+    sounds["putt"] = puttSound
+    
+    let backgroundMusic = SCNAudioSource(fileNamed: "background.mp3")!
+    backgroundMusic.volume = 0.3
+    backgroundMusic.loops = true
+    backgroundMusic.load()
+    
+    let musicPlayer = SCNAudioPlayer(source: backgroundMusic)
+    courseNode.addAudioPlayer(musicPlayer)
+    
+  }
+  
+  
+  
   func addTapGestureToSceneView() {
     let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.addCourseToSceneView(withGestureRecognizer:)))
     sceneView.addGestureRecognizer(tapGestureRecognizer)
@@ -87,6 +107,12 @@ class ViewController: UIViewController {
     self.longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(ViewController.applyForceToBall(withGestureRecognizer:)))
     self.longPressGestureRecognizer.minimumPressDuration = 0.5
     sceneView.addGestureRecognizer(self.longPressGestureRecognizer)
+  }
+  
+  func addPinchGestureToSceneView(){
+    let pinchGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.handlePinch))
+    sceneView.addGestureRecognizer(pinchGestureRecognizer)
+    
   }
   
   @objc func addCourseToSceneView(withGestureRecognizer recognizer: UIGestureRecognizer) {
@@ -102,7 +128,7 @@ class ViewController: UIViewController {
     let translation = hitTestResult.worldTransform.translation
     let x = translation.x
     let y = translation.y + 0.05
-    let z = translation.z
+    let z = translation.z - 0.5
     
 
     guard let courseScene = SCNScene(named: "art.scnassets/course.scn"),
@@ -111,9 +137,8 @@ class ViewController: UIViewController {
 
     
     courseNode.position = SCNVector3(x,y,z)
-
     
-    // TODO: Attach physics body to rocketship node
+    // TODO: Attach physics body to course node
     let physicsBody = SCNPhysicsBody(type: .static, shape: nil)
 //    physicsBody.restitution = 0.1
     courseNode.physicsBody = physicsBody
@@ -132,26 +157,24 @@ class ViewController: UIViewController {
       else { return }
     
     
-    ballNode.position = SCNVector3(courseNode.position.x-1, courseNode.position.y, courseNode.position.z + 0.02)
+    ballNode.position = SCNVector3(courseNode.position.x, courseNode.position.y, courseNode.position.z + 1.15)
     sceneView.scene.rootNode.addChildNode(ballNode)
     
     //start game, remove the detecting plane node
     turnoffARPlaneTracking()
+    setupSounds()
     gameManager.startGame()
   }
   
-  // TODO: Create get rocketship node from swipe location method
-  func getRocketshipNode(from swipeLocation: CGPoint) -> SCNNode? {
-    let hitTestResults = sceneView.hitTest(swipeLocation)
-    guard let parentNode = hitTestResults.first?.node.parent
-    
-      else { return nil }
-    guard  parentNode.name == rocketNodeName else{
-      return nil
-    }
-    return parentNode
-  }
   
+  @objc func handlePinch(_ recognizer: UIGestureRecognizer) {
+    //Don't continue if game already started
+    print("pinch gesture handler called")
+    if gameManager.gameStarted()  {
+      return
+    }
+    
+  }
   //*************************************************************************** direction and force for ball path *********************************
   
   // Get user vector
@@ -202,7 +225,12 @@ class ViewController: UIViewController {
       direction.x = direction.x * forceMultiplier
       direction.z = direction.z * forceMultiplier
       print (direction)
+      
+      //play a sound and apply force
+      let puttSound =  sounds["putt"]!
+      ballNode.runAction(SCNAction.playAudio(puttSound, waitForCompletion: false))
       physicsBody.applyForce(direction, asImpulse: true)
+
     }
   }
   
