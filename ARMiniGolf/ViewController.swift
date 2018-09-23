@@ -78,7 +78,7 @@ class ViewController: UIViewController {
   }
   
   func setupSounds(){
-    let puttSound = SCNAudioSource(fileNamed: "golfputt.mp3")!
+    let puttSound = SCNAudioSource(fileNamed: "putt.wav")!
     puttSound.load()
     puttSound.volume = 0.6
     
