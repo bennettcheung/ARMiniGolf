@@ -214,15 +214,7 @@ class ViewController: UIViewController {
   @objc func applyForceToBall(withGestureRecognizer recognizer: UIGestureRecognizer) {
     print("above state began")
     //button press state begins
-    if recognizer.state == .cancelled {
-        print("cancelled")
-    }
-    if recognizer.state == .failed {
-        print("failed")
-    }
-    if recognizer.state == .changed {
-        print("changed")
-    }
+
     if recognizer.state == .began {
         print("State begin")
       pressStartTime = Date()
@@ -253,17 +245,19 @@ class ViewController: UIViewController {
       let puttSound =  sounds["putt"]!
       globalBallNode.runAction(SCNAction.playAudio(puttSound, waitForCompletion: false))
       physicsBody.applyForce(direction, asImpulse: true)
+      self.ballHitForceProgressView.setProgress(0, animated: false)
     }
 
 
   }
     
     func updateForceIndicator (force: Float){
-        //self.ballHitForceProgressView.setProgress(1.0, animated: true)
+        //self.ballHitForceProgressView.setProgress(0, animated: false)
         self.ballHitForceProgressView.clipsToBounds = true
         self.ballHitForceProgressView.layer.cornerRadius = 5
         self.ballHitForceProgressView.alpha = 1
-        self.ballHitForceProgressView.progress = force/10
+        UIView.animate(withDuration: 0.5) { self.ballHitForceProgressView.setProgress(force/10, animated: true) }
+        //self.ballHitForceProgressView.progress = force/10
         
     }
     
