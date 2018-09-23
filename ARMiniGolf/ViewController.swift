@@ -17,8 +17,7 @@ class ViewController: UIViewController {
   @IBOutlet weak var ballHitForceProgressView: UIProgressView!
     
   var planeNodes = [SCNNode]()
-  var testBallNode: SCNNode!
-  //var ballPosition: SCNVector3!
+  var globalBallNode: SCNNode!
   var courseNode: SCNNode!
   var longPressGestureRecognizer = UILongPressGestureRecognizer()
   var tapGestureRecognizer = UITapGestureRecognizer()
@@ -109,7 +108,8 @@ class ViewController: UIViewController {
   func addLongPressGesturesToSceneView() {
     longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(ViewController.applyForceToBall(withGestureRecognizer:)))
     longPressGestureRecognizer.minimumPressDuration = 0.5
-    longPressGestureRecognizer.allowableMovement = 20
+    
+ 
     
     sceneView.addGestureRecognizer(self.longPressGestureRecognizer)
   }
@@ -160,8 +160,8 @@ class ViewController: UIViewController {
     guard let ballScene = SCNScene(named: "art.scnassets/ball.scn"),
       let ballNode = ballScene.rootNode.childNode(withName: "ball", recursively: false)
       else { return }
-    testBallNode = ballNode
-    testBallNode.position = SCNVector3(courseNode.position.x, courseNode.position.y, courseNode.position.z + 2.1)
+    globalBallNode = ballNode
+    globalBallNode.position = SCNVector3(courseNode.position.x, courseNode.position.y, courseNode.position.z + 2.1)
     //ballNode.position = SCNVector3(courseNode.position.x, courseNode.position.y, courseNode.position.z + 2.1)
     sceneView.scene.rootNode.addChildNode(ballNode)
     
@@ -214,16 +214,23 @@ class ViewController: UIViewController {
   @objc func applyForceToBall(withGestureRecognizer recognizer: UIGestureRecognizer) {
     print("above state began")
     //button press state begins
-    
+    if recognizer.state == .cancelled {
+        print("cancelled")
+    }
+    if recognizer.state == .failed {
+        print("failed")
+    }
+    if recognizer.state == .changed {
+        print("changed")
+    }
     if recognizer.state == .began {
         print("State begin")
       pressStartTime = Date()
     }
-    let longPressLocation = recognizer.location(in: self.view)
-    guard let ballNode = getBallNode(from: longPressLocation),
-      let physicsBody = ballNode.physicsBody
+   
+    guard let physicsBody = globalBallNode.physicsBody
       else { return }
-    ballNode.geometry?.firstMaterial?.diffuse.contents = UIColor.green
+    globalBallNode.geometry?.firstMaterial?.diffuse.contents = UIColor.green
     var direction = self.getUserVector()
     let duration = getHoldDuration()
     hapticsInterval = Float(getAppropriateFeedback(duration: duration))
@@ -235,7 +242,7 @@ class ViewController: UIViewController {
     
     if recognizer.state == .ended {
         print("state ended")
-      ballNode.geometry?.firstMaterial?.diffuse.contents = UIColor.white
+      globalBallNode.geometry?.firstMaterial?.diffuse.contents = UIColor.white
       self.ballHitForceProgressView.alpha = 0
       let forceMultiplier = force * 0.05 //adjust the distance the ball is hit
       direction.x = direction.x * forceMultiplier
@@ -244,10 +251,11 @@ class ViewController: UIViewController {
       
       //play a sound and apply force
       let puttSound =  sounds["putt"]!
-      ballNode.runAction(SCNAction.playAudio(puttSound, waitForCompletion: false))
+      globalBallNode.runAction(SCNAction.playAudio(puttSound, waitForCompletion: false))
       physicsBody.applyForce(direction, asImpulse: true)
-
     }
+
+
   }
     
     func updateForceIndicator (force: Float){
@@ -293,7 +301,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func resetBallLocationButton(_ sender: Any) {
-        testBallNode.position = SCNVector3(courseNode.position.x, courseNode.position.y, courseNode.position.z + 2.1)
+        globalBallNode.position = SCNVector3(courseNode.position.x, courseNode.position.y, courseNode.position.z + 2.1)
     }
     
 }

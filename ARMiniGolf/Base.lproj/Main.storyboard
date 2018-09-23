@@ -29,8 +29,8 @@
                                 <color key="trackTintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </progressView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FvH-39-w15">
-                                <rect key="frame" x="16" y="31" width="39" height="30"/>
-                                <state key="normal" title="Reset"/>
+                                <rect key="frame" x="16" y="31" width="68" height="30"/>
+                                <state key="normal" title="Reset Ball"/>
                                 <connections>
                                     <action selector="resetBallLocationButton:" destination="BV1-FR-VrT" eventType="touchUpInside" id="Uim-cq-PSN"/>
                                 </connections>
