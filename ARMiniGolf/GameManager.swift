@@ -15,13 +15,28 @@ enum State {
 
 class GameManager: NSObject {
   var state: State
+  private var currentPlayer: Player!
   
   override init() {
     state = State.Detecting
+    currentPlayer = Player(name: "Player 1", score: 0)
+    super.init()
   }
   
   func startGame(){
     state = State.Started
+  }
+  
+  func restartGame(){
+    currentPlayer.score = 0
+  }
+  
+  func incrementShotCount(){
+    currentPlayer.score += 1
+  }
+  
+  func getCurrentPlayerScore() -> Int{
+    return currentPlayer.score
   }
   
   func gameStarted() -> Bool{
