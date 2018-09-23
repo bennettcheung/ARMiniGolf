@@ -14,9 +14,11 @@ import ARKit
 class ViewController: UIViewController {
   
   @IBOutlet weak var sceneView: ARSCNView!
-  
+  @IBOutlet weak var ballHitForceProgressView: UIProgressView!
+    
   var planeNodes = [SCNNode]()
-  var ballNode: SCNNode!
+  var testBallNode: SCNNode!
+  //var ballPosition: SCNVector3!
   var courseNode: SCNNode!
   var longPressGestureRecognizer = UILongPressGestureRecognizer()
   var tapGestureRecognizer = UITapGestureRecognizer()
@@ -42,6 +44,7 @@ class ViewController: UIViewController {
     addTapGestureToSceneView()
     configureLighting()
     addLongPressGesturesToSceneView()
+    self.ballHitForceProgressView.alpha = 0
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -104,8 +107,10 @@ class ViewController: UIViewController {
 
   // Add long press gestures to scene view method
   func addLongPressGesturesToSceneView() {
-    self.longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(ViewController.applyForceToBall(withGestureRecognizer:)))
-    self.longPressGestureRecognizer.minimumPressDuration = 0.5
+    longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(ViewController.applyForceToBall(withGestureRecognizer:)))
+    longPressGestureRecognizer.minimumPressDuration = 0.5
+    longPressGestureRecognizer.allowableMovement = 20
+    
     sceneView.addGestureRecognizer(self.longPressGestureRecognizer)
   }
   
@@ -155,9 +160,9 @@ class ViewController: UIViewController {
     guard let ballScene = SCNScene(named: "art.scnassets/ball.scn"),
       let ballNode = ballScene.rootNode.childNode(withName: "ball", recursively: false)
       else { return }
-    
-    
-    ballNode.position = SCNVector3(courseNode.position.x, courseNode.position.y, courseNode.position.z + 1.15)
+    testBallNode = ballNode
+    testBallNode.position = SCNVector3(courseNode.position.x, courseNode.position.y, courseNode.position.z + 2.1)
+    //ballNode.position = SCNVector3(courseNode.position.x, courseNode.position.y, courseNode.position.z + 2.1)
     sceneView.scene.rootNode.addChildNode(ballNode)
     
     //start game, remove the detecting plane node
@@ -207,7 +212,11 @@ class ViewController: UIViewController {
   //Apply force to ball method
   
   @objc func applyForceToBall(withGestureRecognizer recognizer: UIGestureRecognizer) {
+    print("above state began")
+    //button press state begins
+    
     if recognizer.state == .began {
+        print("State begin")
       pressStartTime = Date()
     }
     let longPressLocation = recognizer.location(in: self.view)
@@ -218,10 +227,17 @@ class ViewController: UIViewController {
     var direction = self.getUserVector()
     let duration = getHoldDuration()
     hapticsInterval = Float(getAppropriateFeedback(duration: duration))
+    let force = 1/hapticsInterval
+    updateForceIndicator(force: force)
+    print("All commands for begin have run")
+    
+    //button press state ends
     
     if recognizer.state == .ended {
+        print("state ended")
       ballNode.geometry?.firstMaterial?.diffuse.contents = UIColor.white
-      let forceMultiplier = (1/hapticsInterval) * 0.05
+      self.ballHitForceProgressView.alpha = 0
+      let forceMultiplier = force * 0.05 //adjust the distance the ball is hit
       direction.x = direction.x * forceMultiplier
       direction.z = direction.z * forceMultiplier
       print (direction)
@@ -233,41 +249,56 @@ class ViewController: UIViewController {
 
     }
   }
-  
-  func getHoldDuration() -> Float {
-    guard let pressStartTime = pressStartTime else {
-      print ("Timer not created")
-      return 0
-    }
-    let duration = -Float(pressStartTime.timeIntervalSinceNow)
-    return duration
     
-  }
-  func getAppropriateFeedback(duration:Float) -> TimeInterval{
-    let interval: TimeInterval
-    switch duration {
-    case 0.5...1:
-      interval = 0.4
-    case 1...2:
-      interval = 0.2
-    case 2...:
-      interval = 0.1
-    default:
-      interval = 1.0
+    func updateForceIndicator (force: Float){
+        //self.ballHitForceProgressView.setProgress(1.0, animated: true)
+        self.ballHitForceProgressView.clipsToBounds = true
+        self.ballHitForceProgressView.layer.cornerRadius = 5
+        self.ballHitForceProgressView.alpha = 1
+        self.ballHitForceProgressView.progress = force/10
+        
     }
-    if let prevTime = timeSinceLastHaptic {
-      if Date().timeIntervalSince(prevTime) > interval {
-        lightFeedback.impactOccurred()
-        timeSinceLastHaptic = Date()
-      }
-    } else {
-      lightFeedback.impactOccurred()
-      timeSinceLastHaptic = Date()
+    
+    func getHoldDuration() -> Float {
+        guard let pressStartTime = pressStartTime else {
+            print ("Timer not created")
+            return 0
+        }
+        let duration = -Float(pressStartTime.timeIntervalSinceNow)
+        return duration
+        
     }
-    return interval
-  }
-
+    func getAppropriateFeedback(duration:Float) -> TimeInterval{
+        let interval: TimeInterval
+        switch duration {
+        case 0.5...1:
+            interval = 0.4
+        case 1...2:
+            interval = 0.2
+        case 2...:
+            interval = 0.1
+        default:
+            interval = 1.0
+        }
+        if let prevTime = timeSinceLastHaptic {
+            if Date().timeIntervalSince(prevTime) > interval {
+                lightFeedback.impactOccurred()
+                timeSinceLastHaptic = Date()
+            }
+        } else {
+            lightFeedback.impactOccurred()
+            timeSinceLastHaptic = Date()
+        }
+        return interval
+    }
+    
+    @IBAction func resetBallLocationButton(_ sender: Any) {
+        testBallNode.position = SCNVector3(courseNode.position.x, courseNode.position.y, courseNode.position.z + 2.1)
+    }
+    
 }
+
+//********************************* MARK: Plane Rendering
 
 extension ViewController: ARSCNViewDelegate {
   

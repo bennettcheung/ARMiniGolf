@@ -20,22 +20,44 @@
                             <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BrB-h1-WRS">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </arscnView>
+                            <progressView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="BX9-Zr-kpT">
+                                <rect key="frame" x="112" y="40" width="150" height="13"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="12" id="lVg-gf-s0v"/>
+                                </constraints>
+                                <color key="progressTintColor" red="0.1773889844" green="1" blue="0.14560643910000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="trackTintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </progressView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FvH-39-w15">
+                                <rect key="frame" x="16" y="31" width="39" height="30"/>
+                                <state key="normal" title="Reset"/>
+                                <connections>
+                                    <action selector="resetBallLocationButton:" destination="BV1-FR-VrT" eventType="touchUpInside" id="Uim-cq-PSN"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="FvH-39-w15" firstAttribute="top" secondItem="fQZ-KI-GVf" secondAttribute="top" constant="11" id="4nl-8k-nP7"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="BX9-Zr-kpT" secondAttribute="trailing" constant="97" id="5Pw-O1-Clq"/>
+                            <constraint firstItem="FvH-39-w15" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" constant="16" id="EpN-10-vTb"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" id="GsS-dJ-CKf"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="bottom" secondItem="fQZ-KI-GVf" secondAttribute="bottom" id="VpT-BR-CcM"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="trailing" secondItem="fQZ-KI-GVf" secondAttribute="trailing" id="XyZ-9z-H8e"/>
+                            <constraint firstItem="BX9-Zr-kpT" firstAttribute="leading" secondItem="U0K-SW-4ec" secondAttribute="leadingMargin" constant="96" id="ehE-xg-e6H"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="top" secondItem="U0K-SW-4ec" secondAttribute="top" id="rJc-2c-zQA"/>
+                            <constraint firstItem="BX9-Zr-kpT" firstAttribute="top" secondItem="fQZ-KI-GVf" secondAttribute="top" constant="20" id="ylR-LZ-GyO"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="fQZ-KI-GVf"/>
                     </view>
                     <connections>
+                        <outlet property="ballHitForceProgressView" destination="BX9-Zr-kpT" id="zl9-ZN-Tzh"/>
                         <outlet property="sceneView" destination="BrB-h1-WRS" id="5nT-qQ-ynl"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="262" y="98"/>
         </scene>
     </scenes>
 </document>
