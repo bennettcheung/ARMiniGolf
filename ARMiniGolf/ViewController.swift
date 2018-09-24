@@ -162,7 +162,7 @@ class ViewController: UIViewController {
       else { return }
     globalBallNode = ballNode
     globalBallNode.position = SCNVector3(courseNode.position.x, courseNode.position.y, courseNode.position.z + 2.1)
-    //globalBallNode.physicsBody?.continuousCollisionDetectionThreshold
+    globalBallNode.physicsBody?.continuousCollisionDetectionThreshold = 0.1
     //ballNode.position = SCNVector3(courseNode.position.x, courseNode.position.y, courseNode.position.z + 2.1)
     sceneView.scene.rootNode.addChildNode(ballNode)
     
