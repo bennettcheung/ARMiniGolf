@@ -133,7 +133,7 @@ class ViewController: UIViewController {
     let translation = hitTestResult.worldTransform.translation
     let x = translation.x
     let y = translation.y + 0.05
-    let z = translation.z - 0.5
+    let z = translation.z - 1.5 //0.5
     
 
     guard let courseScene = SCNScene(named: "art.scnassets/course.scn"),
