@@ -63,6 +63,7 @@ class ViewController: UIViewController {
     sceneView.session.run(configuration)
     
     sceneView.delegate = self
+    sceneView.scene.physicsWorld.contactDelegate = self
     
   }
   
@@ -300,6 +301,32 @@ class ViewController: UIViewController {
     }
     
 }
+
+
+//********************************* MARK: Collison Reporting
+
+
+extension ViewController: SCNPhysicsContactDelegate {
+    
+    
+    func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact) {
+        
+        if contact.nodeA.physicsBody?.categoryBitMask == bodyType.ball.rawValue &&
+            contact.nodeB.physicsBody?.categoryBitMask == bodyType.hole.rawValue {
+            print("collison between ball and hole")
+        }
+        else if contact.nodeB.physicsBody?.categoryBitMask == bodyType.ball.rawValue &&
+            contact.nodeA.physicsBody?.categoryBitMask == bodyType.hole.rawValue {
+            print("collison between hole and ball")
+        }
+    }
+}
+enum bodyType: Int {
+    case ball = 1
+    case hole = 2
+}
+
+
 
 //********************************* MARK: Plane Rendering
 
