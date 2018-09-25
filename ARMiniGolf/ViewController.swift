@@ -13,6 +13,8 @@ import ARKit
 
 class ViewController: UIViewController {
   
+  @IBOutlet weak var messageLabel: UILabel!
+  @IBOutlet weak var scoreLabel: UILabel!
   @IBOutlet weak var sceneView: ARSCNView!
   @IBOutlet weak var ballHitForceProgressView: UIProgressView!
     
@@ -44,6 +46,8 @@ class ViewController: UIViewController {
     configureLighting()
     addLongPressGesturesToSceneView()
     self.ballHitForceProgressView.alpha = 0
+    scoreLabel.text = "0"
+    messageLabel.text = "Move around to detect a horizontal surface"
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -70,7 +74,7 @@ class ViewController: UIViewController {
   func turnoffARPlaneTracking(){
 
 
-    //sceneView.debugOptions = []
+    sceneView.debugOptions = []
     
     //hide all the tracking nodes
     for node in planeNodes{
@@ -130,6 +134,8 @@ class ViewController: UIViewController {
       return
     }
     
+    messageLabel.text = ""
+    
     let tapLocation = recognizer.location(in: sceneView)
     let hitTestResults = sceneView.hitTest(tapLocation, types: .existingPlaneUsingExtent)
     guard let hitTestResult = hitTestResults.first else { return }
@@ -138,7 +144,6 @@ class ViewController: UIViewController {
     let x = translation.x
     let y = translation.y + 0.05
     let z = translation.z - 1.5 //0.5
-    
 
     guard let courseScene = SCNScene(named: "art.scnassets/course.scn"),
       let courseNode = courseScene.rootNode.childNode(withName: "course", recursively: false)
@@ -165,7 +170,7 @@ class ViewController: UIViewController {
       let ballNode = ballScene.rootNode.childNode(withName: "ball", recursively: false)
       else { return }
     globalBallNode = ballNode
-    globalBallNode.position = SCNVector3(courseNode.position.x, courseNode.position.y, courseNode.position.z + 2.1)
+    resetBallToInitialLocation()
     globalBallNode.physicsBody?.continuousCollisionDetectionThreshold = 0.1
     
     sceneView.scene.rootNode.addChildNode(ballNode)
@@ -220,6 +225,9 @@ class ViewController: UIViewController {
     //button press state begins
     if recognizer.state == .began {
       pressStartTime = Date()
+      DispatchQueue.main.async {
+        self.messageLabel.text = ""
+      }
     }
    
     guard let physicsBody = globalBallNode.physicsBody
@@ -234,6 +242,11 @@ class ViewController: UIViewController {
     //button press state ends
     
     if recognizer.state == .ended {
+      
+      //play a sound and apply force
+      let puttSound =  sounds["putt"]!
+      globalBallNode.runAction(SCNAction.playAudio(puttSound, waitForCompletion: false))
+      
       globalBallNode.geometry?.firstMaterial?.diffuse.contents = UIColor.white
       self.ballHitForceProgressView.alpha = 0
       let forceMultiplier = force * 0.05 //adjust the distance the ball is hit
@@ -241,11 +254,9 @@ class ViewController: UIViewController {
       direction.z = direction.z * forceMultiplier
       //print (direction)
       
-      //play a sound and apply force
-      let puttSound =  sounds["putt"]!
-      globalBallNode.runAction(SCNAction.playAudio(puttSound, waitForCompletion: false))
       physicsBody.applyForce(direction, asImpulse: true)
       self.ballHitForceProgressView.setProgress(0, animated: false)
+      normalStroke()
     }
 
 
@@ -295,8 +306,33 @@ class ViewController: UIViewController {
     }
     
     @IBAction func resetBallLocationButton(_ sender: Any) {
-        globalBallNode.position = SCNVector3(courseNode.position.x, courseNode.position.y, courseNode.position.z + 2.1)
+      resetBallToInitialLocation()
     }
+  
+  private func resetBallToInitialLocation() {
+      guard let physicsBody = globalBallNode.physicsBody else{
+        return
+      }
+      physicsBody.velocity = SCNVector3(0, 0, 0)
+      physicsBody.angularVelocity = SCNVector4(0, 0, 0, 0)
+      globalBallNode.position = SCNVector3(courseNode.position.x, courseNode.position.y, courseNode.position.z + 2.6)
+  }
+  
+  private func penaltyStroke(){
+    
+    DispatchQueue.main.async {
+      self.messageLabel.text = "Penalty stroke"
+    }
+    resetBallToInitialLocation()
+    normalStroke()
+  }
+  
+  private func normalStroke(){
+    gameManager.incrementShotCount()
+    DispatchQueue.main.async {
+      self.scoreLabel.text = self.gameManager.getCurrentPlayerScore().description
+    }
+  }
     
 }
 
@@ -331,10 +367,12 @@ extension ViewController: SCNPhysicsContactDelegate {
         if contact.nodeA.physicsBody?.categoryBitMask == bodyType.ball.rawValue &&
             contact.nodeB.physicsBody?.categoryBitMask == bodyType.water.rawValue {
             print("collison between ball and water")
+            penaltyStroke()
         }
         else if contact.nodeB.physicsBody?.categoryBitMask == bodyType.ball.rawValue &&
             contact.nodeA.physicsBody?.categoryBitMask == bodyType.water.rawValue {
             print("collison between water and ball")
+            penaltyStroke()
         }
     }
 }

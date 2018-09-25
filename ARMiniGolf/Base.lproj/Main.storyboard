@@ -35,16 +35,34 @@
                                     <action selector="resetBallLocationButton:" destination="BV1-FR-VrT" eventType="touchUpInside" id="Uim-cq-PSN"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" alpha="0.69999999999999996" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Score" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Qt-HT-GHT">
+                                <rect key="frame" x="308.5" y="31" width="50.5" height="24"/>
+                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" alpha="0.69999999999999996" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Message" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q7G-Mh-nSM">
+                                <rect key="frame" x="148" y="70" width="79.5" height="24"/>
+                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="FvH-39-w15" firstAttribute="top" secondItem="fQZ-KI-GVf" secondAttribute="top" constant="11" id="4nl-8k-nP7"/>
                             <constraint firstAttribute="trailingMargin" secondItem="BX9-Zr-kpT" secondAttribute="trailing" constant="97" id="5Pw-O1-Clq"/>
+                            <constraint firstItem="q7G-Mh-nSM" firstAttribute="centerX" secondItem="U0K-SW-4ec" secondAttribute="centerX" id="DFi-Dt-8yA"/>
                             <constraint firstItem="FvH-39-w15" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" constant="16" id="EpN-10-vTb"/>
+                            <constraint firstItem="fQZ-KI-GVf" firstAttribute="trailing" secondItem="7Qt-HT-GHT" secondAttribute="trailing" constant="16" id="GJz-KU-PfY"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" id="GsS-dJ-CKf"/>
+                            <constraint firstItem="q7G-Mh-nSM" firstAttribute="top" secondItem="BX9-Zr-kpT" secondAttribute="bottom" constant="18" id="KIC-fL-cN3"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="bottom" secondItem="fQZ-KI-GVf" secondAttribute="bottom" id="VpT-BR-CcM"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="trailing" secondItem="fQZ-KI-GVf" secondAttribute="trailing" id="XyZ-9z-H8e"/>
                             <constraint firstItem="BX9-Zr-kpT" firstAttribute="leading" secondItem="U0K-SW-4ec" secondAttribute="leadingMargin" constant="96" id="ehE-xg-e6H"/>
+                            <constraint firstItem="7Qt-HT-GHT" firstAttribute="top" secondItem="fQZ-KI-GVf" secondAttribute="top" constant="11" id="f8z-BQ-vEV"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="top" secondItem="U0K-SW-4ec" secondAttribute="top" id="rJc-2c-zQA"/>
                             <constraint firstItem="BX9-Zr-kpT" firstAttribute="top" secondItem="fQZ-KI-GVf" secondAttribute="top" constant="20" id="ylR-LZ-GyO"/>
                         </constraints>
@@ -52,12 +70,14 @@
                     </view>
                     <connections>
                         <outlet property="ballHitForceProgressView" destination="BX9-Zr-kpT" id="zl9-ZN-Tzh"/>
+                        <outlet property="messageLabel" destination="q7G-Mh-nSM" id="EO7-JN-e0W"/>
                         <outlet property="sceneView" destination="BrB-h1-WRS" id="5nT-qQ-ynl"/>
+                        <outlet property="scoreLabel" destination="7Qt-HT-GHT" id="KaY-d7-n5f"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="262" y="98"/>
+            <point key="canvasLocation" x="261.60000000000002" y="97.601199400299862"/>
         </scene>
     </scenes>
 </document>
