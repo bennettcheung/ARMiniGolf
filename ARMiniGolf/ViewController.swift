@@ -68,11 +68,14 @@ class ViewController: UIViewController {
   }
   
   func turnoffARPlaneTracking(){
-//    let configuration = ARWorldTrackingConfiguration()
-//    let options: ARSession.RunOptions = [.resetTracking, .removeExistingAnchors]
-//    sceneView.session.run(configuration, options: options)
+
 
     //sceneView.debugOptions = []
+    
+    //hide all the tracking nodes
+    for node in planeNodes{
+        node.opacity = 0
+    }
   }
   
   func configureLighting() {
@@ -362,11 +365,12 @@ extension ViewController: ARSCNViewDelegate {
     
     // TODO: Update plane node
     update(&planeNode, withGeometry: plane, type: .static)
-    
-    node.addChildNode(planeNode)
-    
-    // TODO: Append plane node to plane nodes array if appropriate
-      planeNodes.append(planeNode)
+    if !gameManager.gameStarted(){
+        node.addChildNode(planeNode)
+        
+        // TODO: Append plane node to plane nodes array if appropriate
+        planeNodes.append(planeNode)
+    }
   }
   
   // TODO: Remove plane node from plane nodes array if appropriate
