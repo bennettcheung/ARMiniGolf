@@ -72,7 +72,7 @@ class ViewController: UIViewController {
 //    let options: ARSession.RunOptions = [.resetTracking, .removeExistingAnchors]
 //    sceneView.session.run(configuration, options: options)
 
-    sceneView.debugOptions = []
+    //sceneView.debugOptions = []
   }
   
   func configureLighting() {
@@ -164,7 +164,7 @@ class ViewController: UIViewController {
     globalBallNode = ballNode
     globalBallNode.position = SCNVector3(courseNode.position.x, courseNode.position.y, courseNode.position.z + 2.1)
     globalBallNode.physicsBody?.continuousCollisionDetectionThreshold = 0.1
-    //ballNode.position = SCNVector3(courseNode.position.x, courseNode.position.y, courseNode.position.z + 2.1)
+    
     sceneView.scene.rootNode.addChildNode(ballNode)
     
     //start game, remove the detecting plane node
@@ -214,11 +214,8 @@ class ViewController: UIViewController {
   //Apply force to ball method
   
   @objc func applyForceToBall(withGestureRecognizer recognizer: UIGestureRecognizer) {
-    print("above state began")
     //button press state begins
-
     if recognizer.state == .began {
-        print("State begin")
       pressStartTime = Date()
     }
    
@@ -230,18 +227,16 @@ class ViewController: UIViewController {
     hapticsInterval = Float(getAppropriateFeedback(duration: duration))
     let force = 1/hapticsInterval
     updateForceIndicator(force: force)
-    print("All commands for begin have run")
     
     //button press state ends
     
     if recognizer.state == .ended {
-        print("state ended")
       globalBallNode.geometry?.firstMaterial?.diffuse.contents = UIColor.white
       self.ballHitForceProgressView.alpha = 0
       let forceMultiplier = force * 0.05 //adjust the distance the ball is hit
       direction.x = direction.x * forceMultiplier
       direction.z = direction.z * forceMultiplier
-      print (direction)
+      //print (direction)
       
       //play a sound and apply force
       let puttSound =  sounds["putt"]!
@@ -305,11 +300,19 @@ class ViewController: UIViewController {
 
 //********************************* MARK: Collison Reporting
 
-
+enum bodyType: Int {
+    case ball = 1
+    case wall = 2
+    case hole = 4
+    case ground = 8
+    case water = 16
+}
 extension ViewController: SCNPhysicsContactDelegate {
     
     
     func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact) {
+        
+        //ball contact with hole, hole contact with ball
         
         if contact.nodeA.physicsBody?.categoryBitMask == bodyType.ball.rawValue &&
             contact.nodeB.physicsBody?.categoryBitMask == bodyType.hole.rawValue {
@@ -319,12 +322,20 @@ extension ViewController: SCNPhysicsContactDelegate {
             contact.nodeA.physicsBody?.categoryBitMask == bodyType.hole.rawValue {
             print("collison between hole and ball")
         }
+        
+          //ball contact with water, water contact with ball
+        
+        if contact.nodeA.physicsBody?.categoryBitMask == bodyType.ball.rawValue &&
+            contact.nodeB.physicsBody?.categoryBitMask == bodyType.water.rawValue {
+            print("collison between ball and water")
+        }
+        else if contact.nodeB.physicsBody?.categoryBitMask == bodyType.ball.rawValue &&
+            contact.nodeA.physicsBody?.categoryBitMask == bodyType.water.rawValue {
+            print("collison between water and ball")
+        }
     }
 }
-enum bodyType: Int {
-    case ball = 1
-    case hole = 2
-}
+
 
 
 
