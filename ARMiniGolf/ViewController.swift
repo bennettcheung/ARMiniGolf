@@ -38,7 +38,7 @@ class ViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     //debug code
-    sceneView.debugOptions = [.showFeaturePoints, .showWorldOrigin, .showPhysicsShapes]
+    sceneView.debugOptions = [.showFeaturePoints, .showPhysicsShapes]
     
     addTapGestureToSceneView()
     configureLighting()
@@ -66,7 +66,7 @@ class ViewController: UIViewController {
     sceneView.scene.physicsWorld.contactDelegate = self
     
   }
-  
+    // MARK: Turn off debugging
   func turnoffARPlaneTracking(){
 
 
