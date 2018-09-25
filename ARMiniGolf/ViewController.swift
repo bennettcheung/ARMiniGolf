@@ -71,7 +71,7 @@ class ViewController: UIViewController {
 //    let options: ARSession.RunOptions = [.resetTracking, .removeExistingAnchors]
 //    sceneView.session.run(configuration, options: options)
 
-    //sceneView.debugOptions = []
+    sceneView.debugOptions = []
   }
   
   func configureLighting() {
