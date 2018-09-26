@@ -87,12 +87,13 @@ class ViewController: UIViewController {
   }
     
     func showPhoneMovementDemo(){
-       let centerX = handAndPhoneImageView.center.x
+        
+        let centerX = self.view.center.x
         let handY = handAndPhoneImageView.center.y
         handAndPhoneImageView.center = CGPoint(x: centerX, y: handY)
         UIView.animate(withDuration: 1.5, delay: 0, options: [.curveEaseOut], animations: {
-          self.handAndPhoneImageView.center.x += 150
-            }, completion: nil)
+            self.handAndPhoneImageView.center.x += 150
+        }, completion: nil)
         UIView.animate(withDuration: 3, delay: 1.5, options: [.autoreverse, .repeat, .curveEaseInOut], animations: {
             self.handAndPhoneImageView.center.x -= 280
         }, completion: nil)
