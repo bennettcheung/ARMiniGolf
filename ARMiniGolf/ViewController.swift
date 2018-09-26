@@ -13,6 +13,7 @@ import ARKit
 
 class ViewController: UIViewController {
   
+    @IBOutlet weak var touchTheScreenImageView: UIImageView!
     @IBOutlet weak var resetGameButton: UIButton!
     @IBOutlet weak var handAndPhoneImageView: UIImageView!
     @IBOutlet weak var messageLabel: UILabel!
@@ -50,7 +51,7 @@ class ViewController: UIViewController {
     configureLighting()
     addLongPressGesturesToSceneView()
     self.ballHitForceProgressView.alpha = 0
-    messageLabel.text = "Move the phone side to side repeatedly while searching for a flat plane."
+    
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -77,8 +78,9 @@ class ViewController: UIViewController {
     // MARK: Turn off debugging
   func turnoffARPlaneTracking(){
   handAndPhoneImageView.removeFromSuperview()
-
-    sceneView.debugOptions = []
+  touchTheScreenImageView.layer.removeAllAnimations()
+  touchTheScreenImageView.removeFromSuperview()
+  sceneView.debugOptions = []
     
     //hide all the tracking nodes
     for node in planeNodes{
@@ -87,7 +89,8 @@ class ViewController: UIViewController {
   }
     
     func showPhoneMovementDemo(){
-        
+        touchTheScreenImageView.alpha = 0
+        messageLabel.text = "Move the phone side to side repeatedly while searching for a flat plane."
         let centerX = self.view.center.x
         let handY = handAndPhoneImageView.center.y
         handAndPhoneImageView.center = CGPoint(x: centerX, y: handY)
@@ -97,6 +100,16 @@ class ViewController: UIViewController {
         UIView.animate(withDuration: 3, delay: 1.5, options: [.autoreverse, .repeat, .curveEaseInOut], animations: {
             self.handAndPhoneImageView.center.x -= 280
         }, completion: nil)
+    }
+    
+    func showPhoneWithClickingDemo(){
+        messageLabel.text = "When you see the red plane, tap on it to place the course."
+       handAndPhoneImageView.layer.removeAllAnimations()
+       handAndPhoneImageView.center.x = self.view.center.x
+       touchTheScreenImageView.center.x = handAndPhoneImageView.center.x - 5
+        UIView.animate(withDuration: 2, delay: 0, options: [.repeat, .autoreverse], animations: {
+            self.touchTheScreenImageView.alpha = 1
+        })
     }
     
   func configureLighting() {
@@ -455,6 +468,10 @@ extension ViewController: ARSCNViewDelegate {
         
         // TODO: Append plane node to plane nodes array if appropriate
         planeNodes.append(planeNode)
+        DispatchQueue.main.async {
+             self.showPhoneWithClickingDemo()
+        }
+       
     }
   }
   
@@ -504,6 +521,6 @@ extension float4x4 {
 
 extension UIColor {
   open class var transparentWhite: UIColor {
-    return UIColor.white.withAlphaComponent(0.20)
+    return UIColor.white.withAlphaComponent(0.40)
   }
 }
