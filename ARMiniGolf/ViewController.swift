@@ -141,8 +141,8 @@ class ViewController: UIViewController {
     let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.addCourseToSceneView(withGestureRecognizer:)))
     sceneView.addGestureRecognizer(tapGestureRecognizer)
   
-    longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(ViewController.applyForceToBall(withGestureRecognizer:)))
-    longPressGestureRecognizer.minimumPressDuration = 0.5
+//    longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(ViewController.applyForceToBall(withGestureRecognizer:)))
+//    longPressGestureRecognizer.minimumPressDuration = 0.5
     
     sceneView.addGestureRecognizer(self.longPressGestureRecognizer)
 
@@ -152,9 +152,7 @@ class ViewController: UIViewController {
 
     let rotationGestureRecognizer = UIRotationGestureRecognizer(target: self, action: #selector(handleRotation(_:)))
     sceneView.addGestureRecognizer(rotationGestureRecognizer)
-    
-    let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
-    sceneView.addGestureRecognizer(panGestureRecognizer)
+
   }
   
   @objc func addCourseToSceneView(withGestureRecognizer recognizer: UIGestureRecognizer) {
@@ -255,27 +253,7 @@ class ViewController: UIViewController {
     }
   }
   
-  
-  @IBAction func handlePan(_ gesture: UIPanGestureRecognizer) {
-    
-    let location = gesture.location(in: sceneView)
-    let results = sceneView.hitTest(location, types: .existingPlane)
-    guard let nearestPlane = results.first else {
-      return
-    }
-    
-    switch gesture.state {
-    case .began:
-      print("pan gesture began \(gesture.velocity(in: sceneView))" )
-//      panOffset = nearestPlane.worldTransform.columns.3.xyz - gameBoard.simdWorldPosition
-    case .changed:
-      print("pan gesture changed \(gesture.velocity(in: sceneView))" )
 
-//      gameBoard.simdWorldPosition = nearestPlane.worldTransform.columns.3.xyz - panOffset
-    default:
-      break
-    }
-  }
   //*************************************************************************** direction and force for ball path *********************************
   
   // Get user vector
