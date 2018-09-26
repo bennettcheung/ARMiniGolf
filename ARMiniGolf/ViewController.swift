@@ -47,9 +47,9 @@ class ViewController: UIViewController {
     //debug code
     sceneView.debugOptions = [.showFeaturePoints, .showPhysicsShapes]
     
-    addTapGestureToSceneView()
+    addGesturesToSceneView()
     configureLighting()
-    addLongPressGesturesToSceneView()
+
     self.ballHitForceProgressView.alpha = 0
     
   }
@@ -135,28 +135,26 @@ class ViewController: UIViewController {
     
   }
   
+  // MARK: Gesture recognizers setup
   
-  
-  func addTapGestureToSceneView() {
+  func addGesturesToSceneView() {
     let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.addCourseToSceneView(withGestureRecognizer:)))
     sceneView.addGestureRecognizer(tapGestureRecognizer)
-  }
   
-
-  // Add long press gestures to scene view method
-  func addLongPressGesturesToSceneView() {
     longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(ViewController.applyForceToBall(withGestureRecognizer:)))
     longPressGestureRecognizer.minimumPressDuration = 0.5
     
- 
-    
     sceneView.addGestureRecognizer(self.longPressGestureRecognizer)
-  }
-  
-  func addPinchGestureToSceneView(){
-    let pinchGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.handlePinch))
+
+    let pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(handlePinch(_:)))
     sceneView.addGestureRecognizer(pinchGestureRecognizer)
     
+
+    let rotationGestureRecognizer = UIRotationGestureRecognizer(target: self, action: #selector(handleRotation(_:)))
+    sceneView.addGestureRecognizer(rotationGestureRecognizer)
+    
+    let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
+    sceneView.addGestureRecognizer(panGestureRecognizer)
   }
   
   @objc func addCourseToSceneView(withGestureRecognizer recognizer: UIGestureRecognizer) {
@@ -197,6 +195,11 @@ class ViewController: UIViewController {
     
     courseNode.name = courseNodeName
     
+    if let planeNode = planeNodes.first{
+      print ("Euler angles \(planeNode.simdEulerAngles.x) \(planeNode.simdEulerAngles.y) \(planeNode.simdEulerAngles.z)")
+      courseNode.simdEulerAngles.y = planeNode.simdEulerAngles.y
+    }
+    
     sceneView.scene.rootNode.addChildNode(courseNode)
     
     self.courseNode = courseNode
@@ -218,13 +221,60 @@ class ViewController: UIViewController {
   }
   
   
-  @objc func handlePinch(_ recognizer: UIGestureRecognizer) {
+  @objc func handlePinch(_ gesture: UIPinchGestureRecognizer) {
     //Don't continue if game already started
     print("pinch gesture handler called")
     if gameManager.gameStarted()  {
       return
     }
+    if let planeNode = planeNodes.first{
+      let scale = Float(gesture.scale)
+      planeNode.simdScale.x = planeNode.simdScale.x * scale
+      planeNode.simdScale.y = planeNode.simdScale.y * scale
+      planeNode.simdScale.z = planeNode.simdScale.z * scale
+      gesture.scale = 1
+
+    }
+  }
+  
+  
+  @objc func handleRotation(_ gesture: UIRotationGestureRecognizer) {
+    //Don't continue if game already started
+    if gameManager.gameStarted()  {
+      return
+    }
+    if let planeNode = planeNodes.first{
+      if planeNode.eulerAngles.x > .pi / 2 {
+        planeNode.simdEulerAngles.y += Float(gesture.rotation)
+      } else {
+        planeNode.simdEulerAngles.y -= Float(gesture.rotation)
+      }
+
+      gesture.rotation = 0
+      
+    }
+  }
+  
+  
+  @IBAction func handlePan(_ gesture: UIPanGestureRecognizer) {
     
+    let location = gesture.location(in: sceneView)
+    let results = sceneView.hitTest(location, types: .existingPlane)
+    guard let nearestPlane = results.first else {
+      return
+    }
+    
+    switch gesture.state {
+    case .began:
+      print("pan gesture began \(gesture.velocity(in: sceneView))" )
+//      panOffset = nearestPlane.worldTransform.columns.3.xyz - gameBoard.simdWorldPosition
+    case .changed:
+      print("pan gesture changed \(gesture.velocity(in: sceneView))" )
+
+//      gameBoard.simdWorldPosition = nearestPlane.worldTransform.columns.3.xyz - panOffset
+    default:
+      break
+    }
   }
   //*************************************************************************** direction and force for ball path *********************************
   
@@ -462,7 +512,7 @@ extension ViewController: ARSCNViewDelegate {
     planeNode.eulerAngles.x = -.pi / 2
     
     // TODO: Update plane node
-    update(&planeNode, withGeometry: plane, type: .static)
+    //update(&planeNode, withGeometry: plane, type: .static)
     if !gameManager.gameStarted(){
         node.addChildNode(planeNode)
         
@@ -500,7 +550,7 @@ extension ViewController: ARSCNViewDelegate {
     
     planeNode.position = SCNVector3(x, y, z)
     
-    update(&planeNode, withGeometry: plane, type: .static)
+   update(&planeNode, withGeometry: plane, type: .static)
     
   }
   
