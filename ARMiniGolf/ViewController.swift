@@ -310,12 +310,13 @@ class ViewController: UIViewController {
     }
   
   private func resetBallToInitialLocation() {
+      globalBallNode.isHidden = false
       guard let physicsBody = globalBallNode.physicsBody else{
         return
       }
       physicsBody.velocity = SCNVector3(0, 0, 0)
       physicsBody.angularVelocity = SCNVector4(0, 0, 0, 0)
-      globalBallNode.position = SCNVector3(courseNode.position.x, courseNode.position.y, courseNode.position.z + 2.6)
+      globalBallNode.position = SCNVector3(courseNode.position.x, courseNode.position.y, courseNode.position.z + 3.8)
   }
   
   private func penaltyStroke(){
@@ -331,6 +332,25 @@ class ViewController: UIViewController {
     gameManager.incrementShotCount()
     DispatchQueue.main.async {
       self.scoreLabel.text = self.gameManager.getCurrentPlayerScore().description
+    }
+  }
+  
+  private func checkAndShowVictoryScreen(){
+    
+    guard let physicsBody = globalBallNode.physicsBody else{
+      return
+    }
+    print ("Velocity is \(physicsBody.velocity)")
+    //Make sure the ball is slow enough
+    let velocityMargin = SCNVector3(0.2, 0.2, 0.2)
+    if abs(physicsBody.velocity.x) < velocityMargin.x &&
+      abs(physicsBody.velocity.y) < velocityMargin.y &&
+      abs(physicsBody.velocity.z) < velocityMargin.z
+    {
+      DispatchQueue.main.async {
+        self.globalBallNode.isHidden = true
+        self.messageLabel.text = "You won!"
+      }
     }
   }
     
@@ -356,10 +376,12 @@ extension ViewController: SCNPhysicsContactDelegate {
         if contact.nodeA.physicsBody?.categoryBitMask == bodyType.ball.rawValue &&
             contact.nodeB.physicsBody?.categoryBitMask == bodyType.hole.rawValue {
             print("collison between ball and hole")
+          checkAndShowVictoryScreen()
         }
         else if contact.nodeB.physicsBody?.categoryBitMask == bodyType.ball.rawValue &&
             contact.nodeA.physicsBody?.categoryBitMask == bodyType.hole.rawValue {
             print("collison between hole and ball")
+          checkAndShowVictoryScreen()
         }
         
           //ball contact with water, water contact with ball
