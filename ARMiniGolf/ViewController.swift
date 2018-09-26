@@ -90,7 +90,7 @@ class ViewController: UIViewController {
     
     func showPhoneMovementDemo(){
         touchTheScreenImageView.alpha = 0
-        messageLabel.text = "Move the phone side to side repeatedly while searching for a flat plane."
+        messageLabel.text = "Move the phone side to side repeatedly while the game is searching for a flat surface."
         let centerX = self.view.center.x
         let handY = handAndPhoneImageView.center.y
         handAndPhoneImageView.center = CGPoint(x: centerX, y: handY)
@@ -103,7 +103,7 @@ class ViewController: UIViewController {
     }
     
     func showPhoneWithClickingDemo(){
-        messageLabel.text = "When you see the red plane, tap on it to place the course."
+        messageLabel.text = "Now tap on the white rectangle to place the MiniGolf course."
        handAndPhoneImageView.layer.removeAllAnimations()
        handAndPhoneImageView.center.x = self.view.center.x
        touchTheScreenImageView.center.x = handAndPhoneImageView.center.x - 5
