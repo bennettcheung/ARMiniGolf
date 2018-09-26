@@ -306,6 +306,8 @@ class ViewController: UIViewController {
     }
     
     @IBAction func resetBallLocationButton(_ sender: Any) {
+      scoreLabel.text = "0"
+      gameManager.restartGame()
       resetBallToInitialLocation()
     }
   

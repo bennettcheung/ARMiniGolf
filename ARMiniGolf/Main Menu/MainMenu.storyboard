@@ -20,6 +20,9 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launchscreen" translatesAutoresizingMaskIntoConstraints="NO" id="G8d-2b-4wm">
                                 <rect key="frame" x="0.0" y="20" width="414" height="716"/>
                             </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="AR MiniGolf" translatesAutoresizingMaskIntoConstraints="NO" id="7LZ-zO-Ixv">
+                                <rect key="frame" x="20" y="150" width="378" height="182"/>
+                            </imageView>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6mf-7Z-dCM">
                                 <rect key="frame" x="120" y="622" width="174" height="59"/>
                                 <color key="backgroundColor" red="0.51409308292496858" green="0.64710423413661156" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -38,12 +41,15 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="7LZ-zO-Ixv" firstAttribute="top" secondItem="fuT-ds-xdB" secondAttribute="top" constant="130" id="2dB-jL-JyS"/>
                             <constraint firstItem="fuT-ds-xdB" firstAttribute="bottom" secondItem="6mf-7Z-dCM" secondAttribute="bottom" constant="55" id="33F-Cg-Ce0"/>
                             <constraint firstItem="G8d-2b-4wm" firstAttribute="top" secondItem="fuT-ds-xdB" secondAttribute="top" id="3us-xW-Zdt"/>
                             <constraint firstItem="PAq-65-tn5" firstAttribute="centerX" secondItem="IqQ-5i-bIy" secondAttribute="centerX" id="9JE-H9-lWL"/>
                             <constraint firstItem="6mf-7Z-dCM" firstAttribute="centerX" secondItem="IqQ-5i-bIy" secondAttribute="centerX" id="JCx-di-bk4"/>
                             <constraint firstItem="fuT-ds-xdB" firstAttribute="trailing" secondItem="G8d-2b-4wm" secondAttribute="trailing" id="Onj-9m-3VJ"/>
                             <constraint firstItem="PAq-65-tn5" firstAttribute="centerY" secondItem="IqQ-5i-bIy" secondAttribute="centerY" id="dW9-RV-I4A"/>
+                            <constraint firstItem="fuT-ds-xdB" firstAttribute="trailing" secondItem="7LZ-zO-Ixv" secondAttribute="trailing" constant="16" id="jik-yO-jjl"/>
+                            <constraint firstItem="7LZ-zO-Ixv" firstAttribute="leading" secondItem="fuT-ds-xdB" secondAttribute="leading" constant="20" id="kvB-69-1cC"/>
                             <constraint firstItem="G8d-2b-4wm" firstAttribute="leading" secondItem="fuT-ds-xdB" secondAttribute="leading" id="kvr-xG-KJn"/>
                             <constraint firstItem="fuT-ds-xdB" firstAttribute="bottom" secondItem="G8d-2b-4wm" secondAttribute="bottom" id="lyD-oR-pya"/>
                         </constraints>
@@ -68,6 +74,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="AR MiniGolf" width="369" height="182"/>
         <image name="launchscreen" width="2000" height="1333"/>
     </resources>
 </document>

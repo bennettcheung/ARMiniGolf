@@ -23,9 +23,8 @@
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="UfN-ue-gS7">
                                 <rect key="frame" x="177.5" y="323.5" width="20" height="20"/>
                             </activityIndicatorView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="AR MiniGolf" translatesAutoresizingMaskIntoConstraints="NO" id="iKi-gK-7Io">
-                                <rect key="frame" x="20" y="116" width="339" height="187"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="AR MiniGolf" translatesAutoresizingMaskIntoConstraints="NO" id="iKi-gK-7Io">
+                                <rect key="frame" x="20" y="150" width="339" height="182"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -34,7 +33,10 @@
                             <constraint firstItem="UfN-ue-gS7" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="Gfd-N6-QIn"/>
                             <constraint firstItem="UfN-ue-gS7" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="MKj-sR-Cbz"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="1jp-9B-c9S" secondAttribute="bottom" id="TBh-UL-iRQ"/>
+                            <constraint firstItem="iKi-gK-7Io" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="130" id="Wd0-ur-XH2"/>
+                            <constraint firstItem="iKi-gK-7Io" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="fq0-dZ-5GF"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="1jp-9B-c9S" secondAttribute="trailing" id="gAL-f9-LUE"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="iKi-gK-7Io" secondAttribute="trailing" constant="16" id="o8f-T1-Jlb"/>
                             <constraint firstItem="1jp-9B-c9S" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="u9o-bh-dtc"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
