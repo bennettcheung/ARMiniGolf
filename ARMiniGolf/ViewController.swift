@@ -320,11 +320,25 @@ class ViewController: UIViewController {
     func getAppropriateFeedback(duration:Float) -> TimeInterval{
         let interval: TimeInterval
         switch duration {
-        case 0.5...1:
+        case 0.5...0.83:
             interval = 0.4
-        case 1...2:
-            interval = 0.2
-        case 2...:
+        case 0.83...1.16:
+            interval = 0.367
+        case 1.16...1.49:
+            interval = 0.334
+        case 1.49...1.82:
+            interval = 0.301
+        case 1.82...2.15:
+            interval = 0.268
+        case 2.15...2.48:
+            interval = 0.235
+        case 2.48...2.81:
+            interval = 0.202
+        case 2.81...3.14:
+            interval = 0.169
+        case 3.14...3.47:
+            interval = 0.136
+        case 3.47...:
             interval = 0.1
         default:
             interval = 1.0
