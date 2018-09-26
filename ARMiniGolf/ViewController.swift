@@ -13,7 +13,9 @@ import ARKit
 
 class ViewController: UIViewController {
   
-  @IBOutlet weak var messageLabel: UILabel!
+    @IBOutlet weak var resetGameButton: UIButton!
+    @IBOutlet weak var handAndPhoneImageView: UIImageView!
+    @IBOutlet weak var messageLabel: UILabel!
   @IBOutlet weak var scoreLabel: UILabel!
   @IBOutlet weak var sceneView: ARSCNView!
   @IBOutlet weak var ballHitForceProgressView: UIProgressView!
@@ -39,6 +41,8 @@ class ViewController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    
+    
     //debug code
     sceneView.debugOptions = [.showFeaturePoints, .showPhysicsShapes]
     
@@ -46,13 +50,13 @@ class ViewController: UIViewController {
     configureLighting()
     addLongPressGesturesToSceneView()
     self.ballHitForceProgressView.alpha = 0
-    scoreLabel.text = "0"
-    messageLabel.text = "Move around to detect a horizontal surface"
+    messageLabel.text = "Move the phone side to side repeatedly while searching for a flat plane."
   }
   
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     setUpSceneView()
+    showPhoneMovementDemo()
   }
   
   override func viewWillDisappear(_ animated: Bool) {
@@ -72,7 +76,7 @@ class ViewController: UIViewController {
   }
     // MARK: Turn off debugging
   func turnoffARPlaneTracking(){
-
+  handAndPhoneImageView.removeFromSuperview()
 
     sceneView.debugOptions = []
     
@@ -81,10 +85,23 @@ class ViewController: UIViewController {
         node.opacity = 0
     }
   }
-  
+    
+    func showPhoneMovementDemo(){
+       let centerX = handAndPhoneImageView.center.x
+        let handY = handAndPhoneImageView.center.y
+        handAndPhoneImageView.center = CGPoint(x: centerX, y: handY)
+        UIView.animate(withDuration: 1.5, delay: 0, options: [.curveEaseOut], animations: {
+          self.handAndPhoneImageView.center.x += 150
+            }, completion: nil)
+        UIView.animate(withDuration: 3, delay: 1.5, options: [.autoreverse, .repeat, .curveEaseInOut], animations: {
+            self.handAndPhoneImageView.center.x -= 280
+        }, completion: nil)
+    }
+    
   func configureLighting() {
     sceneView.autoenablesDefaultLighting = true
     sceneView.automaticallyUpdatesLighting = true
+
   }
   
   func setupSounds(){
@@ -135,6 +152,11 @@ class ViewController: UIViewController {
     }
     
     messageLabel.text = ""
+    scoreLabel.text = "0"
+    scoreLabel.alpha = 0.7
+    resetGameButton.alpha = 1
+    
+    
     
     let tapLocation = recognizer.location(in: sceneView)
     let hitTestResults = sceneView.hitTest(tapLocation, types: .existingPlaneUsingExtent)
