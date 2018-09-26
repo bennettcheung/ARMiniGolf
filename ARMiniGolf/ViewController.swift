@@ -141,8 +141,8 @@ class ViewController: UIViewController {
     let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.addCourseToSceneView(withGestureRecognizer:)))
     sceneView.addGestureRecognizer(tapGestureRecognizer)
   
-//    longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(ViewController.applyForceToBall(withGestureRecognizer:)))
-//    longPressGestureRecognizer.minimumPressDuration = 0.5
+    longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(ViewController.applyForceToBall(withGestureRecognizer:)))
+    longPressGestureRecognizer.minimumPressDuration = 0.5
     
     sceneView.addGestureRecognizer(self.longPressGestureRecognizer)
 
