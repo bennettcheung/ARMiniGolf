@@ -80,7 +80,7 @@ class ViewController: UIViewController {
   handAndPhoneImageView.removeFromSuperview()
   touchTheScreenImageView.layer.removeAllAnimations()
   touchTheScreenImageView.removeFromSuperview()
-  //sceneView.debugOptions = []
+  sceneView.debugOptions = []
     
     //hide all the tracking nodes
     for node in planeNodes{
@@ -158,7 +158,8 @@ class ViewController: UIViewController {
     sceneView.addGestureRecognizer(pinchGestureRecognizer)
     
   }
-  
+  //***************************************************************************************** add course
+    
   @objc func addCourseToSceneView(withGestureRecognizer recognizer: UIGestureRecognizer) {
     //Don't continue if game already started
     if gameManager.gameStarted()  {
@@ -181,7 +182,7 @@ class ViewController: UIViewController {
     let y = translation.y + 0.05
     let z = translation.z - 1.5 //0.5
 
-    guard let courseScene = SCNScene(named: "art.scnassets/course.scn"),
+    guard let courseScene = SCNScene(named: "art.scnassets/course2.scn"),
       let courseNode = courseScene.rootNode.childNode(withName: "course", recursively: false)
       else { return }
 
@@ -201,7 +202,7 @@ class ViewController: UIViewController {
     
     self.courseNode = courseNode
     
-    //add ball to the course
+    //************************************************************************* add ball to the course
     guard let ballScene = SCNScene(named: "art.scnassets/ball.scn"),
       let ballNode = ballScene.rootNode.childNode(withName: "ball", recursively: false)
       else { return }
@@ -361,7 +362,7 @@ class ViewController: UIViewController {
       resetBallToInitialLocation()
     }
     // MARK: Ball Position at start
-    
+    //********************************************************************************** reset ball
   private func resetBallToInitialLocation() {
       globalBallNode.isHidden = false
       guard let physicsBody = globalBallNode.physicsBody else{
@@ -369,8 +370,8 @@ class ViewController: UIViewController {
       }
       physicsBody.velocity = SCNVector3(0, 0, 0)
       physicsBody.angularVelocity = SCNVector4(0, 0, 0, 0)
-    globalBallNode.position = SCNVector3(courseNode.position.x, courseNode.position.y, courseNode.position.z + 3.8) //course1
-    // globalBallNode.position = SCNVector3(courseNode.position.x - 0.5, courseNode.position.y + 0.2, courseNode.position.z + 2.7) //course2
+    //globalBallNode.position = SCNVector3(courseNode.position.x, courseNode.position.y, courseNode.position.z + 3.8) //course1
+    globalBallNode.position = SCNVector3(courseNode.position.x - 0.5, courseNode.position.y + 0.2, courseNode.position.z + 2.7) //course2
     print("the balls position is\(globalBallNode.position)")
   }
   
