@@ -369,8 +369,8 @@ class ViewController: UIViewController {
       }
       physicsBody.velocity = SCNVector3(0, 0, 0)
       physicsBody.angularVelocity = SCNVector4(0, 0, 0, 0)
-      //globalBallNode.position = SCNVector3(courseNode.position.x, courseNode.position.y, courseNode.position.z + 3.8) //course1
-     globalBallNode.position = SCNVector3(courseNode.position.x - 0.5, courseNode.position.y + 0.01, courseNode.position.z + 2.7) //course2
+    //globalBallNode.position = SCNVector3(courseNode.position.x, courseNode.position.y, courseNode.position.z + 3.8) //course1
+     globalBallNode.position = SCNVector3(courseNode.position.x - 0.5, courseNode.position.y + 0.25430253, courseNode.position.z + 2.7) //course2
     print("the balls position is\(globalBallNode.position)")
   }
   
