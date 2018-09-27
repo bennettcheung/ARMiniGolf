@@ -181,7 +181,7 @@ class ViewController: UIViewController {
     let y = translation.y + 0.05
     let z = translation.z - 1.5 //0.5
 
-    guard let courseScene = SCNScene(named: "art.scnassets/course2.scn"),
+    guard let courseScene = SCNScene(named: "art.scnassets/course.scn"),
       let courseNode = courseScene.rootNode.childNode(withName: "course", recursively: false)
       else { return }
 
@@ -369,8 +369,8 @@ class ViewController: UIViewController {
       }
       physicsBody.velocity = SCNVector3(0, 0, 0)
       physicsBody.angularVelocity = SCNVector4(0, 0, 0, 0)
-    //globalBallNode.position = SCNVector3(courseNode.position.x, courseNode.position.y, courseNode.position.z + 3.8) //course1
-     globalBallNode.position = SCNVector3(courseNode.position.x - 0.5, courseNode.position.y + 0.2, courseNode.position.z + 2.7) //course2
+    globalBallNode.position = SCNVector3(courseNode.position.x, courseNode.position.y, courseNode.position.z + 3.8) //course1
+    // globalBallNode.position = SCNVector3(courseNode.position.x - 0.5, courseNode.position.y + 0.2, courseNode.position.z + 2.7) //course2
     print("the balls position is\(globalBallNode.position)")
   }
   
