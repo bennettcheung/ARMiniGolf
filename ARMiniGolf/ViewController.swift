@@ -77,10 +77,12 @@ class ViewController: UIViewController {
   }
     // MARK: Turn off debugging
   func turnoffARPlaneTracking(){
-  handAndPhoneImageView.removeFromSuperview()
-  touchTheScreenImageView.layer.removeAllAnimations()
-  touchTheScreenImageView.removeFromSuperview()
-  sceneView.debugOptions = []
+    if handAndPhoneImageView != nil && touchTheScreenImageView != nil{
+      handAndPhoneImageView.removeFromSuperview()
+      touchTheScreenImageView.layer.removeAllAnimations()
+      touchTheScreenImageView.removeFromSuperview()
+    }
+    sceneView.debugOptions = []
     
     //hide all the tracking nodes
     for node in planeNodes{
@@ -424,6 +426,12 @@ class ViewController: UIViewController {
   }
   
   private func advanceToNextLevel(){
+    if (gameManager.gameEnded())
+    {
+      return
+    }
+    gameManager.endGame()
+    
     print("Advance to next level")
     gameManager.advanceLevel()
     

@@ -12,6 +12,7 @@ import SceneKit
 enum State {
   case Detecting
   case Started
+  case Ended
 }
 
 class GameManager: NSObject {
@@ -42,6 +43,10 @@ class GameManager: NSObject {
     currentPlayer.score = 0
   }
   
+  func endGame(){
+    state = State.Ended
+  }
+  
   func incrementShotCount(){
     currentPlayer.score += 1
   }
@@ -52,6 +57,10 @@ class GameManager: NSObject {
   
   func gameStarted() -> Bool{
     return state == State.Started
+  }
+  
+  func gameEnded() -> Bool{
+    return state == State.Ended
   }
   
   func getCurrentLevel() ->Level {
