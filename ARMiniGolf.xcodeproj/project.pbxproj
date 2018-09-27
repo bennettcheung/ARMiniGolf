@@ -94,6 +94,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		911C1B29215DA4B700383FA2 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				910D5E6F215580B600F06577 /* GameManager.swift */,
+				91293C3021580836005F6E70 /* Player.swift */,
+				911C1B23215D7A7A00383FA2 /* Level.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		91293C2921575696005F6E70 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
@@ -137,6 +147,7 @@
 		912C0755215440BA009704B2 /* ARMiniGolf */ = {
 			isa = PBXGroup;
 			children = (
+				911C1B29215DA4B700383FA2 /* Model */,
 				91293C2921575696005F6E70 /* Sounds */,
 				912C0756215440BA009704B2 /* AppDelegate.swift */,
 				912C0758215440BA009704B2 /* art.scnassets */,
@@ -145,10 +156,7 @@
 				912C075F215440BD009704B2 /* Assets.xcassets */,
 				912C0761215440BD009704B2 /* LaunchScreen.storyboard */,
 				912C0764215440BD009704B2 /* Info.plist */,
-				910D5E6F215580B600F06577 /* GameManager.swift */,
 				91293C362158127A005F6E70 /* Main Menu */,
-				91293C3021580836005F6E70 /* Player.swift */,
-				911C1B23215D7A7A00383FA2 /* Level.swift */,
 			);
 			path = ARMiniGolf;
 			sourceTree = "<group>";

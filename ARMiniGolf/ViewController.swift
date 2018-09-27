@@ -439,6 +439,7 @@ class ViewController: UIViewController {
     
     courseNode.removeFromParentNode()
     courseNode.removeAllAudioPlayers()
+    globalBallNode.removeFromParentNode()
     courseNode = nil
     
     let level = gameManager.getCurrentLevel()
@@ -453,7 +454,10 @@ class ViewController: UIViewController {
     
     sceneView.scene.rootNode.addChildNode(courseNode)
     
+    sceneView.scene.rootNode.addChildNode(globalBallNode)
     resetBallToInitialLocation()
+    
+    scoreLabel.text = "0"
     
     loadBackgroundMusic()
   }
