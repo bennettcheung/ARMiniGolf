@@ -21,7 +21,7 @@ class ViewController: UIViewController {
   @IBOutlet weak var sceneView: ARSCNView!
   @IBOutlet weak var ballHitForceProgressView: UIProgressView!
     
-  var planeNodes = [SCNNode]()
+  var planeNode = SCNNode()
   var globalBallNode: SCNNode!
   var courseNode: SCNNode!
   var longPressGestureRecognizer = UILongPressGestureRecognizer()
@@ -83,9 +83,8 @@ class ViewController: UIViewController {
   sceneView.debugOptions = []
     
     //hide all the tracking nodes
-    for node in planeNodes{
-        node.opacity = 0
-    }
+  planeNode.opacity = 0
+    
   }
     
     func showPhoneMovementDemo(){
@@ -124,6 +123,12 @@ class ViewController: UIViewController {
     puttSound.volume = 0.6
     
     sounds["putt"] = puttSound
+    
+    let ballInHoleSound = SCNAudioSource(fileNamed: "ballInHole.wav")!
+    ballInHoleSound.load()
+    ballInHoleSound.volume = 0.6
+    
+    sounds["ballInHole"] = puttSound
     
     let backgroundMusic = SCNAudioSource(fileNamed: "background.mp3")!
     backgroundMusic.volume = 0.3
@@ -193,10 +198,10 @@ class ViewController: UIViewController {
     
     courseNode.name = courseNodeName
     
-    if let planeNode = planeNodes.first{
+
       print ("Euler angles \(planeNode.simdEulerAngles.x) \(planeNode.simdEulerAngles.y) \(planeNode.simdEulerAngles.z)")
       courseNode.simdEulerAngles.y = planeNode.simdEulerAngles.y
-    }
+
     
     sceneView.scene.rootNode.addChildNode(courseNode)
     
@@ -225,14 +230,13 @@ class ViewController: UIViewController {
     if gameManager.gameStarted()  {
       return
     }
-    if let planeNode = planeNodes.first{
-      let scale = Float(gesture.scale)
-      planeNode.simdScale.x = planeNode.simdScale.x * scale
-      planeNode.simdScale.y = planeNode.simdScale.y * scale
-      planeNode.simdScale.z = planeNode.simdScale.z * scale
-      gesture.scale = 1
 
-    }
+    let scale = Float(gesture.scale)
+    planeNode.simdScale.x = planeNode.simdScale.x * scale
+    planeNode.simdScale.y = planeNode.simdScale.y * scale
+    planeNode.simdScale.z = planeNode.simdScale.z * scale
+    gesture.scale = 1
+
   }
   
   
@@ -241,16 +245,16 @@ class ViewController: UIViewController {
     if gameManager.gameStarted()  {
       return
     }
-    if let planeNode = planeNodes.first{
-      if planeNode.eulerAngles.x > .pi / 2 {
-        planeNode.simdEulerAngles.y += Float(gesture.rotation)
-      } else {
-        planeNode.simdEulerAngles.y -= Float(gesture.rotation)
-      }
 
-      gesture.rotation = 0
-      
+    if planeNode.eulerAngles.x > .pi / 2 {
+      planeNode.simdEulerAngles.y += Float(gesture.rotation)
+    } else {
+      planeNode.simdEulerAngles.y -= Float(gesture.rotation)
     }
+
+    gesture.rotation = 0
+      
+    
   }
   
 
@@ -414,6 +418,9 @@ class ViewController: UIViewController {
       abs(physicsBody.velocity.z) < velocityMargin.z
     {
       DispatchQueue.main.async {
+        
+        let ballInHoleSound =  self.sounds["ballInHole"]!
+        self.globalBallNode.runAction(SCNAction.playAudio(ballInHoleSound, waitForCompletion: false))
         self.globalBallNode.isHidden = true
         self.messageLabel.text = "You won!"
       }
@@ -474,6 +481,7 @@ extension ViewController: ARSCNViewDelegate {
   
   func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
     guard  let planeAnchor = anchor as? ARPlaneAnchor else { return }
+  
     
     let width = CGFloat(planeAnchor.extent.x)
     let height = CGFloat(planeAnchor.extent.z)
@@ -481,7 +489,7 @@ extension ViewController: ARSCNViewDelegate {
     
     plane.materials.first?.diffuse.contents = UIColor.transparentWhite
     
-    var planeNode = SCNNode(geometry: plane)
+    planeNode = SCNNode(geometry: plane)
     
     let x = CGFloat(planeAnchor.center.x)
     let y = CGFloat(planeAnchor.center.y)
@@ -495,7 +503,7 @@ extension ViewController: ARSCNViewDelegate {
         node.addChildNode(planeNode)
         
         // TODO: Append plane node to plane nodes array if appropriate
-        planeNodes.append(planeNode)
+        //planeNodes.append(planeNode)
         DispatchQueue.main.async {
              self.showPhoneWithClickingDemo()
         }
@@ -505,10 +513,10 @@ extension ViewController: ARSCNViewDelegate {
   
   // TODO: Remove plane node from plane nodes array if appropriate
   func renderer(_ renderer: SCNSceneRenderer, didRemove node: SCNNode, for anchor: ARAnchor) {
-      guard anchor is ARPlaneAnchor,
-          let planeNode = node.childNodes.first
-          else { return }
-      planeNodes = planeNodes.filter { $0 != planeNode }
+//      guard anchor is ARPlaneAnchor,
+//          let planeNode = node.childNodes.first
+//          else { return }
+//      planeNodes = planeNodes.filter { $0 != planeNode }
   }
   
   func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
