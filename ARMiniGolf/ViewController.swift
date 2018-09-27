@@ -181,7 +181,7 @@ class ViewController: UIViewController {
     let y = translation.y + 0.05
     let z = translation.z - 1.5 //0.5
 
-    guard let courseScene = SCNScene(named: "art.scnassets/course.scn"),
+    guard let courseScene = SCNScene(named: "art.scnassets/course2.scn"),
       let courseNode = courseScene.rootNode.childNode(withName: "course", recursively: false)
       else { return }
 
@@ -368,7 +368,8 @@ class ViewController: UIViewController {
       }
       physicsBody.velocity = SCNVector3(0, 0, 0)
       physicsBody.angularVelocity = SCNVector4(0, 0, 0, 0)
-      globalBallNode.position = SCNVector3(courseNode.position.x, courseNode.position.y, courseNode.position.z + 3.8)
+      //globalBallNode.position = SCNVector3(courseNode.position.x, courseNode.position.y, courseNode.position.z + 3.8) //course1
+     globalBallNode.position = SCNVector3(courseNode.position.x, courseNode.position.y, courseNode.position.z + 0) //course2
   }
   
   private func penaltyStroke(){
