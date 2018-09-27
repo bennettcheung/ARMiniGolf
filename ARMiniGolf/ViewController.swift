@@ -80,7 +80,7 @@ class ViewController: UIViewController {
   handAndPhoneImageView.removeFromSuperview()
   touchTheScreenImageView.layer.removeAllAnimations()
   touchTheScreenImageView.removeFromSuperview()
-  //sceneView.debugOptions = []
+  sceneView.debugOptions = []
     
     //hide all the tracking nodes
     for node in planeNodes{
@@ -125,14 +125,24 @@ class ViewController: UIViewController {
     
     sounds["putt"] = puttSound
     
-    let backgroundMusic = SCNAudioSource(fileNamed: "background.mp3")!
+    let ballInHoleSound = SCNAudioSource(fileNamed: "ballInHole.wav")!
+    ballInHoleSound.load()
+    ballInHoleSound.volume = 0.4
+    
+    sounds["ballInHole"] = ballInHoleSound
+    
+    loadBackgroundMusic()
+  }
+  
+  func loadBackgroundMusic(){
+    let level = gameManager.getCurrentLevel()
+    let backgroundMusic = SCNAudioSource(fileNamed: level.musicFile)!
     backgroundMusic.volume = 0.3
     backgroundMusic.loops = true
     backgroundMusic.load()
     
     let musicPlayer = SCNAudioPlayer(source: backgroundMusic)
     courseNode.addAudioPlayer(musicPlayer)
-    
   }
   
   
@@ -180,20 +190,14 @@ class ViewController: UIViewController {
     let x = translation.x
     let y = translation.y + 0.05
     let z = translation.z - 1.5 //0.5
-
-    guard let courseScene = SCNScene(named: "art.scnassets/course.scn"),
+    
+    let level = gameManager.getCurrentLevel()
+    guard let courseScene = SCNScene(named: level.sceneFile),
       let courseNode = courseScene.rootNode.childNode(withName: "course", recursively: false)
       else { return }
 
     
     courseNode.position = SCNVector3(x,y,z)
-    
-    // TODO: Attach physics body to course node
-//    let physicsBody = SCNPhysicsBody(type: .static, shape: nil)
-////    physicsBody.restitution = 0.1
-//    courseNode.physicsBody = physicsBody
-    
-//    courseNode.physicsBody?.isAffectedByGravity = false  //TEST CODE
     
     courseNode.name = courseNodeName
     
@@ -356,6 +360,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func resetBallLocationButton(_ sender: Any) {
+      
       scoreLabel.text = "0"
       gameManager.restartGame()
       resetBallToInitialLocation()
@@ -369,9 +374,14 @@ class ViewController: UIViewController {
       }
       physicsBody.velocity = SCNVector3(0, 0, 0)
       physicsBody.angularVelocity = SCNVector4(0, 0, 0, 0)
-    globalBallNode.position = SCNVector3(courseNode.position.x, courseNode.position.y, courseNode.position.z + 3.8) //course1
-    // globalBallNode.position = SCNVector3(courseNode.position.x - 0.5, courseNode.position.y + 0.2, courseNode.position.z + 2.7) //course2
-    print("the balls position is\(globalBallNode.position)")
+    
+      //grab the game level offset
+      let level = gameManager.getCurrentLevel()
+      globalBallNode.position = SCNVector3(courseNode.position.x + level.initialBallOffset.x,
+                                           courseNode.position.y + level.initialBallOffset.y,
+                                           courseNode.position.z + level.initialBallOffset.z)
+    
+//    print("the balls position is\(globalBallNode.position)")
   }
   
   private func penaltyStroke(){
@@ -403,10 +413,41 @@ class ViewController: UIViewController {
       abs(physicsBody.velocity.z) < velocityMargin.z
     {
       DispatchQueue.main.async {
+        let ballInHoleSound =  self.sounds["ballInHole"]!
+        self.globalBallNode.runAction(SCNAction.playAudio(ballInHoleSound, waitForCompletion: false))
         self.globalBallNode.isHidden = true
         self.messageLabel.text = "You won!"
+        
+        self.advanceToNextLevel()
       }
     }
+  }
+  
+  private func advanceToNextLevel(){
+    print("Advance to next level")
+    gameManager.advanceLevel()
+    
+    let oldPosition = courseNode.position
+    
+    courseNode.removeFromParentNode()
+    courseNode.removeAllAudioPlayers()
+    courseNode = nil
+    
+    let level = gameManager.getCurrentLevel()
+    guard let courseScene = SCNScene(named: level.sceneFile),
+      let courseNode = courseScene.rootNode.childNode(withName: "course", recursively: false)
+      else { return }
+    
+    courseNode.position = oldPosition
+    self.courseNode = courseNode
+    
+    courseNode.name = courseNodeName
+    
+    sceneView.scene.rootNode.addChildNode(courseNode)
+    
+    resetBallToInitialLocation()
+    
+    loadBackgroundMusic()
   }
     
 }
