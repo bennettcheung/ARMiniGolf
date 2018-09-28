@@ -21,9 +21,14 @@ class ViewController: UIViewController {
   @IBOutlet weak var sceneView: ARSCNView!
   @IBOutlet weak var ballHitForceProgressView: UIProgressView!
     
-  var planeNode = SCNNode()
+  var planeNodes = [SCNNode]()
   var globalBallNode: SCNNode!
   var courseNode: SCNNode!
+  var minimumWidth: CGFloat = 0
+  var minimumHeight: CGFloat = 0
+  var initialXScale: Float = 0
+  var initialYScale: Float = 0
+  let MAX_PITCH_SCALE: Float = 3.5
 
   var ballExists = false
   var pressStartTime:Date?
@@ -90,10 +95,10 @@ class ViewController: UIViewController {
     //sceneView.debugOptions = []
     
     //hide all the tracking nodes
-//    for node in planeNodes{
-//        node.opacity = 0
-//    }
-    planeNode.opacity = 0
+    for node in planeNodes{
+      node.opacity = 0
+      node.physicsBody = nil
+    }
   }
     
     func showPhoneMovementDemo(){
@@ -244,10 +249,26 @@ class ViewController: UIViewController {
       return
     }
     
+    guard let planeNode = planeNodes.first else{
+      return
+    }
+    //the initial setup
+    if initialXScale == 0 && initialYScale == 0{
+      initialXScale = planeNode.simdScale.x
+      initialYScale = planeNode.simdScale.y
+    }
+      
     let scale = Float(gesture.scale)
-    planeNode.simdScale.x = planeNode.simdScale.x * scale
-    planeNode.simdScale.y = planeNode.simdScale.y * scale
-    planeNode.simdScale.z = planeNode.simdScale.z * scale
+    let resultXScale = planeNode.simdScale.x * scale
+    let resultYScale = planeNode.simdScale.y * scale
+    
+    if resultXScale >= initialXScale && resultYScale >= initialYScale &&
+      resultXScale < MAX_PITCH_SCALE && resultYScale < MAX_PITCH_SCALE {
+      planeNode.simdScale.x = resultXScale
+      planeNode.simdScale.y = resultYScale
+      
+      print ("scale \(scale) simdScale x \(resultXScale) simdscale Y \(resultYScale)" )
+    }
     
     gesture.scale = 1
     
@@ -257,6 +278,9 @@ class ViewController: UIViewController {
   @objc func handleRotation(_ gesture: UIRotationGestureRecognizer) {
     //Don't continue if game already started
     if gameManager.gameStarted()  {
+      return
+    }
+    guard let planeNode = planeNodes.first else{
       return
     }
     
@@ -541,13 +565,13 @@ extension ViewController: ARSCNViewDelegate {
   func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
     guard  let planeAnchor = anchor as? ARPlaneAnchor else { return }
     
-    let width = CGFloat(planeAnchor.extent.x)
-    let height = CGFloat(planeAnchor.extent.z)
-    let plane = SCNPlane(width: width, height: height)
+    minimumWidth = CGFloat(planeAnchor.extent.x)
+    minimumHeight = CGFloat(planeAnchor.extent.z)
+    let plane = SCNPlane(width: minimumWidth, height: minimumHeight)
     
     plane.materials.first?.diffuse.contents = UIColor.transparentWhite
     
-    let planeNode = SCNNode(geometry: plane)
+    var planeNode = SCNNode(geometry: plane)
     
     let x = CGFloat(planeAnchor.center.x)
     let y = CGFloat(planeAnchor.center.y)
@@ -556,13 +580,11 @@ extension ViewController: ARSCNViewDelegate {
     planeNode.eulerAngles.x = -.pi / 2
     
     // TODO: Update plane node
-    //update(&planeNode, withGeometry: plane, type: .static)
+    update(&planeNode, withGeometry: plane, type: .static)
     if !gameManager.gameStarted(){
         node.addChildNode(planeNode)
       
-        //replace the saved plane node and remove the old one from view
-        self.planeNode.removeFromParentNode()
-        self.planeNode = planeNode
+        planeNodes.append(planeNode)
         DispatchQueue.main.async {
              self.showPhoneWithClickingDemo()
         }
@@ -572,12 +594,15 @@ extension ViewController: ARSCNViewDelegate {
   
   // TODO: Remove plane node from plane nodes array if appropriate
   func renderer(_ renderer: SCNSceneRenderer, didRemove node: SCNNode, for anchor: ARAnchor) {
-
+    guard anchor is ARPlaneAnchor,
+      let planeNode = node.childNodes.first
+      else { return }
+    planeNodes = planeNodes.filter { $0 != planeNode }
   }
   
   func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
     guard let planeAnchor = anchor as?  ARPlaneAnchor,
-      let planeNode = node.childNodes.first,
+      var planeNode = node.childNodes.first,
       let plane = planeNode.geometry as? SCNPlane
       else { return }
     
@@ -592,6 +617,15 @@ extension ViewController: ARSCNViewDelegate {
     
     planeNode.position = SCNVector3(x, y, z)
     
+    update(&planeNode, withGeometry: plane, type: .static)
+    
+  }
+  
+  // TODO: Create update plane node method
+  func update(_ node: inout SCNNode, withGeometry geometry: SCNGeometry, type: SCNPhysicsBodyType) {
+    let shape = SCNPhysicsShape(geometry: geometry, options: nil)
+    let physicsBody = SCNPhysicsBody(type: type, shape: shape)
+    node.physicsBody = physicsBody
   }
   
 }
