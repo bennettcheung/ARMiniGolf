@@ -82,7 +82,7 @@ class ViewController: UIViewController {
       touchTheScreenImageView.layer.removeAllAnimations()
       touchTheScreenImageView.removeFromSuperview()
     }
-    sceneView.debugOptions = []
+    //sceneView.debugOptions = []
     
     //hide all the tracking nodes
     for node in planeNodes{
@@ -197,7 +197,15 @@ class ViewController: UIViewController {
     guard let courseScene = SCNScene(named: level.sceneFile),
       let courseNode = courseScene.rootNode.childNode(withName: "course", recursively: false)
       else { return }
-
+    
+    if level.scale != 1 {
+      courseNode.scale = SCNVector3(level.scale, level.scale, level.scale)
+      for node in courseNode.childNodes{
+        if let physicsBody = node.physicsBody{
+          physicsBody.physicsShape = SCNPhysicsShape(node: node, options: [SCNPhysicsShape.Option.scale: SCNVector3(level.scale, level.scale, level.scale)])
+        }
+      }
+    }
     
     courseNode.position = SCNVector3(x,y,z)
     
