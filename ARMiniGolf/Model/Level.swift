@@ -12,13 +12,21 @@ import SceneKit
 class Level{
   let sceneFile: String
   let musicFile: String
+  let initialCourseOffset: SCNVector3
   let initialBallOffset: SCNVector3
   var scale: Float
   
-  init(sceneFile: String, musicFile: String, initialBallOffset: SCNVector3, scale: Float) {
+  init(sceneFile: String, musicFile: String, initialCourseOffset: SCNVector3, initialBallOffset: SCNVector3, scale: Float) {
     self.sceneFile = sceneFile
     self.musicFile = musicFile
     self.scale = scale
+    
+    var courseOffsetWIthScale = initialCourseOffset
+    courseOffsetWIthScale.x *= scale
+    courseOffsetWIthScale.y *= scale
+    courseOffsetWIthScale.z *= scale
+    self.initialCourseOffset = courseOffsetWIthScale
+    
     var ballOffsetWithScale = initialBallOffset
     ballOffsetWithScale.x *= scale
     ballOffsetWithScale.z *= scale

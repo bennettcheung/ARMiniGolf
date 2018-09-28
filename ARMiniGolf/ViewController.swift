@@ -198,11 +198,13 @@ class ViewController: UIViewController {
     guard let hitTestResult = hitTestResults.first else { return }
     
     let translation = hitTestResult.worldTransform.translation
-    let x = translation.x
-    let y = translation.y + 0.05
-    let z = translation.z - 1.5 //0.5
     
     let level = gameManager.getCurrentLevel()
+    let x = translation.x + level.initialCourseOffset.x
+    let y = translation.y + level.initialCourseOffset.y
+    let z = translation.z + level.initialCourseOffset.z
+    
+
     guard let courseScene = SCNScene(named: level.sceneFile),
       let courseNode = courseScene.rootNode.childNode(withName: "course", recursively: false)
       else { return }
@@ -567,6 +569,8 @@ extension ViewController: ARSCNViewDelegate {
     
     minimumWidth = CGFloat(planeAnchor.extent.x)
     minimumHeight = CGFloat(planeAnchor.extent.z)
+    
+    print ("Minimum width is \(minimumWidth) and heigh is \(minimumHeight)")
     let plane = SCNPlane(width: minimumWidth, height: minimumHeight)
     
     plane.materials.first?.diffuse.contents = UIColor.transparentWhite
@@ -610,6 +614,8 @@ extension ViewController: ARSCNViewDelegate {
     let height = CGFloat(planeAnchor.extent.z)
     plane.width = width
     plane.height = height
+    print ("Updated Minimum width is \(width) and heigh is \(height)")
+
     
     let x = CGFloat(planeAnchor.center.x)
     let y = CGFloat(planeAnchor.center.y)
