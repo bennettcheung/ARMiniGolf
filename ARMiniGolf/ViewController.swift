@@ -202,7 +202,9 @@ class ViewController: UIViewController {
     if level.scale != 1 {
       courseNode.scale = SCNVector3(level.scale, level.scale, level.scale)
       for node in courseNode.childNodes{
-        if let physicsBody = node.physicsBody{
+//        print("node name is \(String(describing: node.name)      )")
+        if node.name != "floor",
+          let physicsBody = node.physicsBody{
           physicsBody.physicsShape = SCNPhysicsShape(node: node, options: [SCNPhysicsShape.Option.scale: SCNVector3(level.scale, level.scale, level.scale)])
         }
       }
@@ -448,7 +450,7 @@ class ViewController: UIViewController {
     
     courseNode.removeFromParentNode()
     courseNode.removeAllAudioPlayers()
-    globalBallNode.removeFromParentNode()
+    //globalBallNode.removeFromParentNode()
     courseNode = nil
     
     let level = gameManager.getCurrentLevel()
@@ -463,7 +465,7 @@ class ViewController: UIViewController {
     
     sceneView.scene.rootNode.addChildNode(courseNode)
     
-    sceneView.scene.rootNode.addChildNode(globalBallNode)
+    //sceneView.scene.rootNode.addChildNode(globalBallNode)
     resetBallToInitialLocation()
     
     scoreLabel.text = "0"
