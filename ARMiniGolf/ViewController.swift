@@ -82,7 +82,7 @@ class ViewController: UIViewController {
       touchTheScreenImageView.layer.removeAllAnimations()
       touchTheScreenImageView.removeFromSuperview()
     }
-    //sceneView.debugOptions = []
+    sceneView.debugOptions = []
     
     //hide all the tracking nodes
     for node in planeNodes{
