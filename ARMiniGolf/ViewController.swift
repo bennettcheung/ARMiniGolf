@@ -192,7 +192,6 @@ class ViewController: UIViewController {
     resetGameButton.alpha = 1
     
     
-    
     let tapLocation = recognizer.location(in: sceneView)
     let hitTestResults = sceneView.hitTest(tapLocation, types: .existingPlaneUsingExtent)
     guard let hitTestResult = hitTestResults.first else { return }
@@ -205,28 +204,8 @@ class ViewController: UIViewController {
     let z = translation.z + level.initialCourseOffset.z
     
 
-    guard let courseScene = SCNScene(named: level.sceneFile),
-      let courseNode = courseScene.rootNode.childNode(withName: "course", recursively: false)
-      else { return }
+    addCourseAtPosition(SCNVector3(x,y,z))
     
-    if level.scale != 1 {
-      courseNode.scale = SCNVector3(level.scale, level.scale, level.scale)
-      for node in courseNode.childNodes{
-//        print("node name is \(String(describing: node.name)      )")
-        if node.name != "floor",
-          let physicsBody = node.physicsBody{
-          physicsBody.physicsShape = SCNPhysicsShape(node: node, options: [SCNPhysicsShape.Option.scale: SCNVector3(level.scale, level.scale, level.scale)])
-        }
-      }
-    }
-    
-    courseNode.position = SCNVector3(x,y,z)
-    
-    courseNode.name = courseNodeName
-    
-    sceneView.scene.rootNode.addChildNode(courseNode)
-    
-    self.courseNode = courseNode
     
     //************************************************************************* add ball to the course
     guard let ballScene = SCNScene(named: "art.scnassets/ball.scn"),
@@ -268,8 +247,6 @@ class ViewController: UIViewController {
       resultXScale < MAX_PITCH_SCALE && resultYScale < MAX_PITCH_SCALE {
       planeNode.simdScale.x = resultXScale
       planeNode.simdScale.y = resultYScale
-      
-      print ("scale \(scale) simdScale x \(resultXScale) simdscale Y \(resultYScale)" )
     }
     
     gesture.scale = 1
@@ -475,6 +452,39 @@ class ViewController: UIViewController {
     }
   }
   
+  private func addCourseAtPosition(_ position: SCNVector3){
+    
+    //if we are advancing to a different level
+    if courseNode != nil{
+      courseNode.removeFromParentNode()
+      courseNode.removeAllAudioPlayers()
+      courseNode = nil
+    }
+    
+    let level = gameManager.getCurrentLevel()
+    guard let courseScene = SCNScene(named: level.sceneFile)
+      else { return }
+    
+    courseNode = courseScene.rootNode.childNode(withName: "course", recursively: false)
+    
+    //change the physics body to scale
+    if level.scale != 1 {
+      courseNode.scale = SCNVector3(level.scale, level.scale, level.scale)
+      for node in courseNode.childNodes{
+        if node.name != "floor",
+          let physicsBody = node.physicsBody{
+          physicsBody.physicsShape = SCNPhysicsShape(node: node, options: [SCNPhysicsShape.Option.scale: SCNVector3(level.scale, level.scale, level.scale)])
+        }
+      }
+    }
+    
+    courseNode.position = position
+    
+    courseNode.name = courseNodeName
+    
+    sceneView.scene.rootNode.addChildNode(courseNode)
+  }
+  
   private func advanceToNextLevel(){
     if (gameManager.gameEnded())
     {
@@ -486,25 +496,9 @@ class ViewController: UIViewController {
     gameManager.advanceLevel()
     
     let oldPosition = courseNode.position
+    addCourseAtPosition(oldPosition)
+
     
-    courseNode.removeFromParentNode()
-    courseNode.removeAllAudioPlayers()
-    //globalBallNode.removeFromParentNode()
-    courseNode = nil
-    
-    let level = gameManager.getCurrentLevel()
-    guard let courseScene = SCNScene(named: level.sceneFile),
-      let courseNode = courseScene.rootNode.childNode(withName: "course", recursively: false)
-      else { return }
-    
-    courseNode.position = oldPosition
-    self.courseNode = courseNode
-    
-    courseNode.name = courseNodeName
-    
-    sceneView.scene.rootNode.addChildNode(courseNode)
-    
-    //sceneView.scene.rootNode.addChildNode(globalBallNode)
     resetBallToInitialLocation()
     
     scoreLabel.text = "0"
@@ -570,7 +564,7 @@ extension ViewController: ARSCNViewDelegate {
     minimumWidth = CGFloat(planeAnchor.extent.x)
     minimumHeight = CGFloat(planeAnchor.extent.z)
     
-    print ("Minimum width is \(minimumWidth) and heigh is \(minimumHeight)")
+    print ("Minimum width is \(minimumWidth) and height is \(minimumHeight)")
     let plane = SCNPlane(width: minimumWidth, height: minimumHeight)
     
     plane.materials.first?.diffuse.contents = UIColor.transparentWhite
