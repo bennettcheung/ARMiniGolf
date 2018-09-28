@@ -21,11 +21,10 @@ class ViewController: UIViewController {
   @IBOutlet weak var sceneView: ARSCNView!
   @IBOutlet weak var ballHitForceProgressView: UIProgressView!
     
-  var planeNodes = [SCNNode]()
+  var planeNode = SCNNode()
   var globalBallNode: SCNNode!
   var courseNode: SCNNode!
-  var longPressGestureRecognizer = UILongPressGestureRecognizer()
-  var tapGestureRecognizer = UITapGestureRecognizer()
+
   var ballExists = false
   var pressStartTime:Date?
   var timeSinceLastHaptic: Date?
@@ -34,6 +33,12 @@ class ViewController: UIViewController {
   var sounds:[String:SCNAudioSource] = [:]
   
   var gameManager = GameManager()
+  
+  //gestures
+  var longPressGestureRecognizer = UILongPressGestureRecognizer()
+  var tapGestureRecognizer = UITapGestureRecognizer()
+  var pinchGestureRecognizer = UIPinchGestureRecognizer()
+  var rotationGestureRecognizer = UIRotationGestureRecognizer()
   
   // TODO: Declare  node name constant
   let courseNodeName = "course"
@@ -47,9 +52,9 @@ class ViewController: UIViewController {
     //debug code
     sceneView.debugOptions = [.showFeaturePoints, .showPhysicsShapes]
     
-    addTapGestureToSceneView()
+    addGesturesToSceneView()
     configureLighting()
-    addLongPressGesturesToSceneView()
+
     self.ballHitForceProgressView.alpha = 0
     
   }
@@ -85,9 +90,10 @@ class ViewController: UIViewController {
     //sceneView.debugOptions = []
     
     //hide all the tracking nodes
-    for node in planeNodes{
-        node.opacity = 0
-    }
+//    for node in planeNodes{
+//        node.opacity = 0
+//    }
+    planeNode.opacity = 0
   }
     
     func showPhoneMovementDemo(){
@@ -149,25 +155,22 @@ class ViewController: UIViewController {
   
   
   
-  func addTapGestureToSceneView() {
-    let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.addCourseToSceneView(withGestureRecognizer:)))
+  func addGesturesToSceneView() {
+    tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.addCourseToSceneView(withGestureRecognizer:)))
     sceneView.addGestureRecognizer(tapGestureRecognizer)
-  }
-  
 
-  // Add long press gestures to scene view method
-  func addLongPressGesturesToSceneView() {
+    // Add long press gestures to scene view method
     longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(ViewController.applyForceToBall(withGestureRecognizer:)))
     longPressGestureRecognizer.minimumPressDuration = 0.5
     
- 
-    
     sceneView.addGestureRecognizer(self.longPressGestureRecognizer)
-  }
-  
-  func addPinchGestureToSceneView(){
-    let pinchGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.handlePinch))
+
+    //add pinch gesture
+    pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(ViewController.handlePinch(_:)))
     sceneView.addGestureRecognizer(pinchGestureRecognizer)
+    
+    rotationGestureRecognizer = UIRotationGestureRecognizer(target: self, action: #selector(handleRotation(_:)))
+    sceneView.addGestureRecognizer(rotationGestureRecognizer)
     
   }
   //***************************************************************************************** add course
@@ -235,14 +238,38 @@ class ViewController: UIViewController {
   }
   
   
-  @objc func handlePinch(_ recognizer: UIGestureRecognizer) {
+  @objc func handlePinch(_ gesture: UIPinchGestureRecognizer) {
     //Don't continue if game already started
-    print("pinch gesture handler called")
     if gameManager.gameStarted()  {
       return
     }
     
+    let scale = Float(gesture.scale)
+    planeNode.simdScale.x = planeNode.simdScale.x * scale
+    planeNode.simdScale.y = planeNode.simdScale.y * scale
+    planeNode.simdScale.z = planeNode.simdScale.z * scale
+    
+    gesture.scale = 1
+    
   }
+  
+  
+  @objc func handleRotation(_ gesture: UIRotationGestureRecognizer) {
+    //Don't continue if game already started
+    if gameManager.gameStarted()  {
+      return
+    }
+    
+    if planeNode.eulerAngles.x > .pi / 2 {
+      planeNode.simdEulerAngles.y += Float(gesture.rotation)
+    } else {
+      planeNode.simdEulerAngles.y -= Float(gesture.rotation)
+    }
+    
+    gesture.rotation = 0
+
+  }
+
   //*************************************************************************** direction and force for ball path *********************************
   
   // Get user vector
@@ -256,20 +283,6 @@ class ViewController: UIViewController {
       return (direction)
     }
     return (SCNVector3(0, 0, -1))
-  }
-  
-  
-  // Get ball node from long press location method
-  func getBallNode(from longPressLocation: CGPoint) -> SCNNode? {
-    let hitTestResults = sceneView.hitTest(longPressLocation)
-    guard let parentNode  = hitTestResults.first?.node.parent
-      else { return nil }
-    for child in parentNode.childNodes {
-      if child.name == "ball" {
-        return child
-      }
-    }
-    return nil
   }
   
   //Apply force to ball method
@@ -534,7 +547,7 @@ extension ViewController: ARSCNViewDelegate {
     
     plane.materials.first?.diffuse.contents = UIColor.transparentWhite
     
-    var planeNode = SCNNode(geometry: plane)
+    let planeNode = SCNNode(geometry: plane)
     
     let x = CGFloat(planeAnchor.center.x)
     let y = CGFloat(planeAnchor.center.y)
@@ -543,12 +556,13 @@ extension ViewController: ARSCNViewDelegate {
     planeNode.eulerAngles.x = -.pi / 2
     
     // TODO: Update plane node
-    update(&planeNode, withGeometry: plane, type: .static)
+    //update(&planeNode, withGeometry: plane, type: .static)
     if !gameManager.gameStarted(){
         node.addChildNode(planeNode)
-        
-        // TODO: Append plane node to plane nodes array if appropriate
-        planeNodes.append(planeNode)
+      
+        //replace the saved plane node and remove the old one from view
+        self.planeNode.removeFromParentNode()
+        self.planeNode = planeNode
         DispatchQueue.main.async {
              self.showPhoneWithClickingDemo()
         }
@@ -558,15 +572,12 @@ extension ViewController: ARSCNViewDelegate {
   
   // TODO: Remove plane node from plane nodes array if appropriate
   func renderer(_ renderer: SCNSceneRenderer, didRemove node: SCNNode, for anchor: ARAnchor) {
-      guard anchor is ARPlaneAnchor,
-          let planeNode = node.childNodes.first
-          else { return }
-      planeNodes = planeNodes.filter { $0 != planeNode }
+
   }
   
   func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
     guard let planeAnchor = anchor as?  ARPlaneAnchor,
-      var planeNode = node.childNodes.first,
+      let planeNode = node.childNodes.first,
       let plane = planeNode.geometry as? SCNPlane
       else { return }
     
@@ -581,16 +592,8 @@ extension ViewController: ARSCNViewDelegate {
     
     planeNode.position = SCNVector3(x, y, z)
     
-    update(&planeNode, withGeometry: plane, type: .static)
-    
   }
   
-  // TODO: Create update plane node method
-  func update(_ node: inout SCNNode, withGeometry geometry: SCNGeometry, type: SCNPhysicsBodyType) {
-    let shape = SCNPhysicsShape(geometry: geometry, options: nil)
-    let physicsBody = SCNPhysicsBody(type: type, shape: shape)
-    node.physicsBody = physicsBody
-  }
 }
 
 extension float4x4 {
@@ -602,6 +605,6 @@ extension float4x4 {
 
 extension UIColor {
   open class var transparentWhite: UIColor {
-    return UIColor.white.withAlphaComponent(0.40)
+    return UIColor.white.withAlphaComponent(0.80)
   }
 }
