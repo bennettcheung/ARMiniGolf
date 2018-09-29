@@ -7,10 +7,11 @@
 //
 
 import UIKit
+import AVFoundation
 
 class MainMenuViewController: UIViewController {
   @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
-  
+    var backgroundMusicPlayer: AVAudioPlayer?
     
     @IBOutlet weak var hole1Button: UIButton!
     @IBOutlet weak var hole2Button: UIButton!
@@ -24,6 +25,17 @@ class MainMenuViewController: UIViewController {
   
   override func viewDidLoad() {
         super.viewDidLoad()
+    
+    //start playing background music
+    let path = Bundle.main.path(forResource: "mainmenu.mp3", ofType:nil)!
+    let url = URL(fileURLWithPath: path)
+    do {
+      backgroundMusicPlayer = try AVAudioPlayer(contentsOf: url)
+      backgroundMusicPlayer?.volume = 0.4
+      backgroundMusicPlayer?.play()
+    } catch {
+      print(" couldn't load file ")
+    }
 
     // Setup the level selection buttons
     
@@ -69,6 +81,9 @@ class MainMenuViewController: UIViewController {
         guard let controller = segue.destination as? ViewController else{
             return
         }
+      
+      backgroundMusicPlayer?.stop()
+      
       if segue.identifier == "hole1Button"{
             controller.setLevel(1)
         }
