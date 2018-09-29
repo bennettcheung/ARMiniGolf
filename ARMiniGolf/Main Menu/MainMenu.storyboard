@@ -79,7 +79,6 @@
                             <constraint firstItem="v0V-YQ-gdE" firstAttribute="centerX" secondItem="IqQ-5i-bIy" secondAttribute="centerX" id="b50-xZ-Enn"/>
                             <constraint firstItem="sXf-Sg-28i" firstAttribute="top" secondItem="v0V-YQ-gdE" secondAttribute="bottom" constant="8" id="cYM-LT-KTh"/>
                             <constraint firstItem="PAq-65-tn5" firstAttribute="centerY" secondItem="IqQ-5i-bIy" secondAttribute="centerY" id="dW9-RV-I4A"/>
-                            <constraint firstItem="v0V-YQ-gdE" firstAttribute="top" secondItem="fuT-ds-xdB" secondAttribute="top" constant="302" id="gC0-ER-Zgh"/>
                             <constraint firstItem="7LZ-zO-Ixv" firstAttribute="leading" secondItem="fuT-ds-xdB" secondAttribute="leading" id="kUz-e0-XJq"/>
                             <constraint firstItem="G8d-2b-4wm" firstAttribute="leading" secondItem="fuT-ds-xdB" secondAttribute="leading" id="kvr-xG-KJn"/>
                             <constraint firstItem="fuT-ds-xdB" firstAttribute="bottom" secondItem="G8d-2b-4wm" secondAttribute="bottom" id="lyD-oR-pya"/>
@@ -89,8 +88,8 @@
                     </view>
                     <connections>
                         <outlet property="activityIndicator" destination="PAq-65-tn5" id="CiY-5O-SMa"/>
-                        <outlet property="course1CenterXConstraint" destination="b50-xZ-Enn" id="euH-2E-vmn"/>
-                        <outlet property="course1ImageView" destination="v0V-YQ-gdE" id="uOK-tU-ESa"/>
+                        <outlet property="course1CenterXConstraint" destination="b50-xZ-Enn" id="l3w-ev-un0"/>
+                        <outlet property="course1ImageView" destination="v0V-YQ-gdE" id="7Y1-h4-FD2"/>
                         <outlet property="course2CenterXConstraint" destination="09n-Np-9aA" id="DSR-IF-mf4"/>
                         <outlet property="course2ImageView" destination="sXf-Sg-28i" id="Eat-LE-b0g"/>
                         <outlet property="course3CenterXConstraint" destination="TRX-ty-pzs" id="ssc-ej-RRl"/>

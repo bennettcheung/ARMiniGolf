@@ -11,11 +11,13 @@ import UIKit
 class MainMenuViewController: UIViewController {
   @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
   
+
     @IBOutlet weak var course1CenterXConstraint: NSLayoutConstraint!
     @IBOutlet weak var course2CenterXConstraint: NSLayoutConstraint!
     @IBOutlet weak var course3CenterXConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var course1ImageView: UIImageView!
+    
     @IBOutlet weak var course2ImageView: UIImageView!
     @IBOutlet weak var course3ImageView: UIImageView!
     
@@ -35,6 +37,7 @@ class MainMenuViewController: UIViewController {
     course1CenterXConstraint.constant = movementRightOffset
     course2CenterXConstraint.constant = movementLeftOffset
     course3CenterXConstraint.constant = movementRightOffset
+    //self.view.layoutIfNeeded()
     
     UIView.animate(withDuration: 2, delay: 1, usingSpringWithDamping: 0.5, initialSpringVelocity: 5, animations: {
         self.course1CenterXConstraint.constant = 0
@@ -48,23 +51,7 @@ class MainMenuViewController: UIViewController {
         self.course3CenterXConstraint.constant = 0
         self.view.layoutIfNeeded()
     })
-    
-    //set the c1 leading to the view trailing
-    
-    
-    //?? set the c1 trailing to the view trailing + c1.width ?? Do I need this if I have a width set?
-    
-  
-    
-    
-    //set the c2 trailing to the view leading
-    
-    //?? set the c1 trailing to the view leading + c1.width ?? Do I need this if I have a width set?
-    
-    //set the c3 leading to the view trailing
-    //?? set the c3 trailing to the view leading + c1.width ?? Do I need this if I have a width set?
-    
-    // then animate turning off the above 3 and turning on the 3 center ones
+
     }
     
 
