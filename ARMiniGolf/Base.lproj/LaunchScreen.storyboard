@@ -23,16 +23,11 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="AR MiniGolf" translatesAutoresizingMaskIntoConstraints="NO" id="iKi-gK-7Io">
                                 <rect key="frame" x="0.0" y="170" width="414" height="182"/>
                             </imageView>
-                            <activityIndicatorView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="UfN-ue-gS7">
-                                <rect key="frame" x="188.66666666666666" y="349.66666666666669" width="37" height="37"/>
-                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="iKi-gK-7Io" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="8cz-E2-aHO"/>
                             <constraint firstItem="1jp-9B-c9S" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="Ezd-Ox-LdM"/>
-                            <constraint firstItem="UfN-ue-gS7" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="Gfd-N6-QIn"/>
-                            <constraint firstItem="UfN-ue-gS7" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="MKj-sR-Cbz"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="1jp-9B-c9S" secondAttribute="bottom" id="TBh-UL-iRQ"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="1jp-9B-c9S" secondAttribute="trailing" id="gAL-f9-LUE"/>
                             <constraint firstItem="iKi-gK-7Io" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="150" id="iHh-k3-ro5"/>

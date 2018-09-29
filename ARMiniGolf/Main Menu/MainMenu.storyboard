@@ -29,7 +29,7 @@
                                     <constraint firstAttribute="width" constant="240" id="BUo-GK-p9A"/>
                                     <constraint firstAttribute="height" constant="128" id="T1V-1V-Bvd"/>
                                 </constraints>
-                                <state key="normal" title="Button" image="IMG_9374"/>
+                                <state key="normal" title="Button" image="goodPond"/>
                                 <connections>
                                     <segue destination="JkF-MF-A1W" kind="show" identifier="hole1Button" id="WUr-ik-d61"/>
                                 </connections>
@@ -40,7 +40,7 @@
                                     <constraint firstAttribute="height" constant="128" id="cZW-qN-uFW"/>
                                     <constraint firstAttribute="width" constant="240" id="zes-jK-lWP"/>
                                 </constraints>
-                                <state key="normal" title="Button" image="IMG_9372"/>
+                                <state key="normal" title="Button" image="goodWindmill"/>
                                 <connections>
                                     <segue destination="JkF-MF-A1W" kind="show" identifier="hole2Button" id="NBP-Wa-iWx"/>
                                 </connections>
@@ -51,7 +51,7 @@
                                     <constraint firstAttribute="height" constant="128" id="eB5-c6-E7m"/>
                                     <constraint firstAttribute="width" constant="240" id="uG5-Em-uWl"/>
                                 </constraints>
-                                <state key="normal" title="Button" image="IMG_9373"/>
+                                <state key="normal" title="Button" image="goodPipes"/>
                                 <connections>
                                     <segue destination="JkF-MF-A1W" kind="show" identifier="hole3Button" id="Oqn-RQ-2L8"/>
                                 </connections>
@@ -100,9 +100,9 @@
     </scenes>
     <resources>
         <image name="AR MiniGolf" width="369" height="182"/>
-        <image name="IMG_9372" width="1242" height="2208"/>
-        <image name="IMG_9373" width="1242" height="2208"/>
-        <image name="IMG_9374" width="1242" height="2208"/>
+        <image name="goodPipes" width="1242" height="2208"/>
+        <image name="goodPond" width="1217" height="1002"/>
+        <image name="goodWindmill" width="1083" height="1010"/>
         <image name="launchscreen" width="2000" height="1333"/>
     </resources>
     <inferredMetricsTieBreakers>
