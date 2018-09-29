@@ -38,38 +38,63 @@
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="PAq-65-tn5">
                                 <rect key="frame" x="188.66666666666666" y="349.66666666666669" width="37" height="37"/>
                             </activityIndicatorView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="v0V-YQ-gdE" userLabel="Course 1 Image View">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IMG_9374" translatesAutoresizingMaskIntoConstraints="NO" id="v0V-YQ-gdE" userLabel="Course 1 Image View">
                                 <rect key="frame" x="87" y="322" width="240" height="128"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <accessibility key="accessibilityConfiguration">
+                                    <accessibilityTraits key="traits" button="YES" image="YES"/>
+                                </accessibility>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="240" id="EnB-X4-R2s"/>
+                                    <constraint firstAttribute="height" constant="128" id="Whm-QC-sp4"/>
+                                </constraints>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sXf-Sg-28i" userLabel="Course 2 Image View">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IMG_9372" translatesAutoresizingMaskIntoConstraints="NO" id="sXf-Sg-28i" userLabel="Course 2 Image View">
                                 <rect key="frame" x="87" y="458" width="240" height="128"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="240" id="MF7-WY-OGb"/>
+                                    <constraint firstAttribute="height" constant="128" id="Yi8-ia-6hc"/>
+                                </constraints>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0lg-2S-3Fb" userLabel="Course 3 Image View">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IMG_9373" translatesAutoresizingMaskIntoConstraints="NO" id="0lg-2S-3Fb">
                                 <rect key="frame" x="87" y="594" width="240" height="128"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="128" id="HhH-7o-LPg"/>
+                                    <constraint firstAttribute="width" constant="240" id="dWv-pp-zZ6"/>
+                                </constraints>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="sXf-Sg-28i" firstAttribute="centerX" secondItem="IqQ-5i-bIy" secondAttribute="centerX" id="09n-Np-9aA"/>
                             <constraint firstItem="G8d-2b-4wm" firstAttribute="top" secondItem="fuT-ds-xdB" secondAttribute="top" id="3us-xW-Zdt"/>
                             <constraint firstItem="PAq-65-tn5" firstAttribute="centerX" secondItem="IqQ-5i-bIy" secondAttribute="centerX" id="9JE-H9-lWL"/>
                             <constraint firstItem="7LZ-zO-Ixv" firstAttribute="trailing" secondItem="fuT-ds-xdB" secondAttribute="trailing" id="AJO-tV-p0P"/>
                             <constraint firstItem="fuT-ds-xdB" firstAttribute="bottom" secondItem="6mf-7Z-dCM" secondAttribute="bottom" constant="35" id="BR8-mS-DLT"/>
                             <constraint firstItem="6mf-7Z-dCM" firstAttribute="centerX" secondItem="IqQ-5i-bIy" secondAttribute="centerX" id="JCx-di-bk4"/>
+                            <constraint firstItem="fuT-ds-xdB" firstAttribute="bottom" secondItem="0lg-2S-3Fb" secondAttribute="bottom" constant="14" id="O2Q-sj-ZrK"/>
                             <constraint firstItem="fuT-ds-xdB" firstAttribute="trailing" secondItem="G8d-2b-4wm" secondAttribute="trailing" id="Onj-9m-3VJ"/>
                             <constraint firstItem="7LZ-zO-Ixv" firstAttribute="top" secondItem="fuT-ds-xdB" secondAttribute="top" constant="150" id="RAn-92-ccq"/>
                             <constraint firstItem="7LZ-zO-Ixv" firstAttribute="centerX" secondItem="IqQ-5i-bIy" secondAttribute="centerX" id="SDG-c0-DV9"/>
+                            <constraint firstItem="0lg-2S-3Fb" firstAttribute="centerX" secondItem="IqQ-5i-bIy" secondAttribute="centerX" id="TRX-ty-pzs"/>
+                            <constraint firstItem="v0V-YQ-gdE" firstAttribute="centerX" secondItem="IqQ-5i-bIy" secondAttribute="centerX" id="b50-xZ-Enn"/>
+                            <constraint firstItem="sXf-Sg-28i" firstAttribute="top" secondItem="v0V-YQ-gdE" secondAttribute="bottom" constant="8" id="cYM-LT-KTh"/>
                             <constraint firstItem="PAq-65-tn5" firstAttribute="centerY" secondItem="IqQ-5i-bIy" secondAttribute="centerY" id="dW9-RV-I4A"/>
+                            <constraint firstItem="v0V-YQ-gdE" firstAttribute="top" secondItem="fuT-ds-xdB" secondAttribute="top" constant="302" id="gC0-ER-Zgh"/>
                             <constraint firstItem="7LZ-zO-Ixv" firstAttribute="leading" secondItem="fuT-ds-xdB" secondAttribute="leading" id="kUz-e0-XJq"/>
                             <constraint firstItem="G8d-2b-4wm" firstAttribute="leading" secondItem="fuT-ds-xdB" secondAttribute="leading" id="kvr-xG-KJn"/>
                             <constraint firstItem="fuT-ds-xdB" firstAttribute="bottom" secondItem="G8d-2b-4wm" secondAttribute="bottom" id="lyD-oR-pya"/>
+                            <constraint firstItem="0lg-2S-3Fb" firstAttribute="top" secondItem="sXf-Sg-28i" secondAttribute="bottom" constant="8" id="zB9-Aa-bgP"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="fuT-ds-xdB"/>
                     </view>
                     <connections>
                         <outlet property="activityIndicator" destination="PAq-65-tn5" id="CiY-5O-SMa"/>
+                        <outlet property="course1CenterXConstraint" destination="b50-xZ-Enn" id="euH-2E-vmn"/>
+                        <outlet property="course1ImageView" destination="v0V-YQ-gdE" id="uOK-tU-ESa"/>
+                        <outlet property="course2CenterXConstraint" destination="09n-Np-9aA" id="DSR-IF-mf4"/>
+                        <outlet property="course2ImageView" destination="sXf-Sg-28i" id="Eat-LE-b0g"/>
+                        <outlet property="course3CenterXConstraint" destination="TRX-ty-pzs" id="ssc-ej-RRl"/>
+                        <outlet property="course3ImageView" destination="0lg-2S-3Fb" id="tkJ-sV-1a4"/>
                         <outlet property="startGameButton" destination="6mf-7Z-dCM" id="aju-hm-NnF"/>
                     </connections>
                 </viewController>
@@ -88,6 +113,9 @@
     </scenes>
     <resources>
         <image name="AR MiniGolf" width="369" height="182"/>
+        <image name="IMG_9372" width="1242" height="2208"/>
+        <image name="IMG_9373" width="1242" height="2208"/>
+        <image name="IMG_9374" width="1242" height="2208"/>
         <image name="launchscreen" width="2000" height="1333"/>
     </resources>
 </document>
