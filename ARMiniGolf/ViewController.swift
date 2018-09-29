@@ -26,8 +26,6 @@ class ViewController: UIViewController {
   var courseNode: SCNNode!
   var minimumWidth: CGFloat = 0
   var minimumHeight: CGFloat = 0
-  var initialXScale: Float = 0
-  var initialYScale: Float = 0
   let MAX_PITCH_SCALE: Float = 3.5
 
   var ballExists = false
@@ -191,7 +189,7 @@ class ViewController: UIViewController {
     scoreLabel.alpha = 0.7
     resetGameButton.alpha = 1
     
-    
+    //grab the location of the initial plane detected
     let tapLocation = recognizer.location(in: sceneView)
     let hitTestResults = sceneView.hitTest(tapLocation, types: .existingPlaneUsingExtent)
     guard let hitTestResult = hitTestResults.first else { return }
@@ -203,20 +201,11 @@ class ViewController: UIViewController {
     let y = translation.y + level.initialCourseOffset.y
     let z = translation.z + level.initialCourseOffset.z
     
-
+    
     addCourseAtPosition(SCNVector3(x,y,z))
     
-    
-    //************************************************************************* add ball to the course
-    guard let ballScene = SCNScene(named: "art.scnassets/ball.scn"),
-      let ballNode = ballScene.rootNode.childNode(withName: "ball", recursively: false)
-      else { return }
-    globalBallNode = ballNode
-    resetBallToInitialLocation()
-    globalBallNode.physicsBody?.continuousCollisionDetectionThreshold = 0.1
-    
-    sceneView.scene.rootNode.addChildNode(ballNode)
-    
+    addBallToScene()
+
     //start game, remove the detecting plane node
     turnoffARPlaneTracking()
     setupSounds()
@@ -233,17 +222,12 @@ class ViewController: UIViewController {
     guard let planeNode = planeNodes.first else{
       return
     }
-    //the initial setup
-    if initialXScale == 0 && initialYScale == 0{
-      initialXScale = planeNode.simdScale.x
-      initialYScale = planeNode.simdScale.y
-    }
       
     let scale = Float(gesture.scale)
     let resultXScale = planeNode.simdScale.x * scale
     let resultYScale = planeNode.simdScale.y * scale
     
-    if resultXScale >= initialXScale && resultYScale >= initialYScale &&
+    if resultXScale >= 1 && resultYScale >= 1 &&
       resultXScale < MAX_PITCH_SCALE && resultYScale < MAX_PITCH_SCALE {
       planeNode.simdScale.x = resultXScale
       planeNode.simdScale.y = resultYScale
@@ -484,6 +468,18 @@ class ViewController: UIViewController {
     
     sceneView.scene.rootNode.addChildNode(courseNode)
   }
+  
+  private func addBallToScene(){
+    guard let ballScene = SCNScene(named: "art.scnassets/ball.scn"),
+    let ballNode = ballScene.rootNode.childNode(withName: "ball", recursively: false)
+    else { return }
+    globalBallNode = ballNode
+    resetBallToInitialLocation()
+    globalBallNode.physicsBody?.continuousCollisionDetectionThreshold = 0.1
+  
+    sceneView.scene.rootNode.addChildNode(ballNode)
+  }
+  
   
   private func advanceToNextLevel(){
     if (gameManager.gameEnded())

@@ -14,12 +14,16 @@ class Level{
   let musicFile: String
   let initialCourseOffset: SCNVector3
   let initialBallOffset: SCNVector3
-  var scale: Float
+  let width: Float
+  let height: Float
+  let scale: Float
   
-  init(sceneFile: String, musicFile: String, initialCourseOffset: SCNVector3, initialBallOffset: SCNVector3, scale: Float) {
+  init(sceneFile: String, musicFile: String, width: Float, height: Float, initialCourseOffset: SCNVector3, initialBallOffset: SCNVector3, scale: Float) {
     self.sceneFile = sceneFile
     self.musicFile = musicFile
     self.scale = scale
+    self.width = width
+    self.height = height
     
     var courseOffsetWIthScale = initialCourseOffset
     courseOffsetWIthScale.x *= scale
