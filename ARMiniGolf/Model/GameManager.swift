@@ -31,9 +31,9 @@ class GameManager: NSObject {
     //hard code the levels
     levels = [
       Level.init(sceneFile: "art.scnassets/course.scn", musicFile: "background.mp3", width: 3.4, height: 11.6,
-                 initialCourseOffset: SCNVector3(0, 0.05, -1.5), initialBallOffset: SCNVector3(0, 0, 3.8), scale: 0.5),  // Level 1
+                 initialCourseOffset: SCNVector3(0, 0.05, -1.5), initialBallOffset: SCNVector3(0, 0, 3.8)),  // Level 1
       Level.init(sceneFile: "art.scnassets/course2.scn", musicFile: "background2.mp3", width: 3.3, height: 5.25,
-                 initialCourseOffset: SCNVector3(0, 0, -2), initialBallOffset: SCNVector3(-0.5, 0.2, 2.7), scale: 0.5)  // Level 2
+                 initialCourseOffset: SCNVector3(0, 0, -2), initialBallOffset: SCNVector3(-0.5, 0.2, 2.7))  // Level 2
               ]
   }
   

@@ -12,28 +12,40 @@ import SceneKit
 class Level{
   let sceneFile: String
   let musicFile: String
-  let initialCourseOffset: SCNVector3
-  let initialBallOffset: SCNVector3
+  private let initialCourseOffset: SCNVector3
+  private let initialBallOffset: SCNVector3
+  var scaledCourseOffset: SCNVector3
+  var scaledBallOffset: SCNVector3
   let width: Float
   let height: Float
-  let scale: Float
+  var scale: Float = 1
   
-  init(sceneFile: String, musicFile: String, width: Float, height: Float, initialCourseOffset: SCNVector3, initialBallOffset: SCNVector3, scale: Float) {
+  init(sceneFile: String, musicFile: String, width: Float, height: Float, initialCourseOffset: SCNVector3, initialBallOffset: SCNVector3) {
     self.sceneFile = sceneFile
     self.musicFile = musicFile
-    self.scale = scale
     self.width = width
     self.height = height
+    self.initialCourseOffset = initialCourseOffset
+    self.initialBallOffset = initialBallOffset
+    scaledBallOffset = SCNVector3(x: initialBallOffset.x, y: initialBallOffset.y, z: initialBallOffset.z)
+    scaledCourseOffset = SCNVector3(x: initialCourseOffset.x, y: initialCourseOffset.y, z: initialCourseOffset.z)
+  }
+  
+  func calculateScale(planeWidth: CGFloat, planeHeight: CGFloat, pitchScale: Float){
+    let widthRatio = Float(planeWidth) * pitchScale / width
+    let heightRatio = Float(planeHeight) * pitchScale / height
     
-    var courseOffsetWIthScale = initialCourseOffset
-    courseOffsetWIthScale.x *= scale
-    courseOffsetWIthScale.y *= scale
-    courseOffsetWIthScale.z *= scale
-    self.initialCourseOffset = courseOffsetWIthScale
+    //take the larger ratio
+    scale = widthRatio > heightRatio ? widthRatio : heightRatio
     
-    var ballOffsetWithScale = initialBallOffset
-    ballOffsetWithScale.x *= scale
-    ballOffsetWithScale.z *= scale
-    self.initialBallOffset = ballOffsetWithScale
+    self.scaledBallOffset.x *= scale
+    self.scaledBallOffset.y *= scale
+    self.scaledBallOffset.z *= scale
+    
+    self.scaledCourseOffset.x *= scale
+    self.scaledCourseOffset.y *= scale
+    self.scaledCourseOffset.z *= scale
+    
+    print("Scale is \(scale)")
   }
 }

@@ -197,9 +197,9 @@ class ViewController: UIViewController {
     let translation = hitTestResult.worldTransform.translation
     
     let level = gameManager.getCurrentLevel()
-    let x = translation.x + level.initialCourseOffset.x
-    let y = translation.y + level.initialCourseOffset.y
-    let z = translation.z + level.initialCourseOffset.z
+    let x = translation.x + level.scaledCourseOffset.x
+    let y = translation.y + level.scaledCourseOffset.y
+    let z = translation.z + level.scaledCourseOffset.z
     
     
     addCourseAtPosition(SCNVector3(x,y,z))
@@ -390,9 +390,9 @@ class ViewController: UIViewController {
     
       //grab the game level offset
       let level = gameManager.getCurrentLevel()
-      globalBallNode.position = SCNVector3(courseNode.position.x + level.initialBallOffset.x,
-                                           courseNode.position.y + level.initialBallOffset.y,
-                                           courseNode.position.z + level.initialBallOffset.z)
+      globalBallNode.position = SCNVector3(courseNode.position.x + level.scaledBallOffset.x,
+                                           courseNode.position.y + level.scaledBallOffset.y,
+                                           courseNode.position.z + level.scaledBallOffset.z)
     
 //    print("the balls position is\(globalBallNode.position)")
   }
@@ -446,6 +446,12 @@ class ViewController: UIViewController {
     }
     
     let level = gameManager.getCurrentLevel()
+    if let planeNode = planeNodes.first{
+      let pinchScale = planeNode.simdScale.x
+      
+      //TODO: need to multiple it by the pinch scale
+      level.calculateScale(planeWidth: minimumWidth, planeHeight: minimumHeight, pitchScale: pinchScale)
+    }
     guard let courseScene = SCNScene(named: level.sceneFile)
       else { return }
     
@@ -470,9 +476,24 @@ class ViewController: UIViewController {
   }
   
   private func addBallToScene(){
+    if globalBallNode != nil{
+      globalBallNode.removeFromParentNode()
+    }
+    
     guard let ballScene = SCNScene(named: "art.scnassets/ball.scn"),
     let ballNode = ballScene.rootNode.childNode(withName: "ball", recursively: false)
     else { return }
+    let level = gameManager.getCurrentLevel()
+    
+    //change the physics body to scale
+    if level.scale != 1 {
+      ballNode.scale = SCNVector3(level.scale, level.scale, level.scale)
+
+      if let physicsBody = ballNode.physicsBody{
+        physicsBody.physicsShape = SCNPhysicsShape(node: ballNode, options: nil)
+        ballNode.physicsBody = SCNPhysicsBody(type: SCNPhysicsBody., shape: <#T##SCNPhysicsShape?#>)
+      }
+    }
     globalBallNode = ballNode
     resetBallToInitialLocation()
     globalBallNode.physicsBody?.continuousCollisionDetectionThreshold = 0.1
@@ -560,7 +581,7 @@ extension ViewController: ARSCNViewDelegate {
     minimumWidth = CGFloat(planeAnchor.extent.x)
     minimumHeight = CGFloat(planeAnchor.extent.z)
     
-    print ("Minimum width is \(minimumWidth) and height is \(minimumHeight)")
+//    print ("Minimum width is \(minimumWidth) and height is \(minimumHeight)")
     let plane = SCNPlane(width: minimumWidth, height: minimumHeight)
     
     plane.materials.first?.diffuse.contents = UIColor.transparentWhite
@@ -604,7 +625,8 @@ extension ViewController: ARSCNViewDelegate {
     let height = CGFloat(planeAnchor.extent.z)
     plane.width = width
     plane.height = height
-    print ("Updated Minimum width is \(width) and heigh is \(height)")
+    minimumWidth = width
+    minimumHeight = height
 
     
     let x = CGFloat(planeAnchor.center.x)
