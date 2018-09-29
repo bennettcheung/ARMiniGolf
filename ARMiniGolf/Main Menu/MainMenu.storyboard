@@ -23,78 +23,66 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="AR MiniGolf" translatesAutoresizingMaskIntoConstraints="NO" id="7LZ-zO-Ixv">
                                 <rect key="frame" x="0.0" y="170" width="414" height="182"/>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6mf-7Z-dCM">
-                                <rect key="frame" x="140.66666666666666" y="653" width="132.99999999999997" height="48"/>
-                                <color key="backgroundColor" red="0.51409308292496858" green="0.64710423413661156" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="23"/>
-                                <inset key="contentEdgeInsets" minX="10" minY="10" maxX="10" maxY="10"/>
-                                <state key="normal" title="Start Game">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
+                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rX2-BQ-NQG" userLabel="hole1Button">
+                                <rect key="frame" x="587" y="322" width="240" height="128"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="240" id="BUo-GK-p9A"/>
+                                    <constraint firstAttribute="height" constant="128" id="T1V-1V-Bvd"/>
+                                </constraints>
+                                <state key="normal" title="Button" image="IMG_9374"/>
                                 <connections>
-                                    <segue destination="JkF-MF-A1W" kind="presentation" identifier="segueToGameScreen" id="TUp-Ua-STo"/>
+                                    <segue destination="JkF-MF-A1W" kind="show" identifier="hole1Button" id="WUr-ik-d61"/>
                                 </connections>
                             </button>
-                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="PAq-65-tn5">
-                                <rect key="frame" x="188.66666666666666" y="349.66666666666669" width="37" height="37"/>
-                            </activityIndicatorView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IMG_9374" translatesAutoresizingMaskIntoConstraints="NO" id="v0V-YQ-gdE" userLabel="Course 1 Image View">
-                                <rect key="frame" x="87" y="322" width="240" height="128"/>
-                                <accessibility key="accessibilityConfiguration">
-                                    <accessibilityTraits key="traits" button="YES" image="YES"/>
-                                </accessibility>
+                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J5I-Q1-7PT" userLabel="hole2Button">
+                                <rect key="frame" x="-413" y="458" width="240" height="128"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="240" id="EnB-X4-R2s"/>
-                                    <constraint firstAttribute="height" constant="128" id="Whm-QC-sp4"/>
+                                    <constraint firstAttribute="height" constant="128" id="cZW-qN-uFW"/>
+                                    <constraint firstAttribute="width" constant="240" id="zes-jK-lWP"/>
                                 </constraints>
-                            </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IMG_9372" translatesAutoresizingMaskIntoConstraints="NO" id="sXf-Sg-28i" userLabel="Course 2 Image View">
-                                <rect key="frame" x="87" y="458" width="240" height="128"/>
+                                <state key="normal" title="Button" image="IMG_9372"/>
+                                <connections>
+                                    <segue destination="JkF-MF-A1W" kind="show" identifier="hole2Button" id="NBP-Wa-iWx"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mb6-RN-UHw" userLabel="hole3Button">
+                                <rect key="frame" x="587" y="594" width="240" height="128"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="240" id="MF7-WY-OGb"/>
-                                    <constraint firstAttribute="height" constant="128" id="Yi8-ia-6hc"/>
+                                    <constraint firstAttribute="height" constant="128" id="eB5-c6-E7m"/>
+                                    <constraint firstAttribute="width" constant="240" id="uG5-Em-uWl"/>
                                 </constraints>
-                            </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IMG_9373" translatesAutoresizingMaskIntoConstraints="NO" id="0lg-2S-3Fb">
-                                <rect key="frame" x="87" y="594" width="240" height="128"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="128" id="HhH-7o-LPg"/>
-                                    <constraint firstAttribute="width" constant="240" id="dWv-pp-zZ6"/>
-                                </constraints>
-                            </imageView>
+                                <state key="normal" title="Button" image="IMG_9373"/>
+                                <connections>
+                                    <segue destination="JkF-MF-A1W" kind="show" identifier="hole3Button" id="Oqn-RQ-2L8"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="sXf-Sg-28i" firstAttribute="centerX" secondItem="IqQ-5i-bIy" secondAttribute="centerX" id="09n-Np-9aA"/>
+                            <constraint firstItem="fuT-ds-xdB" firstAttribute="bottom" secondItem="Mb6-RN-UHw" secondAttribute="bottom" constant="14" id="1Zb-X9-9d1"/>
                             <constraint firstItem="G8d-2b-4wm" firstAttribute="top" secondItem="fuT-ds-xdB" secondAttribute="top" id="3us-xW-Zdt"/>
-                            <constraint firstItem="PAq-65-tn5" firstAttribute="centerX" secondItem="IqQ-5i-bIy" secondAttribute="centerX" id="9JE-H9-lWL"/>
+                            <constraint firstItem="Mb6-RN-UHw" firstAttribute="top" secondItem="J5I-Q1-7PT" secondAttribute="bottom" constant="8" id="41Y-vo-Ae6"/>
                             <constraint firstItem="7LZ-zO-Ixv" firstAttribute="trailing" secondItem="fuT-ds-xdB" secondAttribute="trailing" id="AJO-tV-p0P"/>
-                            <constraint firstItem="fuT-ds-xdB" firstAttribute="bottom" secondItem="6mf-7Z-dCM" secondAttribute="bottom" constant="35" id="BR8-mS-DLT"/>
-                            <constraint firstItem="6mf-7Z-dCM" firstAttribute="centerX" secondItem="IqQ-5i-bIy" secondAttribute="centerX" id="JCx-di-bk4"/>
-                            <constraint firstItem="fuT-ds-xdB" firstAttribute="bottom" secondItem="0lg-2S-3Fb" secondAttribute="bottom" constant="14" id="O2Q-sj-ZrK"/>
+                            <constraint firstItem="J5I-Q1-7PT" firstAttribute="top" secondItem="rX2-BQ-NQG" secondAttribute="bottom" constant="8" id="LtE-oh-Gfm"/>
                             <constraint firstItem="fuT-ds-xdB" firstAttribute="trailing" secondItem="G8d-2b-4wm" secondAttribute="trailing" id="Onj-9m-3VJ"/>
+                            <constraint firstItem="J5I-Q1-7PT" firstAttribute="centerX" secondItem="IqQ-5i-bIy" secondAttribute="centerX" constant="-500" id="Qnw-Oz-lqM"/>
                             <constraint firstItem="7LZ-zO-Ixv" firstAttribute="top" secondItem="fuT-ds-xdB" secondAttribute="top" constant="150" id="RAn-92-ccq"/>
                             <constraint firstItem="7LZ-zO-Ixv" firstAttribute="centerX" secondItem="IqQ-5i-bIy" secondAttribute="centerX" id="SDG-c0-DV9"/>
-                            <constraint firstItem="0lg-2S-3Fb" firstAttribute="centerX" secondItem="IqQ-5i-bIy" secondAttribute="centerX" id="TRX-ty-pzs"/>
-                            <constraint firstItem="v0V-YQ-gdE" firstAttribute="centerX" secondItem="IqQ-5i-bIy" secondAttribute="centerX" id="b50-xZ-Enn"/>
-                            <constraint firstItem="sXf-Sg-28i" firstAttribute="top" secondItem="v0V-YQ-gdE" secondAttribute="bottom" constant="8" id="cYM-LT-KTh"/>
-                            <constraint firstItem="PAq-65-tn5" firstAttribute="centerY" secondItem="IqQ-5i-bIy" secondAttribute="centerY" id="dW9-RV-I4A"/>
+                            <constraint firstItem="Mb6-RN-UHw" firstAttribute="centerX" secondItem="IqQ-5i-bIy" secondAttribute="centerX" constant="500" id="VJ9-lM-jqG"/>
                             <constraint firstItem="7LZ-zO-Ixv" firstAttribute="leading" secondItem="fuT-ds-xdB" secondAttribute="leading" id="kUz-e0-XJq"/>
+                            <constraint firstItem="rX2-BQ-NQG" firstAttribute="centerX" secondItem="IqQ-5i-bIy" secondAttribute="centerX" constant="500" id="kmD-K6-LSC"/>
                             <constraint firstItem="G8d-2b-4wm" firstAttribute="leading" secondItem="fuT-ds-xdB" secondAttribute="leading" id="kvr-xG-KJn"/>
                             <constraint firstItem="fuT-ds-xdB" firstAttribute="bottom" secondItem="G8d-2b-4wm" secondAttribute="bottom" id="lyD-oR-pya"/>
-                            <constraint firstItem="0lg-2S-3Fb" firstAttribute="top" secondItem="sXf-Sg-28i" secondAttribute="bottom" constant="8" id="zB9-Aa-bgP"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="fuT-ds-xdB"/>
                     </view>
                     <connections>
-                        <outlet property="activityIndicator" destination="PAq-65-tn5" id="CiY-5O-SMa"/>
-                        <outlet property="course1CenterXConstraint" destination="b50-xZ-Enn" id="l3w-ev-un0"/>
-                        <outlet property="course1ImageView" destination="v0V-YQ-gdE" id="7Y1-h4-FD2"/>
-                        <outlet property="course2CenterXConstraint" destination="09n-Np-9aA" id="DSR-IF-mf4"/>
-                        <outlet property="course2ImageView" destination="sXf-Sg-28i" id="Eat-LE-b0g"/>
-                        <outlet property="course3CenterXConstraint" destination="TRX-ty-pzs" id="ssc-ej-RRl"/>
-                        <outlet property="course3ImageView" destination="0lg-2S-3Fb" id="tkJ-sV-1a4"/>
-                        <outlet property="startGameButton" destination="6mf-7Z-dCM" id="aju-hm-NnF"/>
+                        <outlet property="hole1Button" destination="rX2-BQ-NQG" id="cmk-vT-cJx"/>
+                        <outlet property="hole1CenterXConstraint" destination="kmD-K6-LSC" id="VkR-0i-MXZ"/>
+                        <outlet property="hole2Button" destination="J5I-Q1-7PT" id="bBq-2E-Q5H"/>
+                        <outlet property="hole2CenterXConstraint" destination="Qnw-Oz-lqM" id="ZNK-gK-Lib"/>
+                        <outlet property="hole3Button" destination="Mb6-RN-UHw" id="ii0-DA-cG9"/>
+                        <outlet property="hole3CenterXConstraint" destination="VJ9-lM-jqG" id="hAQ-q1-UIY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="euu-wH-qyN" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -107,7 +95,7 @@
                 <viewControllerPlaceholder storyboardName="Main" id="JkF-MF-A1W" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eEo-XA-Mnw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="417" y="211"/>
+            <point key="canvasLocation" x="464" y="-22"/>
         </scene>
     </scenes>
     <resources>
@@ -117,4 +105,7 @@
         <image name="IMG_9374" width="1242" height="2208"/>
         <image name="launchscreen" width="2000" height="1333"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="Oqn-RQ-2L8"/>
+    </inferredMetricsTieBreakers>
 </document>

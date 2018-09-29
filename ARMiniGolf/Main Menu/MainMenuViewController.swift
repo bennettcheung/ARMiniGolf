@@ -11,47 +11,51 @@ import UIKit
 class MainMenuViewController: UIViewController {
   @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
   
-
-    @IBOutlet weak var course1CenterXConstraint: NSLayoutConstraint!
-    @IBOutlet weak var course2CenterXConstraint: NSLayoutConstraint!
-    @IBOutlet weak var course3CenterXConstraint: NSLayoutConstraint!
     
-    @IBOutlet weak var course1ImageView: UIImageView!
+    @IBOutlet weak var hole1Button: UIButton!
+    @IBOutlet weak var hole2Button: UIButton!
+    @IBOutlet weak var hole3Button: UIButton!
     
-    @IBOutlet weak var course2ImageView: UIImageView!
-    @IBOutlet weak var course3ImageView: UIImageView!
+    @IBOutlet weak var hole1CenterXConstraint: NSLayoutConstraint!
+    @IBOutlet weak var hole2CenterXConstraint: NSLayoutConstraint!
+    @IBOutlet weak var hole3CenterXConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var startGameButton: UIButton!
   
   override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
-    startGameButton.clipsToBounds = true
-    startGameButton.layer.cornerRadius = 10.0
-    //remove center x contraints on all 3
+    // Setup the level selection buttons
     
-    let movementRightOffset = view.frame.width/2 + course1ImageView.frame.width/2
-      let movementLeftOffset = -1 * (view.frame.width/2 + course1ImageView.frame.width/2)
+    hole1Button.layer.borderColor = UIColor.white.cgColor
+    hole1Button.layer.borderWidth = 1.5
+    hole1Button.layer.cornerRadius = 20
+    hole1Button.imageView?.contentMode = UIView.ContentMode.scaleAspectFill
+    hole2Button.layer.borderColor = UIColor.white.cgColor
+    hole2Button.layer.borderWidth = 1.5
+    hole2Button.layer.cornerRadius = 20
+     hole2Button.imageView?.contentMode = UIView.ContentMode.scaleAspectFill
+    hole3Button.layer.borderColor = UIColor.white.cgColor
+    hole3Button.layer.borderWidth = 1.5
+    hole3Button.layer.cornerRadius = 20
+     hole3Button.imageView?.contentMode = UIView.ContentMode.scaleAspectFill
     
-    course1CenterXConstraint.constant = movementRightOffset
-    course2CenterXConstraint.constant = movementLeftOffset
-    course3CenterXConstraint.constant = movementRightOffset
-    //self.view.layoutIfNeeded()
+    //animate the selection buttons in from the side
     
-    UIView.animate(withDuration: 2, delay: 1, usingSpringWithDamping: 0.5, initialSpringVelocity: 5, animations: {
-        self.course1CenterXConstraint.constant = 0
-        self.view.layoutIfNeeded()
-    })
-    UIView.animate(withDuration: 2, delay: 2, usingSpringWithDamping: 0.5, initialSpringVelocity: 5, animations: {
-        self.course2CenterXConstraint.constant = 0
-        self.view.layoutIfNeeded()
-    })
-    UIView.animate(withDuration: 2, delay: 3, usingSpringWithDamping: 0.5, initialSpringVelocity: 5, animations: {
-        self.course3CenterXConstraint.constant = 0
-        self.view.layoutIfNeeded()
-    })
-
+    DispatchQueue.main.async {[unowned self] in
+        UIView.animate(withDuration: 1.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 5, animations: {
+            self.hole1CenterXConstraint.constant = 0
+            self.view.layoutIfNeeded()
+        })
+        UIView.animate(withDuration: 1.5, delay: 0.5, usingSpringWithDamping: 0.5, initialSpringVelocity: 5, animations: {
+            self.hole2CenterXConstraint.constant = 0
+            self.view.layoutIfNeeded()
+        })
+        UIView.animate(withDuration: 1.5, delay: 1, usingSpringWithDamping: 0.5, initialSpringVelocity: 5, animations: {
+            self.hole3CenterXConstraint.constant = 0
+            self.view.layoutIfNeeded()
+        })
+    }
     }
     
 
@@ -62,11 +66,18 @@ class MainMenuViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
-      
-      if segue.identifier == "segueToGameScreen"{
-        activityIndicator.isHidden = false
-        activityIndicator.startAnimating()
-      }
+        guard let controller = segue.destination as? ViewController else{
+            return
+        }
+      if segue.identifier == "hole1Button"{
+            controller.setLevel(1)
+        }
+        if segue.identifier == "hole2Button"{
+            controller.setLevel(2)
+        }
+        if segue.identifier == "hole3Button"{
+            controller.setLevel(3)
+        }
     }
  
 

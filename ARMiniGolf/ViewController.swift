@@ -64,6 +64,10 @@ class ViewController: UIViewController {
     super.viewWillDisappear(animated)
     sceneView.session.pause()
   }
+    
+    func setLevel(_ level: Int){
+        gameManager.setLevel(level)
+    }
   
   func setUpSceneView() {
     let configuration = ARWorldTrackingConfiguration()

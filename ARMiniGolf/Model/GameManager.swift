@@ -64,6 +64,12 @@ class GameManager: NSObject {
     return state == State.Ended
   }
   
+    func setLevel(_ level: Int){
+        if level > 0 && level <= levels.count{
+            self.currentLevelNum = level
+        }
+    }
+    
   func getCurrentLevel() ->Level {
     return levels[currentLevelNum - 1]
   }
