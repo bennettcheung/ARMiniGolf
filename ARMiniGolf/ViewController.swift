@@ -195,8 +195,8 @@ class ViewController: UIViewController {
     
     let translation = hitTestResult.worldTransform.translation
     let x = translation.x
-    let y = translation.y + 0.05
-    let z = translation.z - 1.5 //0.5
+    let y = translation.y
+    let z = translation.z //0.5
     
     let level = gameManager.getCurrentLevel()
     guard let courseScene = SCNScene(named: level.sceneFile),
@@ -212,7 +212,7 @@ class ViewController: UIViewController {
                 print ("\(printPhysicsShape.description)")
             }
             
-            if node.name == "redTube" || node.name == "interiorRightTube" || node.name == "interiorLeftTube"  ,
+            if node.name == "redTube" || node.name == "interiorRightTube" || node.name == "interiorLeftTube" || node.name == "exteriorWalls"  ,
                 let physicsBody = node.physicsBody, let geometry = node.geometry{
                     physicsBody.physicsShape = SCNPhysicsShape(geometry: geometry, options: [SCNPhysicsShape.Option.scale: SCNVector3(level.scale, level.scale, level.scale), SCNPhysicsShape.Option.type: SCNPhysicsShape.ShapeType.concavePolyhedron])
             }
@@ -402,10 +402,47 @@ class ViewController: UIViewController {
       physicsBody.angularVelocity = SCNVector4(0, 0, 0, 0)
     
       //grab the game level offset
-      let level = gameManager.getCurrentLevel()
-      globalBallNode.position = SCNVector3(courseNode.position.x + level.initialBallOffset.x,
-                                           courseNode.position.y + level.initialBallOffset.y,
-                                           courseNode.position.z + level.initialBallOffset.z)
+      //let level = gameManager.getCurrentLevel()
+    
+     for node in courseNode.childNodes{
+        if node.name == "tee" {
+            let nodePositionX = Float(node.position.x)
+            let nodePositionZ = Float(node.position.z)
+            let nodePositionY = Float(node.position.y)
+            print ("\(nodePositionX)", "\(nodePositionY)","\(nodePositionZ)")
+            
+            globalBallNode.position = SCNVector3(courseNode.position.x - node.position.x, //course1
+                courseNode.position.y + 0.2,
+                courseNode.position.z + node.position.z)
+            
+//            globalBallNode.position = SCNVector3(courseNode.position.x - node.position.x, //course2
+//                courseNode.position.y + 0.2,
+//                courseNode.position.z + node.position.z)
+        
+//            globalBallNode.position = SCNVector3(courseNode.position.x + node.position.x, //course3
+//                                                 courseNode.position.y + 0.52,
+//                                                 courseNode.position.z - node.position.z)
+            
+            
+//
+            // globalBallNode.position = courseNode.position
+            //            globalBallNode.position.x = courseNode.position.x
+            //            globalBallNode.position.z = courseNode.position.z
+//            globalBallNode.position.y = 0.025
+//            print("found node tee")
+//            let nodePositionX = Float(node.position.x)
+//            let nodePositionZ = Float(node.position.z)
+//            let nodePositionY = Float(node.position.y)
+//            print ("\(nodePositionX)", "\(nodePositionZ)","\(nodePositionY)")
+            //print ("\(globalBallNode.position.x)", "\(globalBallNode.position.z)","\(globalBallNode.position.y)")
+            print("Fount the tee")
+        }else{
+            print("No tee found in childNode array")
+        }
+    }
+//      globalBallNode.position = SCNVector3(courseNode.position.x + level.initialBallOffset.x,
+//                                           courseNode.position.y + level.initialBallOffset.y,
+//                                           courseNode.position.z + level.initialBallOffset.z)
     
 //    print("the balls position is\(globalBallNode.position)")
   }
