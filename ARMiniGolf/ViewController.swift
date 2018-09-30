@@ -409,23 +409,25 @@ class ViewController: UIViewController {
             let nodePositionX = Float(node.position.x)
             let nodePositionZ = Float(node.position.z)
             let nodePositionY = Float(node.position.y)
-            print ("\(nodePositionX)", "\(nodePositionY)","\(nodePositionZ)")
-            
-            globalBallNode.position = SCNVector3(courseNode.position.x - node.position.x, //course1
+            print ("Node postion :\(nodePositionX)", "\(nodePositionY)","\(nodePositionZ)")
+//            globalBallNode.position = SCNVector3(0,0,0)
+            globalBallNode.position = SCNVector3(courseNode.position.x + node.position.x, //course1
                 courseNode.position.y + 0.2,
-                courseNode.position.z + node.position.z)
+                courseNode.position.z )//+ node.position.z)
             
-//            globalBallNode.position = SCNVector3(courseNode.position.x - node.position.x, //course2
+           // globalBallNode.position = node.position
+//
+//            globalBallNode.position = SCNVector3(courseNode.position.x + node.position.x, //course2 - works!
 //                courseNode.position.y + 0.2,
 //                courseNode.position.z + node.position.z)
         
-//            globalBallNode.position = SCNVector3(courseNode.position.x + node.position.x, //course3
+//            globalBallNode.position = SCNVector3(courseNode.position.x + node.position.x, //course3 -works!
 //                                                 courseNode.position.y + 0.52,
 //                                                 courseNode.position.z - node.position.z)
             
             
 //
-            // globalBallNode.position = courseNode.position
+//             globalBallNode.position = courseNode.position
             //            globalBallNode.position.x = courseNode.position.x
             //            globalBallNode.position.z = courseNode.position.z
 //            globalBallNode.position.y = 0.025
@@ -434,7 +436,9 @@ class ViewController: UIViewController {
 //            let nodePositionZ = Float(node.position.z)
 //            let nodePositionY = Float(node.position.y)
 //            print ("\(nodePositionX)", "\(nodePositionZ)","\(nodePositionY)")
-            //print ("\(globalBallNode.position.x)", "\(globalBallNode.position.z)","\(globalBallNode.position.y)")
+            print ("ball postion :\(globalBallNode.position.x)", "\(globalBallNode.position.y)","\(globalBallNode.position.z)")
+            print ("course postion :\(courseNode.position.x)", "\(courseNode.position.y)","\(courseNode.position.z)")
+            
             print("Fount the tee")
         }else{
             print("No tee found in childNode array")
