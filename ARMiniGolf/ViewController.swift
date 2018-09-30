@@ -204,8 +204,18 @@ class ViewController: UIViewController {
       else { return }
     
     if level.scale != 1 {
-        courseNode.scale = SCNVector3(level.scale, level.scale, level.scale)
+        //courseNode.scale = SCNVector3(level.scale, level.scale, level.scale)
+
         for node in courseNode.childNodes{
+            print("\(node.name ?? "No node name") \(node.geometry?.description ?? "No node geometry") ")
+            if let printPhysicsBody = node.physicsBody, let printPhysicsShape = printPhysicsBody.physicsShape {
+                print ("\(printPhysicsShape.description)")
+            }
+            
+            if node.name == "redTube" || node.name == "interiorRightTube" || node.name == "interiorLeftTube"  ,
+                let physicsBody = node.physicsBody, let geometry = node.geometry{
+                    physicsBody.physicsShape = SCNPhysicsShape(geometry: geometry, options: [SCNPhysicsShape.Option.scale: SCNVector3(level.scale, level.scale, level.scale), SCNPhysicsShape.Option.type: SCNPhysicsShape.ShapeType.concavePolyhedron])
+            }
             if node.name != "floor",
                 let physicsBody = node.physicsBody, let geometry = node.geometry{
                 physicsBody.physicsShape = SCNPhysicsShape(geometry: geometry, options: [SCNPhysicsShape.Option.scale: SCNVector3(level.scale, level.scale, level.scale)])
