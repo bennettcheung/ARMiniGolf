@@ -204,7 +204,7 @@ class ViewController: UIViewController {
       else { return }
     
     if level.scale != 1 {
-        //courseNode.scale = SCNVector3(level.scale, level.scale, level.scale)
+        courseNode.scale = SCNVector3(level.scale, level.scale, level.scale)
 
         for node in courseNode.childNodes{
             print("\(node.name ?? "No node name") \(node.geometry?.description ?? "No node geometry") ")
