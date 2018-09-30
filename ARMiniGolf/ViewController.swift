@@ -190,6 +190,7 @@ class ViewController: UIViewController {
     guard let hitTestResult = hitTestResults.first else { return }
     
     let translation = hitTestResult.worldTransform.translation
+
     
     
     // Get a transformation matrix with the euler angle of the camera
@@ -224,6 +225,7 @@ class ViewController: UIViewController {
       courseNode.removeAllAudioPlayers()
       courseNode = nil
     }
+
     
     let level = gameManager.getCurrentLevel()
     
@@ -234,13 +236,24 @@ class ViewController: UIViewController {
     
     //change the physics body to scale
     if level.scale != 1 {
-      courseNode.simdScale = float3(level.scale, level.scale, level.scale)
-      for node in courseNode.childNodes{
-        if node.name != "floor",
-          let physicsBody = node.physicsBody, let geometry = node.geometry{
-          physicsBody.physicsShape = SCNPhysicsShape(geometry: geometry, options: [SCNPhysicsShape.Option.scale: SCNVector3(level.scale, level.scale, level.scale)])
+
+        courseNode.scale = SCNVector3(level.scale, level.scale, level.scale)
+
+        for node in courseNode.childNodes{
+            print("\(node.name ?? "No node name") \(node.geometry?.description ?? "No node geometry") ")
+            if let printPhysicsBody = node.physicsBody, let printPhysicsShape = printPhysicsBody.physicsShape {
+                print ("\(printPhysicsShape.description)")
+            }
+            
+            if node.name == "redTube" || node.name == "interiorRightTube" || node.name == "interiorLeftTube" || node.name == "exteriorWalls"  ,
+                let physicsBody = node.physicsBody, let geometry = node.geometry{
+                    physicsBody.physicsShape = SCNPhysicsShape(geometry: geometry, options: [SCNPhysicsShape.Option.scale: SCNVector3(level.scale, level.scale, level.scale), SCNPhysicsShape.Option.type: SCNPhysicsShape.ShapeType.concavePolyhedron])
+            }
+            if node.name != "floor",
+                let physicsBody = node.physicsBody, let geometry = node.geometry{
+                physicsBody.physicsShape = SCNPhysicsShape(geometry: geometry, options: [SCNPhysicsShape.Option.scale: SCNVector3(level.scale, level.scale, level.scale)])
+            }
         }
-      }
     }
     
     courseNode.position = position
@@ -404,13 +417,19 @@ class ViewController: UIViewController {
       physicsBody.angularVelocity = SCNVector4(0, 0, 0, 0)
     
       //grab the game level offset
-      let level = gameManager.getCurrentLevel()
-      globalBallNode.position = SCNVector3(courseNode.position.x + level.initialBallOffset.x,
-                                           courseNode.position.y + level.initialBallOffset.y,
-                                           courseNode.position.z + level.initialBallOffset.z)
+      //let level = gameManager.getCurrentLevel()
     
-//    print("the balls position is\(globalBallNode.position)")
-  }
+     for node in courseNode.childNodes{
+        if node.name == "tee" {
+
+            
+
+                globalBallNode.position = SCNVector3(courseNode.position.x + node.position.x, //course1 - works!
+                    courseNode.position.y + 0.2,
+                    courseNode.position.z + node.position.z)
+        }
+      }
+    }
   
   private func penaltyStroke(){
     

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7D2FCBEF2161955E007F2D36 /* Victory.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D2FCBED2161955E007F2D36 /* Victory.storyboard */; };
+		7D2FCBF02161955E007F2D36 /* VictoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2FCBEE2161955E007F2D36 /* VictoryViewController.swift */; };
 		910D5E70215580B600F06577 /* GameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910D5E6F215580B600F06577 /* GameManager.swift */; };
 		911C1B24215D7A7A00383FA2 /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911C1B23215D7A7A00383FA2 /* Level.swift */; };
 		911C1B26215D7C1400383FA2 /* background2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 911C1B25215D7C1300383FA2 /* background2.mp3 */; };
@@ -46,6 +48,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7D2FCBED2161955E007F2D36 /* Victory.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Victory.storyboard; sourceTree = "<group>"; };
+		7D2FCBEE2161955E007F2D36 /* VictoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VictoryViewController.swift; sourceTree = "<group>"; };
 		910D5E6F215580B600F06577 /* GameManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameManager.swift; sourceTree = "<group>"; };
 		911C1B23215D7A7A00383FA2 /* Level.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level.swift; sourceTree = "<group>"; };
 		911C1B25215D7C1300383FA2 /* background2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = background2.mp3; sourceTree = "<group>"; };
@@ -98,6 +102,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7D2FCBEC2161954A007F2D36 /* Victory Screen */ = {
+			isa = PBXGroup;
+			children = (
+				7D2FCBED2161955E007F2D36 /* Victory.storyboard */,
+				7D2FCBEE2161955E007F2D36 /* VictoryViewController.swift */,
+			);
+			path = "Victory Screen";
+			sourceTree = "<group>";
+		};
 		911C1B29215DA4B700383FA2 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -153,6 +166,7 @@
 		912C0755215440BA009704B2 /* ARMiniGolf */ = {
 			isa = PBXGroup;
 			children = (
+				7D2FCBEC2161954A007F2D36 /* Victory Screen */,
 				911C1B29215DA4B700383FA2 /* Model */,
 				91293C2921575696005F6E70 /* Sounds */,
 				912C0756215440BA009704B2 /* AppDelegate.swift */,
@@ -294,6 +308,7 @@
 				911C1B28215D86C900383FA2 /* ballInHole.wav in Resources */,
 				912C0759215440BA009704B2 /* art.scnassets in Resources */,
 				91293C3321581010005F6E70 /* MainMenu.storyboard in Resources */,
+				7D2FCBEF2161955E007F2D36 /* Victory.storyboard in Resources */,
 				912C0763215440BD009704B2 /* LaunchScreen.storyboard in Resources */,
 				91293C2F215761A0005F6E70 /* putt.wav in Resources */,
 				912C0760215440BD009704B2 /* Assets.xcassets in Resources */,
@@ -326,6 +341,7 @@
 			files = (
 				911C1B24215D7A7A00383FA2 /* Level.swift in Sources */,
 				91293C3521581273005F6E70 /* MainMenuViewController.swift in Sources */,
+				7D2FCBF02161955E007F2D36 /* VictoryViewController.swift in Sources */,
 				912C075B215440BA009704B2 /* ViewController.swift in Sources */,
 				912C0757215440BA009704B2 /* AppDelegate.swift in Sources */,
 				91293C3121580836005F6E70 /* Player.swift in Sources */,
@@ -506,7 +522,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 4MNU75ZBC4;
+				DEVELOPMENT_TEAM = W7K9Q4Z2Y3;
 				INFOPLIST_FILE = ARMiniGolf/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -526,7 +542,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 4MNU75ZBC4;
+				DEVELOPMENT_TEAM = W7K9Q4Z2Y3;
 				INFOPLIST_FILE = ARMiniGolf/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
