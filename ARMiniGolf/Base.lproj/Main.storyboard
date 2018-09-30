@@ -87,11 +87,20 @@
                         <outlet property="sceneView" destination="BrB-h1-WRS" id="5nT-qQ-ynl"/>
                         <outlet property="scoreLabel" destination="7Qt-HT-GHT" id="KaY-d7-n5f"/>
                         <outlet property="touchTheScreenImageView" destination="7r2-Ba-4PN" id="ba4-li-Y44"/>
+                        <segue destination="XzN-va-U0L" kind="presentation" identifier="segueToVictoryScreen" id="TTC-mr-7ww"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="261.60000000000002" y="97.601199400299862"/>
+        </scene>
+        <!--Victory-->
+        <scene sceneID="LP2-EN-zPp">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Victory" id="XzN-va-U0L" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="CBf-sN-xCq" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1533" y="66"/>
         </scene>
     </scenes>
     <resources>

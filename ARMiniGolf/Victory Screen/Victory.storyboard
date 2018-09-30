@@ -1,7 +1,75 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13142" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="OhN-Bz-X8T">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12042"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
-    <scenes/>
+    <scenes>
+        <!--Victory View Controller-->
+        <scene sceneID="wQd-7Q-8Yl">
+            <objects>
+                <viewController id="OhN-Bz-X8T" customClass="VictoryViewController" customModule="ARMiniGolf" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="9CR-56-NVi">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ballinhole" translatesAutoresizingMaskIntoConstraints="NO" id="Kcb-TB-TBe">
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Score" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xJP-Nq-YpS">
+                                <rect key="frame" x="119" y="200" width="137" height="67"/>
+                                <fontDescription key="fontDescription" name="DINAlternate-Bold" family="DIN Alternate" pointSize="57"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zBO-4X-e5t">
+                                <rect key="frame" x="175.5" y="304.5" width="24" height="58.5"/>
+                                <fontDescription key="fontDescription" name="DINAlternate-Bold" family="DIN Alternate" pointSize="50"/>
+                                <color key="textColor" red="0.053271193869999997" green="1" blue="0.071601488020000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8LX-JK-2w2">
+                                <rect key="frame" x="126" y="559" width="123" height="48"/>
+                                <color key="backgroundColor" red="0.5140930829" green="0.64710423409999995" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                <state key="normal" title="Next hole">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="nextHoldPressed:" destination="OhN-Bz-X8T" eventType="touchUpInside" id="YpG-RH-yOK"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="Kcb-TB-TBe" firstAttribute="leading" secondItem="wit-X0-ThE" secondAttribute="leading" id="5Dl-50-h5W"/>
+                            <constraint firstItem="xJP-Nq-YpS" firstAttribute="top" secondItem="wit-X0-ThE" secondAttribute="top" constant="180" id="Fj7-7F-RGC"/>
+                            <constraint firstItem="Kcb-TB-TBe" firstAttribute="top" secondItem="wit-X0-ThE" secondAttribute="top" id="VGZ-aL-PKK"/>
+                            <constraint firstItem="zBO-4X-e5t" firstAttribute="centerX" secondItem="9CR-56-NVi" secondAttribute="centerX" id="WSm-bi-htp"/>
+                            <constraint firstItem="8LX-JK-2w2" firstAttribute="centerX" secondItem="9CR-56-NVi" secondAttribute="centerX" id="YVD-KN-Ook"/>
+                            <constraint firstItem="wit-X0-ThE" firstAttribute="bottom" secondItem="8LX-JK-2w2" secondAttribute="bottom" constant="60" id="dtH-iQ-8zp"/>
+                            <constraint firstItem="wit-X0-ThE" firstAttribute="trailing" secondItem="Kcb-TB-TBe" secondAttribute="trailing" id="eKA-cl-L1w"/>
+                            <constraint firstItem="xJP-Nq-YpS" firstAttribute="centerX" secondItem="9CR-56-NVi" secondAttribute="centerX" id="f0w-Tg-2OW"/>
+                            <constraint firstItem="zBO-4X-e5t" firstAttribute="centerY" secondItem="9CR-56-NVi" secondAttribute="centerY" id="gra-VC-cWa"/>
+                            <constraint firstItem="wit-X0-ThE" firstAttribute="bottom" secondItem="Kcb-TB-TBe" secondAttribute="bottom" id="sEL-5Q-Xgm"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="wit-X0-ThE"/>
+                    </view>
+                    <connections>
+                        <outlet property="nextHoleButton" destination="8LX-JK-2w2" id="Fxw-PE-2W4"/>
+                        <outlet property="scoreLabel" destination="zBO-4X-e5t" id="LMc-vq-LPJ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Vrt-GW-wO1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="257" y="154"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="ballinhole" width="512" height="341"/>
+    </resources>
 </document>

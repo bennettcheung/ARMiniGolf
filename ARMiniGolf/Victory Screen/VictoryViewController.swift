@@ -7,24 +7,48 @@
 //
 
 import UIKit
+import AVFoundation
+
+protocol VictoryViewControllerDelegate {
+  func advanceToNextLevel()
+}
 
 class VictoryViewController: UIViewController {
-
-    override func viewDidLoad() {
+  var backgroundMusicPlayer: AVAudioPlayer?
+  var score: Int = 0
+  var delegate: VictoryViewControllerDelegate?
+  @IBOutlet weak var nextHoleButton: UIButton!
+  @IBOutlet weak var scoreLabel: UILabel!
+  
+  
+  override func viewDidLoad() {
         super.viewDidLoad()
+        nextHoleButton.layer.cornerRadius = 10
 
-        // Do any additional setup after loading the view.
+      //start playing background music
+      let path = Bundle.main.path(forResource: "victory.mp3", ofType:nil)!
+      let url = URL(fileURLWithPath: path)
+      do {
+        backgroundMusicPlayer = try AVAudioPlayer(contentsOf: url)
+        backgroundMusicPlayer?.volume = 0.4
+        backgroundMusicPlayer?.play()
+        
+      } catch {
+        print(" couldn't load file ")
+      }
+      scoreLabel.text = score.description
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+  @IBAction func nextHoldPressed(_ sender: Any) {
+    
+    backgroundMusicPlayer?.stop()
+    if let delegate = delegate{
+      delegate.advanceToNextLevel()
     }
-    */
+    self.dismiss(animated: true) {
+      self.delegate = nil
+    }
+  }
+  
 
 }

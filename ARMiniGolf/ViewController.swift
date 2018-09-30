@@ -86,7 +86,7 @@ class ViewController: UIViewController {
       touchTheScreenImageView.layer.removeAllAnimations()
       touchTheScreenImageView.removeFromSuperview()
     }
-    sceneView.debugOptions = []
+    //sceneView.debugOptions = []
     
     //hide all the tracking nodes
     for node in planeNodes{
@@ -189,6 +189,17 @@ class ViewController: UIViewController {
     
     let translation = hitTestResult.worldTransform.translation
     
+    
+    // Get a transformation matrix with the euler angle of the camera
+    let rotate = simd_float4x4(SCNMatrix4MakeRotation(sceneView.session.currentFrame!.camera.eulerAngles.y, 0, 1, 0))
+    
+    // Combine both transformation matrices
+    let finalTransform = simd_mul(hitTestResult.worldTransform, rotate)
+    print("camera rotation \(rotate)")
+    
+    // Use the resulting matrix to position the anchor
+    sceneView.session.add(anchor: ARAnchor(transform: finalTransform))
+    
     let level = gameManager.getCurrentLevel()
     let x = translation.x + level.initialCourseOffset.x
     let y = translation.y + level.initialCourseOffset.y
@@ -204,14 +215,6 @@ class ViewController: UIViewController {
     gameManager.startGame()
   }
   private func addCourseAtPosition(_ position: SCNVector3){
-
-
-    if let planeNode = planeNodes.first{
-      let anchor = ARAnchor(transform: planeNode.simdTransform)
-      sceneView.session.add(anchor: anchor)
-
-    }
-
     
     //if we are advancing to a different level
     if courseNode != nil{
@@ -229,11 +232,11 @@ class ViewController: UIViewController {
     
     //change the physics body to scale
     if level.scale != 1 {
-      courseNode.scale = SCNVector3(level.scale, level.scale, level.scale)
+      courseNode.simdScale = float3(level.scale, level.scale, level.scale)
       for node in courseNode.childNodes{
         if node.name != "floor",
-          let physicsBody = node.physicsBody{
-          physicsBody.physicsShape = SCNPhysicsShape(node: node, options: [SCNPhysicsShape.Option.scale: SCNVector3(level.scale, level.scale, level.scale)])
+          let physicsBody = node.physicsBody, let geometry = node.geometry{
+          physicsBody.physicsShape = SCNPhysicsShape(geometry: geometry, options: [SCNPhysicsShape.Option.scale: SCNVector3(level.scale, level.scale, level.scale)])
         }
       }
     }
@@ -439,49 +442,14 @@ class ViewController: UIViewController {
         let ballInHoleSound =  self.sounds["ballInHole"]!
         self.globalBallNode.runAction(SCNAction.playAudio(ballInHoleSound, waitForCompletion: false))
         self.globalBallNode.isHidden = true
-        self.messageLabel.text = "You won!"
+        self.courseNode.removeAllAudioPlayers()
         
-        self.advanceToNextLevel()
+        self.performSegue(withIdentifier: "segueToVictoryScreen", sender: self)
+        
       }
     }
   }
-  
-  private func advanceToNextLevel(){
-    if (gameManager.gameEnded())
-    {
-      return
-    }
-    gameManager.endGame()
-    
-    print("Advance to next level")
-    gameManager.advanceLevel()
-    
-    let oldPosition = courseNode.position
-    
-    courseNode.removeFromParentNode()
-    courseNode.removeAllAudioPlayers()
-    //globalBallNode.removeFromParentNode()
-    courseNode = nil
-    
-    let level = gameManager.getCurrentLevel()
-    guard let courseScene = SCNScene(named: level.sceneFile),
-      let courseNode = courseScene.rootNode.childNode(withName: "course", recursively: false)
-      else { return }
-    
-    courseNode.position = oldPosition
-    self.courseNode = courseNode
-    
-    courseNode.name = courseNodeName
-    
-    sceneView.scene.rootNode.addChildNode(courseNode)
-    
-    //sceneView.scene.rootNode.addChildNode(globalBallNode)
-    resetBallToInitialLocation()
-    
-    scoreLabel.text = "0"
-    
-    loadBackgroundMusic()
-  }
+
     
 }
 
@@ -600,6 +568,46 @@ extension ViewController: ARSCNViewDelegate {
 //    let shape = SCNPhysicsShape(geometry: geometry, options: nil)
 //    let physicsBody = SCNPhysicsBody(type: type, shape: shape)
 //    node.physicsBody = physicsBody
+  }
+}
+
+extension ViewController: VictoryViewControllerDelegate{
+  
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    
+    if segue.identifier == "SegueToVictoryScreen"{
+      guard let controller = segue.destination as? VictoryViewController else
+      {
+        return
+      }
+      controller.delegate = self
+      controller.score = gameManager.getCurrentPlayerScore()
+    }
+    
+  }
+  
+  func advanceToNextLevel(){
+    if (gameManager.gameEnded())
+    {
+      return
+    }
+    gameManager.endGame()
+    
+    print("Advance to next level")
+    gameManager.advanceLevel()
+    
+    print("Advance to next level")
+    gameManager.advanceLevel()
+    
+    let oldPosition = courseNode.position
+    addCourseAtPosition(oldPosition)
+    
+    
+    resetBallToInitialLocation()
+    
+    scoreLabel.text = "0"
+    
+    loadBackgroundMusic()
   }
 }
 
