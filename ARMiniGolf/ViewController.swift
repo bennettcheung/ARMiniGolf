@@ -406,51 +406,15 @@ class ViewController: UIViewController {
     
      for node in courseNode.childNodes{
         if node.name == "tee" {
-            let nodePositionX = Float(node.position.x)
-            let nodePositionZ = Float(node.position.z)
-            let nodePositionY = Float(node.position.y)
-            print ("Node postion :\(nodePositionX)", "\(nodePositionY)","\(nodePositionZ)")
-          //  courseNode.position = SCNVector3(0,0,0)
-            globalBallNode.position = SCNVector3(courseNode.position.x + node.position.x, //course1 - works!
-                                courseNode.position.y + 0.2,
-                                courseNode.position.z + node.position.z)
+
             
-//            globalBallNode.position = courseNode.position
-//            globalBallNode.position.y = 0.2
-//
-//            globalBallNode.position = SCNVector3(courseNode.position.x + node.position.x, //course2 - works!
-//                courseNode.position.y + 0.2,
-//                courseNode.position.z + node.position.z)
-        
-//            globalBallNode.position = SCNVector3(courseNode.position.x + node.position.x, //course3 -works!
-//                                                 courseNode.position.y + 0.52,
-//                                                 courseNode.position.z - node.position.z)
-            
-            
-//
-             //globalBallNode.position = courseNode.position
-            //            globalBallNode.position.x = courseNode.position.x
-            //            globalBallNode.position.z = courseNode.position.z
-//            globalBallNode.position.y = 0.025
-//            print("found node tee")
-//            let nodePositionX = Float(node.position.x)
-//            let nodePositionZ = Float(node.position.z)
-//            let nodePositionY = Float(node.position.y)
-//            print ("\(nodePositionX)", "\(nodePositionZ)","\(nodePositionY)")
-            print ("ball postion :\(globalBallNode.position.x)", "\(globalBallNode.position.y)","\(globalBallNode.position.z)")
-            print ("course postion :\(courseNode.position.x)", "\(courseNode.position.y)","\(courseNode.position.z)")
-            
-            print("Fount the tee")
-        }else{
-            print("No tee found in childNode array")
+
+                globalBallNode.position = SCNVector3(courseNode.position.x + node.position.x, //course1 - works!
+                    courseNode.position.y + 0.2,
+                    courseNode.position.z + node.position.z)
         }
+      }
     }
-//      globalBallNode.position = SCNVector3(courseNode.position.x + level.initialBallOffset.x,
-//                                           courseNode.position.y + level.initialBallOffset.y,
-//                                           courseNode.position.z + level.initialBallOffset.z)
-    
-//    print("the balls position is\(globalBallNode.position)")
-  }
   
   private func penaltyStroke(){
     
