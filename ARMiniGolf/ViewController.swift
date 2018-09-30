@@ -410,12 +410,13 @@ class ViewController: UIViewController {
             let nodePositionZ = Float(node.position.z)
             let nodePositionY = Float(node.position.y)
             print ("Node postion :\(nodePositionX)", "\(nodePositionY)","\(nodePositionZ)")
-//            globalBallNode.position = SCNVector3(0,0,0)
-            globalBallNode.position = SCNVector3(courseNode.position.x + node.position.x, //course1
-                courseNode.position.y + 0.2,
-                courseNode.position.z )//+ node.position.z)
+          //  courseNode.position = SCNVector3(0,0,0)
+            globalBallNode.position = SCNVector3(courseNode.position.x + node.position.x, //course1 - works!
+                                courseNode.position.y + 0.2,
+                                courseNode.position.z + node.position.z)
             
-           // globalBallNode.position = node.position
+//            globalBallNode.position = courseNode.position
+//            globalBallNode.position.y = 0.2
 //
 //            globalBallNode.position = SCNVector3(courseNode.position.x + node.position.x, //course2 - works!
 //                courseNode.position.y + 0.2,
@@ -427,7 +428,7 @@ class ViewController: UIViewController {
             
             
 //
-//             globalBallNode.position = courseNode.position
+             //globalBallNode.position = courseNode.position
             //            globalBallNode.position.x = courseNode.position.x
             //            globalBallNode.position.z = courseNode.position.z
 //            globalBallNode.position.y = 0.025
