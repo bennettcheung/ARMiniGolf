@@ -24,6 +24,8 @@
 		912C0763215440BD009704B2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 912C0761215440BD009704B2 /* LaunchScreen.storyboard */; };
 		912C076E215440BD009704B2 /* ARMiniGolfTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912C076D215440BD009704B2 /* ARMiniGolfTests.swift */; };
 		912C0779215440BD009704B2 /* ARMiniGolfUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912C0778215440BD009704B2 /* ARMiniGolfUITests.swift */; };
+		916795862160351000C4C7F4 /* mainmenu.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 916795852160351000C4C7F4 /* mainmenu.mp3 */; };
+		916795882160351600C4C7F4 /* background3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 916795872160351600C4C7F4 /* background3.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +69,8 @@
 		912C0774215440BD009704B2 /* ARMiniGolfUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ARMiniGolfUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		912C0778215440BD009704B2 /* ARMiniGolfUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARMiniGolfUITests.swift; sourceTree = "<group>"; };
 		912C077A215440BD009704B2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		916795852160351000C4C7F4 /* mainmenu.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = mainmenu.mp3; sourceTree = "<group>"; };
+		916795872160351600C4C7F4 /* background3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = background3.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +114,8 @@
 				91293C2E215761A0005F6E70 /* putt.wav */,
 				91293C2C2157573E005F6E70 /* background.mp3 */,
 				911C1B25215D7C1300383FA2 /* background2.mp3 */,
+				916795872160351600C4C7F4 /* background3.mp3 */,
+				916795852160351000C4C7F4 /* mainmenu.mp3 */,
 				911C1B27215D86C900383FA2 /* ballInHole.wav */,
 			);
 			path = Sounds;
@@ -283,6 +289,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				916795862160351000C4C7F4 /* mainmenu.mp3 in Resources */,
+				916795882160351600C4C7F4 /* background3.mp3 in Resources */,
 				911C1B28215D86C900383FA2 /* ballInHole.wav in Resources */,
 				912C0759215440BA009704B2 /* art.scnassets in Resources */,
 				91293C3321581010005F6E70 /* MainMenu.storyboard in Resources */,
@@ -498,7 +506,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = W7K9Q4Z2Y3;
+				DEVELOPMENT_TEAM = 4MNU75ZBC4;
 				INFOPLIST_FILE = ARMiniGolf/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -518,7 +526,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = W7K9Q4Z2Y3;
+				DEVELOPMENT_TEAM = 4MNU75ZBC4;
 				INFOPLIST_FILE = ARMiniGolf/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

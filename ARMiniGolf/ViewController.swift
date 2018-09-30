@@ -47,9 +47,9 @@ class ViewController: UIViewController {
     //debug code
     sceneView.debugOptions = [.showFeaturePoints, .showPhysicsShapes]
     
-    addTapGestureToSceneView()
+    addGesturesToSceneView()
     configureLighting()
-    addLongPressGesturesToSceneView()
+
     self.ballHitForceProgressView.alpha = 0
     
   }
@@ -86,7 +86,7 @@ class ViewController: UIViewController {
       touchTheScreenImageView.layer.removeAllAnimations()
       touchTheScreenImageView.removeFromSuperview()
     }
-    sceneView.debugOptions = []
+    //sceneView.debugOptions = []
     
     //hide all the tracking nodes
     for node in planeNodes{
@@ -95,6 +95,7 @@ class ViewController: UIViewController {
   }
     
     func showPhoneMovementDemo(){
+      if handAndPhoneImageView != nil && touchTheScreenImageView != nil{
         touchTheScreenImageView.alpha = 0
         messageLabel.text = "Move the phone side to side repeatedly while the game is searching for a flat surface."
         let centerX = self.view.center.x
@@ -106,23 +107,28 @@ class ViewController: UIViewController {
         UIView.animate(withDuration: 3, delay: 1.5, options: [.autoreverse, .repeat, .curveEaseInOut], animations: {
             self.handAndPhoneImageView.center.x -= 280
         }, completion: nil)
+      }
     }
     
     func showPhoneWithClickingDemo(){
-        messageLabel.text = "Now tap on the white rectangle to place the MiniGolf course."
-       handAndPhoneImageView.layer.removeAllAnimations()
-       handAndPhoneImageView.center.x = self.view.center.x
-       touchTheScreenImageView.center.x = handAndPhoneImageView.center.x - 5
-        UIView.animate(withDuration: 2, delay: 0, options: [.repeat, .autoreverse], animations: {
-            self.touchTheScreenImageView.alpha = 1
-        })
-    }
+      if handAndPhoneImageView != nil && touchTheScreenImageView != nil{
+          messageLabel.text = "Now tap on the white rectangle to place the MiniGolf course."
+         handAndPhoneImageView.layer.removeAllAnimations()
+         handAndPhoneImageView.center.x = self.view.center.x
+         touchTheScreenImageView.center.x = handAndPhoneImageView.center.x - 5
+          UIView.animate(withDuration: 2, delay: 0, options: [.repeat, .autoreverse], animations: {
+              self.touchTheScreenImageView.alpha = 1
+          })
+        }
+      }
     
   func configureLighting() {
     sceneView.autoenablesDefaultLighting = true
     sceneView.automaticallyUpdatesLighting = true
 
   }
+  
+  // MARK: Music/sound related functions
   
   func setupSounds(){
     let puttSound = SCNAudioSource(fileNamed: "putt.wav")!
@@ -152,29 +158,19 @@ class ViewController: UIViewController {
   }
   
   
-  
-  func addTapGestureToSceneView() {
+  // MARK: Gesture functions
+  func addGesturesToSceneView() {
     let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.addCourseToSceneView(withGestureRecognizer:)))
     sceneView.addGestureRecognizer(tapGestureRecognizer)
-  }
-  
 
   // Add long press gestures to scene view method
-  func addLongPressGesturesToSceneView() {
     longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(ViewController.applyForceToBall(withGestureRecognizer:)))
     longPressGestureRecognizer.minimumPressDuration = 0.5
-    
- 
     
     sceneView.addGestureRecognizer(self.longPressGestureRecognizer)
   }
   
-  func addPinchGestureToSceneView(){
-    let pinchGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.handlePinch))
-    sceneView.addGestureRecognizer(pinchGestureRecognizer)
-    
-  }
-  //***************************************************************************************** add course
+  // MARK:  add course
     
   @objc func addCourseToSceneView(withGestureRecognizer recognizer: UIGestureRecognizer) {
     //Don't continue if game already started
@@ -194,59 +190,85 @@ class ViewController: UIViewController {
     guard let hitTestResult = hitTestResults.first else { return }
     
     let translation = hitTestResult.worldTransform.translation
-    let x = translation.x
-    let y = translation.y + 0.05
-    let z = translation.z - 1.5 //0.5
+    
+    
+    // Get a transformation matrix with the euler angle of the camera
+    let rotate = simd_float4x4(SCNMatrix4MakeRotation(sceneView.session.currentFrame!.camera.eulerAngles.y, 0, 1, 0))
+    
+    // Combine both transformation matrices
+    let finalTransform = simd_mul(hitTestResult.worldTransform, rotate)
+    print("camera rotation \(rotate)")
+    
+    // Use the resulting matrix to position the anchor
+    sceneView.session.add(anchor: ARAnchor(transform: finalTransform))
     
     let level = gameManager.getCurrentLevel()
-    guard let courseScene = SCNScene(named: level.sceneFile),
-      let courseNode = courseScene.rootNode.childNode(withName: "course", recursively: false)
-      else { return }
+    let x = translation.x + level.initialCourseOffset.x
+    let y = translation.y + level.initialCourseOffset.y
+    let z = translation.z + level.initialCourseOffset.z
     
-    if level.scale != 1 {
-      courseNode.scale = SCNVector3(level.scale, level.scale, level.scale)
-      for node in courseNode.childNodes{
-//        print("node name is \(String(describing: node.name)      )")
-        if node.name != "floor",
-          let physicsBody = node.physicsBody{
-          physicsBody.physicsShape = SCNPhysicsShape(node: node, options: [SCNPhysicsShape.Option.scale: SCNVector3(level.scale, level.scale, level.scale)])
-        }
-      }
-    }
+    addCourseAtPosition(SCNVector3(x,y,z))
     
-    courseNode.position = SCNVector3(x,y,z)
-    
-    courseNode.name = courseNodeName
-    
-    sceneView.scene.rootNode.addChildNode(courseNode)
-    
-    self.courseNode = courseNode
-    
-    //************************************************************************* add ball to the course
-    guard let ballScene = SCNScene(named: "art.scnassets/ball.scn"),
-      let ballNode = ballScene.rootNode.childNode(withName: "ball", recursively: false)
-      else { return }
-    globalBallNode = ballNode
-    resetBallToInitialLocation()
-    globalBallNode.physicsBody?.continuousCollisionDetectionThreshold = 0.1
-    
-    sceneView.scene.rootNode.addChildNode(ballNode)
+    addBallToScene()
     
     //start game, remove the detecting plane node
     turnoffARPlaneTracking()
     setupSounds()
     gameManager.startGame()
   }
-  
-  
-  @objc func handlePinch(_ recognizer: UIGestureRecognizer) {
-    //Don't continue if game already started
-    print("pinch gesture handler called")
-    if gameManager.gameStarted()  {
-      return
+  private func addCourseAtPosition(_ position: SCNVector3){
+    
+    //if we are advancing to a different level
+    if courseNode != nil{
+      courseNode.removeFromParentNode()
+      courseNode.removeAllAudioPlayers()
+      courseNode = nil
     }
     
+    let level = gameManager.getCurrentLevel()
+    
+    guard let courseScene = SCNScene(named: level.sceneFile)
+      else { return }
+    
+    courseNode = courseScene.rootNode.childNode(withName: "course", recursively: false)
+    
+    //change the physics body to scale
+    if level.scale != 1 {
+      courseNode.simdScale = float3(level.scale, level.scale, level.scale)
+      for node in courseNode.childNodes{
+        if node.name != "floor",
+          let physicsBody = node.physicsBody, let geometry = node.geometry{
+          physicsBody.physicsShape = SCNPhysicsShape(geometry: geometry, options: [SCNPhysicsShape.Option.scale: SCNVector3(level.scale, level.scale, level.scale)])
+        }
+      }
+    }
+    
+    courseNode.position = position
+    //courseNode.simdTransform = planeNode.simdTransform
+    
+    courseNode.name = courseNodeName
+    
+    sceneView.scene.rootNode.addChildNode(courseNode)
   }
+  
+  private func addBallToScene(){
+    if globalBallNode != nil{
+      globalBallNode.removeFromParentNode()
+    }
+    
+    guard let ballScene = SCNScene(named: "art.scnassets/ball.scn"),
+      let ballNode = ballScene.rootNode.childNode(withName: "ball", recursively: false)
+      else { return }
+    
+    
+    globalBallNode = ballNode
+    sceneView.scene.rootNode.addChildNode(ballNode)
+    
+    globalBallNode.physicsBody?.continuousCollisionDetectionThreshold = 0.1
+    resetBallToInitialLocation()
+    
+  }
+  
   //*************************************************************************** direction and force for ball path *********************************
   
   // Get user vector
@@ -262,19 +284,6 @@ class ViewController: UIViewController {
     return (SCNVector3(0, 0, -1))
   }
   
-  
-  // Get ball node from long press location method
-  func getBallNode(from longPressLocation: CGPoint) -> SCNNode? {
-    let hitTestResults = sceneView.hitTest(longPressLocation)
-    guard let parentNode  = hitTestResults.first?.node.parent
-      else { return nil }
-    for child in parentNode.childNodes {
-      if child.name == "ball" {
-        return child
-      }
-    }
-    return nil
-  }
   
   //Apply force to ball method
   
@@ -382,6 +391,8 @@ class ViewController: UIViewController {
       gameManager.restartGame()
       resetBallToInitialLocation()
     }
+  
+  
     // MARK: Ball Position at start
     //********************************************************************************** reset ball
   private func resetBallToInitialLocation() {
@@ -433,49 +444,19 @@ class ViewController: UIViewController {
         let ballInHoleSound =  self.sounds["ballInHole"]!
         self.globalBallNode.runAction(SCNAction.playAudio(ballInHoleSound, waitForCompletion: false))
         self.globalBallNode.isHidden = true
-        self.messageLabel.text = "You won!"
+        self.courseNode.removeAllAudioPlayers()
+
+        if (self.gameManager.gameEnded())
+        {
+          return
+        }
+        self.gameManager.endGame()
+        self.performSegue(withIdentifier: "segueToVictoryScreen", sender: self)
         
-        self.advanceToNextLevel()
       }
     }
   }
-  
-  private func advanceToNextLevel(){
-    if (gameManager.gameEnded())
-    {
-      return
-    }
-    gameManager.endGame()
-    
-    print("Advance to next level")
-    gameManager.advanceLevel()
-    
-    let oldPosition = courseNode.position
-    
-    courseNode.removeFromParentNode()
-    courseNode.removeAllAudioPlayers()
-    //globalBallNode.removeFromParentNode()
-    courseNode = nil
-    
-    let level = gameManager.getCurrentLevel()
-    guard let courseScene = SCNScene(named: level.sceneFile),
-      let courseNode = courseScene.rootNode.childNode(withName: "course", recursively: false)
-      else { return }
-    
-    courseNode.position = oldPosition
-    self.courseNode = courseNode
-    
-    courseNode.name = courseNodeName
-    
-    sceneView.scene.rootNode.addChildNode(courseNode)
-    
-    //sceneView.scene.rootNode.addChildNode(globalBallNode)
-    resetBallToInitialLocation()
-    
-    scoreLabel.text = "0"
-    
-    loadBackgroundMusic()
-  }
+
     
 }
 
@@ -594,6 +575,39 @@ extension ViewController: ARSCNViewDelegate {
 //    let shape = SCNPhysicsShape(geometry: geometry, options: nil)
 //    let physicsBody = SCNPhysicsBody(type: type, shape: shape)
 //    node.physicsBody = physicsBody
+  }
+}
+
+extension ViewController: VictoryViewControllerDelegate{
+  
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    
+    if segue.identifier == "segueToVictoryScreen"{
+      guard let controller = segue.destination as? VictoryViewController else
+      {
+        return
+      }
+
+      controller.delegate = self
+      controller.score = gameManager.getCurrentPlayerScore()
+    }
+    
+  }
+  
+  func advanceToNextLevel(){
+    
+    print("Advance to next level")
+    gameManager.advanceLevel()
+    
+    let oldPosition = courseNode.position
+    addCourseAtPosition(oldPosition)
+    
+    resetBallToInitialLocation()
+    
+    scoreLabel.text = "0"
+    
+    loadBackgroundMusic()
+    gameManager.startGame()
   }
 }
 
