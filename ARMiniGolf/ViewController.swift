@@ -95,6 +95,7 @@ class ViewController: UIViewController {
   }
     
     func showPhoneMovementDemo(){
+      if handAndPhoneImageView != nil && touchTheScreenImageView != nil{
         touchTheScreenImageView.alpha = 0
         messageLabel.text = "Move the phone side to side repeatedly while the game is searching for a flat surface."
         let centerX = self.view.center.x
@@ -106,6 +107,7 @@ class ViewController: UIViewController {
         UIView.animate(withDuration: 3, delay: 1.5, options: [.autoreverse, .repeat, .curveEaseInOut], animations: {
             self.handAndPhoneImageView.center.x -= 280
         }, completion: nil)
+      }
     }
     
     func showPhoneWithClickingDemo(){
@@ -443,7 +445,12 @@ class ViewController: UIViewController {
         self.globalBallNode.runAction(SCNAction.playAudio(ballInHoleSound, waitForCompletion: false))
         self.globalBallNode.isHidden = true
         self.courseNode.removeAllAudioPlayers()
-        
+
+        if (self.gameManager.gameEnded())
+        {
+          return
+        }
+        self.gameManager.endGame()
         self.performSegue(withIdentifier: "segueToVictoryScreen", sender: self)
         
       }
@@ -575,11 +582,12 @@ extension ViewController: VictoryViewControllerDelegate{
   
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     
-    if segue.identifier == "SegueToVictoryScreen"{
+    if segue.identifier == "segueToVictoryScreen"{
       guard let controller = segue.destination as? VictoryViewController else
       {
         return
       }
+
       controller.delegate = self
       controller.score = gameManager.getCurrentPlayerScore()
     }
@@ -587,14 +595,6 @@ extension ViewController: VictoryViewControllerDelegate{
   }
   
   func advanceToNextLevel(){
-    if (gameManager.gameEnded())
-    {
-      return
-    }
-    gameManager.endGame()
-    
-    print("Advance to next level")
-    gameManager.advanceLevel()
     
     print("Advance to next level")
     gameManager.advanceLevel()
@@ -602,12 +602,12 @@ extension ViewController: VictoryViewControllerDelegate{
     let oldPosition = courseNode.position
     addCourseAtPosition(oldPosition)
     
-    
     resetBallToInitialLocation()
     
     scoreLabel.text = "0"
     
     loadBackgroundMusic()
+    gameManager.startGame()
   }
 }
 
