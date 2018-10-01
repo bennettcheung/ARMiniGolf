@@ -12,344 +12,303 @@ import ARKit
 
 
 class ViewController: UIViewController {
-  
+    
+    //MARK: Outlets
+    
     @IBOutlet weak var touchTheScreenImageView: UIImageView!
     @IBOutlet weak var resetGameButton: UIButton!
     @IBOutlet weak var handAndPhoneImageView: UIImageView!
     @IBOutlet weak var messageLabel: UILabel!
-  @IBOutlet weak var scoreLabel: UILabel!
-  @IBOutlet weak var sceneView: ARSCNView!
-  @IBOutlet weak var ballHitForceProgressView: UIProgressView!
+    @IBOutlet weak var scoreLabel: UILabel!
+    @IBOutlet weak var sceneView: ARSCNView!
+    @IBOutlet weak var ballHitForceProgressView: UIProgressView!
     
-  var planeNodes = [SCNNode]()
-  var globalBallNode: SCNNode!
-  var courseNode: SCNNode!
-  var longPressGestureRecognizer = UILongPressGestureRecognizer()
-  var tapGestureRecognizer = UITapGestureRecognizer()
-  var ballExists = false
-  var pressStartTime:Date?
-  var timeSinceLastHaptic: Date?
-  let lightFeedback = UIImpactFeedbackGenerator(style: .light)
-  var hapticsInterval = Float()
-  var sounds:[String:SCNAudioSource] = [:]
-  
-  var gameManager = GameManager()
-  
-  // TODO: Declare  node name constant
-  let courseNodeName = "course"
-  
-  // TODO: Initialize an empty array of type SCNNode
-  
-  override func viewDidLoad() {
-    super.viewDidLoad()
+    //MARK: Variables and Constants
     
+    var planeNodes = [SCNNode]()
+    var globalBallNode: SCNNode!
+    var courseNode: SCNNode!
+    var longPressGestureRecognizer = UILongPressGestureRecognizer()
+    var tapGestureRecognizer = UITapGestureRecognizer()
+    var ballExists = false
+    var pressStartTime:Date?
+    var timeSinceLastHaptic: Date?
+    let lightFeedback = UIImpactFeedbackGenerator(style: .light)
+    var hapticsInterval = Float()
+    var sounds:[String:SCNAudioSource] = [:]
+    var gameManager = GameManager()
+    let courseNodeName = "course"
     
-    //debug code
-    sceneView.debugOptions = [.showFeaturePoints, .showPhysicsShapes]
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        sceneView.debugOptions = [.showFeaturePoints, .showPhysicsShapes]
+        addGesturesToSceneView()
+        configureLighting()
+    }
     
-    addGesturesToSceneView()
-    configureLighting()
-
-    self.ballHitForceProgressView.alpha = 0
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setUpSceneView()
+        showPhoneMovementDemo()
+    }
     
-  }
-  
-  override func viewWillAppear(_ animated: Bool) {
-    super.viewWillAppear(animated)
-    setUpSceneView()
-    showPhoneMovementDemo()
-  }
-  
-  override func viewWillDisappear(_ animated: Bool) {
-    super.viewWillDisappear(animated)
-    sceneView.session.pause()
-  }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        sceneView.session.pause()
+    }
     
     func setLevel(_ level: Int){
         gameManager.setLevel(level)
     }
-  
-  func setUpSceneView() {
-    let configuration = ARWorldTrackingConfiguration()
-    configuration.planeDetection = .horizontal
     
-    sceneView.session.run(configuration)
-    
-    sceneView.delegate = self
-    sceneView.scene.physicsWorld.contactDelegate = self
-    
-  }
-    // MARK: Turn off debugging
-  func turnoffARPlaneTracking(){
-    if handAndPhoneImageView != nil && touchTheScreenImageView != nil{
-      handAndPhoneImageView.removeFromSuperview()
-      touchTheScreenImageView.layer.removeAllAnimations()
-      touchTheScreenImageView.removeFromSuperview()
+    func setUpSceneView() {
+        let configuration = ARWorldTrackingConfiguration()
+        configuration.planeDetection = .horizontal
+        sceneView.session.run(configuration)
+        sceneView.delegate = self
+        sceneView.scene.physicsWorld.contactDelegate = self
     }
-    //sceneView.debugOptions = []
     
-    //hide all the tracking nodes
-    for node in planeNodes{
-        node.opacity = 0
+    // MARK: Turn Off Debugging
+    
+    func turnoffARPlaneTracking(){
+        if handAndPhoneImageView != nil && touchTheScreenImageView != nil{
+            handAndPhoneImageView.removeFromSuperview()
+            touchTheScreenImageView.layer.removeAllAnimations()
+            touchTheScreenImageView.removeFromSuperview()
+        }
+        //sceneView.debugOptions = []
+        
+        //hide all the tracking nodes
+        for node in planeNodes{
+            node.opacity = 0
+        }
     }
-  }
+    
+    // MARK: Phone Animations
     
     func showPhoneMovementDemo(){
-      if handAndPhoneImageView != nil && touchTheScreenImageView != nil{
-        touchTheScreenImageView.alpha = 0
-        messageLabel.text = "Move the phone side to side repeatedly while the game is searching for a flat surface."
-        let centerX = self.view.center.x
-        let handY = handAndPhoneImageView.center.y
-        handAndPhoneImageView.center = CGPoint(x: centerX, y: handY)
-        UIView.animate(withDuration: 1.5, delay: 0, options: [.curveEaseOut], animations: {
-            self.handAndPhoneImageView.center.x += 150
-        }, completion: nil)
-        UIView.animate(withDuration: 3, delay: 1.5, options: [.autoreverse, .repeat, .curveEaseInOut], animations: {
-            self.handAndPhoneImageView.center.x -= 280
-        }, completion: nil)
-      }
+        if handAndPhoneImageView != nil && touchTheScreenImageView != nil{
+            touchTheScreenImageView.alpha = 0
+            messageLabel.text = "Move the phone side to side repeatedly while the game is searching for a flat surface."
+            let centerX = self.view.center.x
+            let handY = handAndPhoneImageView.center.y
+            handAndPhoneImageView.center = CGPoint(x: centerX, y: handY)
+            UIView.animate(withDuration: 1.5, delay: 0, options: [.curveEaseOut], animations: {
+                self.handAndPhoneImageView.center.x += 150
+            }, completion: nil)
+            UIView.animate(withDuration: 3, delay: 1.5, options: [.autoreverse, .repeat, .curveEaseInOut], animations: {
+                self.handAndPhoneImageView.center.x -= 280
+            }, completion: nil)
+        }
     }
     
     func showPhoneWithClickingDemo(){
-      if handAndPhoneImageView != nil && touchTheScreenImageView != nil{
-          messageLabel.text = "Now tap on the white rectangle to place the MiniGolf course."
-         handAndPhoneImageView.layer.removeAllAnimations()
-         handAndPhoneImageView.center.x = self.view.center.x
-         touchTheScreenImageView.center.x = handAndPhoneImageView.center.x - 5
-          UIView.animate(withDuration: 2, delay: 0, options: [.repeat, .autoreverse], animations: {
-              self.touchTheScreenImageView.alpha = 1
-          })
+        if handAndPhoneImageView != nil && touchTheScreenImageView != nil{
+            messageLabel.text = "Now tap on the white rectangle to place the MiniGolf course."
+            handAndPhoneImageView.layer.removeAllAnimations()
+            handAndPhoneImageView.center.x = self.view.center.x
+            touchTheScreenImageView.center.x = handAndPhoneImageView.center.x - 5
+            UIView.animate(withDuration: 2, delay: 0, options: [.repeat, .autoreverse], animations: {
+                self.touchTheScreenImageView.alpha = 1
+            })
         }
-      }
-    
-  func configureLighting() {
-    sceneView.autoenablesDefaultLighting = true
-    sceneView.automaticallyUpdatesLighting = true
-
-  }
-  
-  // MARK: Music/sound related functions
-  
-  func setupSounds(){
-    let puttSound = SCNAudioSource(fileNamed: "putt.wav")!
-    puttSound.load()
-    puttSound.volume = 0.6
-    
-    sounds["putt"] = puttSound
-    
-    let ballInHoleSound = SCNAudioSource(fileNamed: "ballInHole.wav")!
-    ballInHoleSound.load()
-    ballInHoleSound.volume = 0.4
-    
-    sounds["ballInHole"] = ballInHoleSound
-    
-    loadBackgroundMusic()
-  }
-  
-  func loadBackgroundMusic(){
-    let level = gameManager.getCurrentLevel()
-    let backgroundMusic = SCNAudioSource(fileNamed: level.musicFile)!
-    backgroundMusic.volume = 0.3
-    backgroundMusic.loops = true
-    backgroundMusic.load()
-    
-    let musicPlayer = SCNAudioPlayer(source: backgroundMusic)
-    courseNode.addAudioPlayer(musicPlayer)
-  }
-  
-  
-  // MARK: Gesture functions
-  func addGesturesToSceneView() {
-    let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.addCourseToSceneView(withGestureRecognizer:)))
-    sceneView.addGestureRecognizer(tapGestureRecognizer)
-
-  // Add long press gestures to scene view method
-    longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(ViewController.applyForceToBall(withGestureRecognizer:)))
-    longPressGestureRecognizer.minimumPressDuration = 0.5
-    
-    sceneView.addGestureRecognizer(self.longPressGestureRecognizer)
-  }
-  
-  // MARK:  add course
-    
-  @objc func addCourseToSceneView(withGestureRecognizer recognizer: UIGestureRecognizer) {
-    //Don't continue if game already started
-    if gameManager.gameStarted()  {
-      return
     }
     
-    messageLabel.text = ""
-    scoreLabel.text = "0"
-    scoreLabel.alpha = 0.7
-    resetGameButton.alpha = 1
-    
-    
-    
-    let tapLocation = recognizer.location(in: sceneView)
-    let hitTestResults = sceneView.hitTest(tapLocation, types: .existingPlaneUsingExtent)
-    guard let hitTestResult = hitTestResults.first else { return }
-    
-    let translation = hitTestResult.worldTransform.translation
-
-    
-    
-    // Get a transformation matrix with the euler angle of the camera
-    let rotate = simd_float4x4(SCNMatrix4MakeRotation(sceneView.session.currentFrame!.camera.eulerAngles.y, 0, 1, 0))
-    
-    // Combine both transformation matrices
-    let finalTransform = simd_mul(hitTestResult.worldTransform, rotate)
-    print("camera rotation \(rotate)")
-    
-    // Use the resulting matrix to position the anchor
-    sceneView.session.add(anchor: ARAnchor(transform: finalTransform))
-    
-    let level = gameManager.getCurrentLevel()
-    let x = translation.x + level.initialCourseOffset.x
-    let y = translation.y + level.initialCourseOffset.y
-    let z = translation.z + level.initialCourseOffset.z
-    
-    addCourseAtPosition(SCNVector3(x,y,z))
-    
-    addBallToScene()
-    
-    //start game, remove the detecting plane node
-    turnoffARPlaneTracking()
-    setupSounds()
-    gameManager.startGame()
-  }
-  private func addCourseAtPosition(_ position: SCNVector3){
-    
-    //if we are advancing to a different level
-    if courseNode != nil{
-      courseNode.removeFromParentNode()
-      courseNode.removeAllAudioPlayers()
-      courseNode = nil
+    func configureLighting() {
+        sceneView.autoenablesDefaultLighting = true
+        sceneView.automaticallyUpdatesLighting = true
     }
-
     
-    let level = gameManager.getCurrentLevel()
+    // MARK: Setup Music/Sound
     
-    guard let courseScene = SCNScene(named: level.sceneFile)
-      else { return }
+    func setupSounds(){
+        let puttSound = SCNAudioSource(fileNamed: "putt.wav")!
+        puttSound.load()
+        puttSound.volume = 0.6
+        sounds["putt"] = puttSound
+        let ballInHoleSound = SCNAudioSource(fileNamed: "ballInHole.wav")!
+        ballInHoleSound.load()
+        ballInHoleSound.volume = 0.4
+        sounds["ballInHole"] = ballInHoleSound
+        loadBackgroundMusic()
+    }
     
-    courseNode = courseScene.rootNode.childNode(withName: "course", recursively: false)
+    func loadBackgroundMusic(){
+        let level = gameManager.getCurrentLevel()
+        let backgroundMusic = SCNAudioSource(fileNamed: level.musicFile)!
+        backgroundMusic.volume = 0.3
+        backgroundMusic.loops = true
+        backgroundMusic.load()
+        let musicPlayer = SCNAudioPlayer(source: backgroundMusic)
+        courseNode.addAudioPlayer(musicPlayer)
+    }
     
-    //change the physics body to scale
-    if level.scale != 1 {
-
-        courseNode.scale = SCNVector3(level.scale, level.scale, level.scale)
-
-        for node in courseNode.childNodes{
-            print("\(node.name ?? "No node name") \(node.geometry?.description ?? "No node geometry") ")
-            if let printPhysicsBody = node.physicsBody, let printPhysicsShape = printPhysicsBody.physicsShape {
-                print ("\(printPhysicsShape.description)")
+    // MARK: Setup Gestures
+    
+    func addGesturesToSceneView() {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.addCourseToSceneView(withGestureRecognizer:)))
+        sceneView.addGestureRecognizer(tapGestureRecognizer)
+        longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(ViewController.applyForceToBall(withGestureRecognizer:)))
+        longPressGestureRecognizer.minimumPressDuration = 0.5
+        sceneView.addGestureRecognizer(self.longPressGestureRecognizer)
+    }
+    
+    // MARK:  Setup, Add course / Start Game
+    
+    @objc func addCourseToSceneView(withGestureRecognizer recognizer: UIGestureRecognizer) {
+        //Don't continue if game already started
+        if gameManager.gameStarted()  {
+            return
+        }
+        // screen setup
+        messageLabel.text = ""
+        scoreLabel.text = "0"
+        scoreLabel.alpha = 0.7
+        resetGameButton.alpha = 1
+        ballHitForceProgressView.alpha = 0
+        
+        // get tap location
+        let tapLocation = recognizer.location(in: sceneView)
+        let hitTestResults = sceneView.hitTest(tapLocation, types: .existingPlaneUsingExtent)
+        guard let hitTestResult = hitTestResults.first else { return }
+        let translation = hitTestResult.worldTransform.translation
+        
+        // Get a transformation matrix with the euler angle of the camera
+        let rotate = simd_float4x4(SCNMatrix4MakeRotation(sceneView.session.currentFrame!.camera.eulerAngles.y, 0, 1, 0))
+        
+        // Combine both transformation matrices
+        let finalTransform = simd_mul(hitTestResult.worldTransform, rotate)
+        print("camera rotation \(rotate)")
+        
+        // Use the resulting matrix to position the anchor
+        sceneView.session.add(anchor: ARAnchor(transform: finalTransform))
+        
+        // get level
+        let level = gameManager.getCurrentLevel()
+        let x = translation.x + level.initialCourseOffset.x
+        let y = translation.y + level.initialCourseOffset.y
+        let z = translation.z + level.initialCourseOffset.z
+        
+        // drop the course at the location
+        addCourseAtPosition(SCNVector3(x,y,z))
+        addBallToScene()
+        
+        //start game, remove the detecting plane node
+        turnoffARPlaneTracking()
+        setupSounds()
+        gameManager.startGame()
+    }
+    private func addCourseAtPosition(_ position: SCNVector3){
+        //if we are advancing to a different level
+        if courseNode != nil{
+            courseNode.removeFromParentNode()
+            courseNode.removeAllAudioPlayers()
+            courseNode = nil
+        }
+        let level = gameManager.getCurrentLevel()
+        guard let courseScene = SCNScene(named: level.sceneFile)
+            else { return }
+        courseNode = courseScene.rootNode.childNode(withName: "course", recursively: false)
+        
+        // MARK: Physics Body Scaling
+        
+        if level.scale != 1 {
+            courseNode.scale = SCNVector3(level.scale, level.scale, level.scale)
+            for node in courseNode.childNodes{
+                print("\(node.name ?? "No node name") \(node.geometry?.description ?? "No node geometry") ")
+                if let printPhysicsBody = node.physicsBody, let printPhysicsShape = printPhysicsBody.physicsShape {
+                    print ("\(printPhysicsShape.description)")
+                }
+                if let physicsBody = node.physicsBody, let geometry = node.geometry{
+                    if node.name == "redTube" || node.name == "interiorRightTube" || node.name == "interiorLeftTube" || node.name == "exteriorWalls"
+                    {
+                        physicsBody.physicsShape = SCNPhysicsShape(geometry: geometry, options: [SCNPhysicsShape.Option.scale: SCNVector3(level.scale, level.scale, level.scale), SCNPhysicsShape.Option.type: SCNPhysicsShape.ShapeType.concavePolyhedron])
+                    }
+                    else if node.name != "floor"{
+                        physicsBody.physicsShape = SCNPhysicsShape(geometry: geometry, options: [SCNPhysicsShape.Option.scale: SCNVector3(level.scale, level.scale, level.scale)])
+                    }
+                }
             }
+        }
+        courseNode.position = position
+        //courseNode.simdTransform = planeNode.simdTransform
+        courseNode.name = courseNodeName
+        sceneView.scene.rootNode.addChildNode(courseNode)
+    }
+    
+    // MARK: Add Ball To Scene
+    
+    private func addBallToScene(){
+        if globalBallNode != nil{
+            globalBallNode.removeFromParentNode()
+        }
+        guard let ballScene = SCNScene(named: "art.scnassets/ball.scn"),
+            let ballNode = ballScene.rootNode.childNode(withName: "ball", recursively: false)
+            else { return }
+        globalBallNode = ballNode
+        sceneView.scene.rootNode.addChildNode(ballNode)
+        globalBallNode.physicsBody?.continuousCollisionDetectionThreshold = 0.1
+        resetBallToInitialLocation()
+    }
+    
+    // MARK: Ball Direction and Force
+    
+    // Get user vector
+    
+    func getUserVector() -> (SCNVector3) {
+        if let frame = self.sceneView.session.currentFrame {
+            let mat = SCNMatrix4(frame.camera.transform) // 4x4 transform matrix describing camera in world space
+            var direction = SCNVector3(-1 * mat.m31, -1 * mat.m32, -1 * mat.m33) // orientation of camera in world space
+            //let pos = SCNVector3(mat.m41, mat.m42, mat.m43) // location of camera in world space
+            direction.y = 0 //negate height
+            return (direction)
+        }
+        return (SCNVector3(0, 0, -1))
+    }
+    
+    //Apply force to ball method
+    
+    @objc func applyForceToBall(withGestureRecognizer recognizer: UIGestureRecognizer) {
+        //button press state begins
+        if recognizer.state == .began {
+            pressStartTime = Date()
+            DispatchQueue.main.async {
+                self.messageLabel.text = ""
+            }
+        }
+        guard let physicsBody = globalBallNode.physicsBody
+            else { return }
+        globalBallNode.geometry?.firstMaterial?.diffuse.contents = UIColor.green
+        var direction = self.getUserVector()
+        let duration = getHoldDuration()
+        hapticsInterval = Float(getAppropriateFeedback(duration: duration))
+        let force = 1/hapticsInterval
+        updateForceIndicator(force: force)
+        
+        //button press state ends
+        
+        if recognizer.state == .ended {
             
-            if let physicsBody = node.physicsBody, let geometry = node.geometry{
-                if node.name == "redTube" || node.name == "interiorRightTube" || node.name == "interiorLeftTube" || node.name == "exteriorWalls"
-                {
-                    physicsBody.physicsShape = SCNPhysicsShape(geometry: geometry, options: [SCNPhysicsShape.Option.scale: SCNVector3(level.scale, level.scale, level.scale), SCNPhysicsShape.Option.type: SCNPhysicsShape.ShapeType.concavePolyhedron])
-                }
-                else if node.name != "floor"{
-                    physicsBody.physicsShape = SCNPhysicsShape(geometry: geometry, options: [SCNPhysicsShape.Option.scale: SCNVector3(level.scale, level.scale, level.scale)])
-                }
-            }
+            //play a sound and apply force
+            let puttSound =  sounds["putt"]!
+            globalBallNode.runAction(SCNAction.playAudio(puttSound, waitForCompletion: false))
+            globalBallNode.geometry?.firstMaterial?.diffuse.contents = UIColor.white
+            self.ballHitForceProgressView.alpha = 0
+            let forceMultiplier = force * 0.05 //adjust the distance the ball is hit
+            direction.x = direction.x * forceMultiplier
+            direction.z = direction.z * forceMultiplier
+            physicsBody.applyForce(direction, asImpulse: true)
+            self.ballHitForceProgressView.setProgress(0, animated: false)
+            normalStroke()
         }
     }
-    
-    courseNode.position = position
-    //courseNode.simdTransform = planeNode.simdTransform
-    
-    courseNode.name = courseNodeName
-    
-    sceneView.scene.rootNode.addChildNode(courseNode)
-  }
-  
-  private func addBallToScene(){
-    if globalBallNode != nil{
-      globalBallNode.removeFromParentNode()
-    }
-    
-    guard let ballScene = SCNScene(named: "art.scnassets/ball.scn"),
-      let ballNode = ballScene.rootNode.childNode(withName: "ball", recursively: false)
-      else { return }
-    
-    
-    globalBallNode = ballNode
-    sceneView.scene.rootNode.addChildNode(ballNode)
-    
-    globalBallNode.physicsBody?.continuousCollisionDetectionThreshold = 0.1
-    resetBallToInitialLocation()
-    
-  }
-  
-  //*************************************************************************** direction and force for ball path *********************************
-  
-  // Get user vector
-  
-  func getUserVector() -> (SCNVector3) {
-    if let frame = self.sceneView.session.currentFrame {
-      let mat = SCNMatrix4(frame.camera.transform) // 4x4 transform matrix describing camera in world space
-      var direction = SCNVector3(-1 * mat.m31, -1 * mat.m32, -1 * mat.m33) // orientation of camera in world space
-      //let pos = SCNVector3(mat.m41, mat.m42, mat.m43) // location of camera in world space
-      direction.y = 0 //negate height
-      return (direction)
-    }
-    return (SCNVector3(0, 0, -1))
-  }
-  
-  
-  //Apply force to ball method
-  
-  @objc func applyForceToBall(withGestureRecognizer recognizer: UIGestureRecognizer) {
-    //button press state begins
-    if recognizer.state == .began {
-      pressStartTime = Date()
-      DispatchQueue.main.async {
-        self.messageLabel.text = ""
-      }
-    }
-   
-    guard let physicsBody = globalBallNode.physicsBody
-      else { return }
-    globalBallNode.geometry?.firstMaterial?.diffuse.contents = UIColor.green
-    var direction = self.getUserVector()
-    let duration = getHoldDuration()
-    hapticsInterval = Float(getAppropriateFeedback(duration: duration))
-    let force = 1/hapticsInterval
-    updateForceIndicator(force: force)
-    
-    //button press state ends
-    
-    if recognizer.state == .ended {
-      
-      //play a sound and apply force
-      let puttSound =  sounds["putt"]!
-      globalBallNode.runAction(SCNAction.playAudio(puttSound, waitForCompletion: false))
-      
-      globalBallNode.geometry?.firstMaterial?.diffuse.contents = UIColor.white
-      self.ballHitForceProgressView.alpha = 0
-      let forceMultiplier = force * 0.05 //adjust the distance the ball is hit
-      direction.x = direction.x * forceMultiplier
-      direction.z = direction.z * forceMultiplier
-      //print (direction)
-      
-      physicsBody.applyForce(direction, asImpulse: true)
-      self.ballHitForceProgressView.setProgress(0, animated: false)
-      normalStroke()
-    }
-
-
-  }
     
     func updateForceIndicator (force: Float){
-        //self.ballHitForceProgressView.setProgress(0, animated: false)
         self.ballHitForceProgressView.clipsToBounds = true
         self.ballHitForceProgressView.layer.cornerRadius = 5
         self.ballHitForceProgressView.alpha = 1
         UIView.animate(withDuration: 0.5) { self.ballHitForceProgressView.setProgress(force/10, animated: true) }
-        //self.ballHitForceProgressView.progress = force/10
-        
     }
     
     func getHoldDuration() -> Float {
@@ -359,8 +318,8 @@ class ViewController: UIViewController {
         }
         let duration = -Float(pressStartTime.timeIntervalSinceNow)
         return duration
-        
     }
+    
     func getAppropriateFeedback(duration:Float) -> TimeInterval{
         let interval: TimeInterval
         switch duration {
@@ -399,100 +358,94 @@ class ViewController: UIViewController {
         return interval
     }
     
+    // MARK: Ball Position At Start / Reset
+    
     @IBAction func resetBallLocationButton(_ sender: Any) {
-      
-      scoreLabel.text = "0"
-      gameManager.restartGame()
-      resetBallToInitialLocation()
+        scoreLabel.text = "0"
+        gameManager.restartGame()
+        resetBallToInitialLocation()
     }
-  
-  
-    // MARK: Ball Position at start
-    //********************************************************************************** reset ball
-  private func resetBallToInitialLocation() {
-      globalBallNode.isHidden = false
-      guard let physicsBody = globalBallNode.physicsBody else{
-        return
-      }
-      physicsBody.velocity = SCNVector3(0, 0, 0)
-      physicsBody.angularVelocity = SCNVector4(0, 0, 0, 0)
     
-      //grab the game level offset
-      let level = gameManager.getCurrentLevel()
-      let levelNum = gameManager.currentLevelNum
-    
-    for node in courseNode.childNodes{
-        if node.name == "tee" {
-            switch levelNum {
-            case 1:
-                globalBallNode.position = SCNVector3(courseNode.position.x + node.position.x * level.scale, //course1 - works!
-                    courseNode.position.y + 0.2,
-                    courseNode.position.z + node.position.z * level.scale)
-            case 2:
-                globalBallNode.position = SCNVector3(courseNode.position.x + node.position.x * level.scale, //course2 - works!
-                    courseNode.position.y + 0.2,
-                    courseNode.position.z + node.position.z * level.scale)
-            case 3:
-                globalBallNode.position = SCNVector3(courseNode.position.x + node.position.x * level.scale, //course3 -works!
-                    courseNode.position.y + 0.52,
-                    courseNode.position.z - node.position.z * level.scale)
-            default:
-                print("We have no level 4")
+    private func resetBallToInitialLocation() {
+        globalBallNode.isHidden = false
+        guard let physicsBody = globalBallNode.physicsBody else{
+            return
+        }
+        physicsBody.velocity = SCNVector3(0, 0, 0)
+        physicsBody.angularVelocity = SCNVector4(0, 0, 0, 0)
+        
+        //grab the game level offset
+        let level = gameManager.getCurrentLevel()
+        let levelNum = gameManager.currentLevelNum
+        
+        for node in courseNode.childNodes{
+            if node.name == "tee" {
+                switch levelNum {
+                case 1:
+                    globalBallNode.position = SCNVector3(courseNode.position.x + node.position.x * level.scale, //course1 - works!
+                        courseNode.position.y + 0.2,
+                        courseNode.position.z + node.position.z * level.scale)
+                case 2:
+                    globalBallNode.position = SCNVector3(courseNode.position.x + node.position.x * level.scale, //course2 - works!
+                        courseNode.position.y + 0.2,
+                        courseNode.position.z + node.position.z * level.scale)
+                case 3:
+                    globalBallNode.position = SCNVector3(courseNode.position.x + node.position.x * level.scale, //course3 -works!
+                        courseNode.position.y + 0.52,
+                        courseNode.position.z - node.position.z * level.scale)
+                default:
+                    print("We have no level 4")
+                }
             }
         }
     }
-    }
-  
-  private func penaltyStroke(){
     
-    DispatchQueue.main.async {
-      self.messageLabel.text = "Penalty stroke"
-    }
-    resetBallToInitialLocation()
-    normalStroke()
-  }
-  
-  private func normalStroke(){
-    gameManager.incrementShotCount()
-    DispatchQueue.main.async {
-      self.scoreLabel.text = self.gameManager.getCurrentPlayerScore().description
-    }
-  }
-  
-  private func checkAndShowVictoryScreen(){
+    // MARK: Penalty Stroke / Victory Page
     
-    guard let physicsBody = globalBallNode.physicsBody else{
-      return
-    }
-    print ("Velocity is \(physicsBody.velocity)")
-    //Make sure the ball is slow enough
-    let velocityMargin = SCNVector3(0.2, 0.2, 0.2)
-    if abs(physicsBody.velocity.x) < velocityMargin.x &&
-      abs(physicsBody.velocity.y) < velocityMargin.y &&
-      abs(physicsBody.velocity.z) < velocityMargin.z
-    {
-      DispatchQueue.main.async {
-        let ballInHoleSound =  self.sounds["ballInHole"]!
-        self.globalBallNode.runAction(SCNAction.playAudio(ballInHoleSound, waitForCompletion: false))
-        self.globalBallNode.isHidden = true
-        self.courseNode.removeAllAudioPlayers()
-
-        if (self.gameManager.gameEnded())
-        {
-          return
+    private func penaltyStroke(){
+        DispatchQueue.main.async {
+            self.messageLabel.text = "Penalty stroke"
         }
-        self.gameManager.endGame()
-        self.performSegue(withIdentifier: "segueToVictoryScreen", sender: self)
-        
-      }
+        resetBallToInitialLocation()
+        normalStroke()
     }
-  }
-
     
+    private func normalStroke(){
+        gameManager.incrementShotCount()
+        DispatchQueue.main.async {
+            self.scoreLabel.text = self.gameManager.getCurrentPlayerScore().description
+        }
+    }
+    
+    private func checkAndShowVictoryScreen(){
+        guard let physicsBody = globalBallNode.physicsBody else{
+            return
+        }
+        print ("Velocity is \(physicsBody.velocity)")
+        //Make sure the ball is slow enough
+        let velocityMargin = SCNVector3(0.2, 0.2, 0.2)
+        if abs(physicsBody.velocity.x) < velocityMargin.x &&
+            abs(physicsBody.velocity.y) < velocityMargin.y &&
+            abs(physicsBody.velocity.z) < velocityMargin.z
+        {
+            DispatchQueue.main.async {
+                let ballInHoleSound =  self.sounds["ballInHole"]!
+                self.globalBallNode.runAction(SCNAction.playAudio(ballInHoleSound, waitForCompletion: false))
+                self.globalBallNode.isHidden = true
+                self.courseNode.removeAllAudioPlayers()
+                
+                if (self.gameManager.gameEnded())
+                {
+                    return
+                }
+                self.gameManager.endGame()
+                self.performSegue(withIdentifier: "segueToVictoryScreen", sender: self)
+            }
+        }
+    }
 }
 
-
-//********************************* MARK: Collison Reporting
+// MARK: Collison Reporting Tests
 
 enum bodyType: Int {
     case ball = 1
@@ -503,7 +456,6 @@ enum bodyType: Int {
 }
 extension ViewController: SCNPhysicsContactDelegate {
     
-    
     func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact) {
         
         //ball contact with hole, hole contact with ball
@@ -511,15 +463,15 @@ extension ViewController: SCNPhysicsContactDelegate {
         if contact.nodeA.physicsBody?.categoryBitMask == bodyType.ball.rawValue &&
             contact.nodeB.physicsBody?.categoryBitMask == bodyType.hole.rawValue {
             print("collison between ball and hole")
-          checkAndShowVictoryScreen()
+            checkAndShowVictoryScreen()
         }
         else if contact.nodeB.physicsBody?.categoryBitMask == bodyType.ball.rawValue &&
             contact.nodeA.physicsBody?.categoryBitMask == bodyType.hole.rawValue {
             print("collison between hole and ball")
-          checkAndShowVictoryScreen()
+            checkAndShowVictoryScreen()
         }
         
-          //ball contact with water, water contact with ball
+        //ball contact with water, water contact with ball
         
         if contact.nodeA.physicsBody?.categoryBitMask == bodyType.ball.rawValue &&
             contact.nodeB.physicsBody?.categoryBitMask == bodyType.water.rawValue {
@@ -534,123 +486,116 @@ extension ViewController: SCNPhysicsContactDelegate {
     }
 }
 
-
-
-
-//********************************* MARK: Plane Rendering
-
-extension ViewController: ARSCNViewDelegate {
-  
-  func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
-    guard  let planeAnchor = anchor as? ARPlaneAnchor else { return }
-    
-    let width = CGFloat(planeAnchor.extent.x)
-    let height = CGFloat(planeAnchor.extent.z)
-    let plane = SCNPlane(width: width, height: height)
-    
-    plane.materials.first?.diffuse.contents = UIColor.transparentWhite
-    
-    var planeNode = SCNNode(geometry: plane)
-    
-    let x = CGFloat(planeAnchor.center.x)
-    let y = CGFloat(planeAnchor.center.y)
-    let z = CGFloat(planeAnchor.center.z)
-    planeNode.position = SCNVector3(x,y,z)
-    planeNode.eulerAngles.x = -.pi / 2
-    
-    // TODO: Update plane node
-    update(&planeNode, withGeometry: plane, type: .static)
-    if !gameManager.gameStarted(){
-        node.addChildNode(planeNode)
-        
-        // TODO: Append plane node to plane nodes array if appropriate
-        planeNodes.append(planeNode)
-        DispatchQueue.main.async {
-             self.showPhoneWithClickingDemo()
-        }
-       
-    }
-  }
-  
-  // TODO: Remove plane node from plane nodes array if appropriate
-  func renderer(_ renderer: SCNSceneRenderer, didRemove node: SCNNode, for anchor: ARAnchor) {
-      guard anchor is ARPlaneAnchor,
-          let planeNode = node.childNodes.first
-          else { return }
-      planeNodes = planeNodes.filter { $0 != planeNode }
-  }
-  
-  func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
-    guard let planeAnchor = anchor as?  ARPlaneAnchor,
-      var planeNode = node.childNodes.first,
-      let plane = planeNode.geometry as? SCNPlane
-      else { return }
-    
-    let width = CGFloat(planeAnchor.extent.x)
-    let height = CGFloat(planeAnchor.extent.z)
-    plane.width = width
-    plane.height = height
-    
-    let x = CGFloat(planeAnchor.center.x)
-    let y = CGFloat(planeAnchor.center.y)
-    let z = CGFloat(planeAnchor.center.z)
-    
-    planeNode.position = SCNVector3(x, y, z)
-    
-    update(&planeNode, withGeometry: plane, type: .static)
-    
-  }
-  
-  // TODO: Create update plane node method
-  func update(_ node: inout SCNNode, withGeometry geometry: SCNGeometry, type: SCNPhysicsBodyType) {
-//    let shape = SCNPhysicsShape(geometry: geometry, options: nil)
-//    let physicsBody = SCNPhysicsBody(type: type, shape: shape)
-//    node.physicsBody = physicsBody
-  }
-}
+// MARK: Victory ViewController
 
 extension ViewController: VictoryViewControllerDelegate{
-  
-  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     
-    if segue.identifier == "segueToVictoryScreen"{
-      guard let controller = segue.destination as? VictoryViewController else
-      {
-        return
-      }
-
-      controller.delegate = self
-      controller.score = gameManager.getCurrentPlayerScore()
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "segueToVictoryScreen"{
+            guard let controller = segue.destination as? VictoryViewController else
+            {
+                return
+            }
+            controller.delegate = self
+            controller.score = gameManager.getCurrentPlayerScore()
+        }
     }
     
-  }
-  
-  func advanceToNextLevel(){
+    func advanceToNextLevel(){
+        print("Advance to next level")
+        gameManager.advanceLevel()
+        let oldPosition = courseNode.position
+        addCourseAtPosition(oldPosition)
+        resetBallToInitialLocation()
+        scoreLabel.text = "0"
+        loadBackgroundMusic()
+        gameManager.startGame()
+    }
+}
+
+// MARK: Plane Rendering
+
+extension ViewController: ARSCNViewDelegate {
     
-    print("Advance to next level")
-    gameManager.advanceLevel()
+    func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+        //get anchor
+        guard  let planeAnchor = anchor as? ARPlaneAnchor else { return }
+        
+        //create variables with the width and height of anchor
+        let width = CGFloat(planeAnchor.extent.x)
+        let height = CGFloat(planeAnchor.extent.z)
+        
+        //create plane with white color
+        let plane = SCNPlane(width: width, height: height)
+        plane.materials.first?.diffuse.contents = UIColor.transparentWhite
+        
+        //create node matching new plane
+        var planeNode = SCNNode(geometry: plane)
+        
+        //create variable with the plane anchor center
+        let x = CGFloat(planeAnchor.center.x)
+        let y = CGFloat(planeAnchor.center.y)
+        let z = CGFloat(planeAnchor.center.z)
     
-    let oldPosition = courseNode.position
-    addCourseAtPosition(oldPosition)
+        //update plane node with anchor center
+        planeNode.position = SCNVector3(x,y,z)
+        
+        //turn plane node from vertical to horizontal
+        planeNode.eulerAngles.x = -.pi / 2
+        
+        // Update plane node
+        update(&planeNode, withGeometry: plane, type: .static)
+        if !gameManager.gameStarted(){
+            node.addChildNode(planeNode)
+            
+            // Append plane node to plane nodes array if appropriate
+            planeNodes.append(planeNode)
+            DispatchQueue.main.async {
+                self.showPhoneWithClickingDemo()
+            }
+        }
+    }
     
-    resetBallToInitialLocation()
+    func renderer(_ renderer: SCNSceneRenderer, didRemove node: SCNNode, for anchor: ARAnchor) {
+        guard anchor is ARPlaneAnchor,
+            let planeNode = node.childNodes.first
+            else { return }
+        planeNodes = planeNodes.filter { $0 != planeNode }
+    }
     
-    scoreLabel.text = "0"
+    func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
+        guard let planeAnchor = anchor as?  ARPlaneAnchor,
+            var planeNode = node.childNodes.first,
+            let plane = planeNode.geometry as? SCNPlane
+            else { return }
+        let width = CGFloat(planeAnchor.extent.x)
+        let height = CGFloat(planeAnchor.extent.z)
+        plane.width = width
+        plane.height = height
+        
+        let x = CGFloat(planeAnchor.center.x)
+        let y = CGFloat(planeAnchor.center.y)
+        let z = CGFloat(planeAnchor.center.z)
+        planeNode.position = SCNVector3(x, y, z)
+        update(&planeNode, withGeometry: plane, type: .static)
+    }
     
-    loadBackgroundMusic()
-    gameManager.startGame()
-  }
+    func update(_ node: inout SCNNode, withGeometry geometry: SCNGeometry, type: SCNPhysicsBodyType) {
+        //    let shape = SCNPhysicsShape(geometry: geometry, options: nil)
+        //    let physicsBody = SCNPhysicsBody(type: type, shape: shape)
+        //    node.physicsBody = physicsBody
+    }
 }
 
 extension float4x4 {
-  var translation: float3 {
-    let translation = self.columns.3
-    return float3(translation.x, translation.y, translation.z)
-  }
+    var translation: float3 {
+        let translation = self.columns.3
+        return float3(translation.x, translation.y, translation.z)
+    }
 }
 
 extension UIColor {
-  open class var transparentWhite: UIColor {
-    return UIColor.white.withAlphaComponent(0.40)
-  }
+    open class var transparentWhite: UIColor {
+        return UIColor.white.withAlphaComponent(0.40)
+    }
 }
