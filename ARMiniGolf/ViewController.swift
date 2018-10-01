@@ -417,18 +417,28 @@ class ViewController: UIViewController {
       physicsBody.angularVelocity = SCNVector4(0, 0, 0, 0)
     
       //grab the game level offset
-      //let level = gameManager.getCurrentLevel()
+      let level = gameManager.currentLevelNum
     
-     for node in courseNode.childNodes{
+    for node in courseNode.childNodes{
         if node.name == "tee" {
-
-            
-
-                globalBallNode.position = SCNVector3(courseNode.position.x + node.position.x, //course1 - works!
+            switch level {
+            case 1:
+                globalBallNode.position = SCNVector3(courseNode.position.x + node.position.x * 0.5, //course1 - works!
                     courseNode.position.y + 0.2,
-                    courseNode.position.z + node.position.z)
+                    courseNode.position.z + node.position.z * 0.5)
+            case 2:
+                globalBallNode.position = SCNVector3(courseNode.position.x + node.position.x * 0.5, //course2 - works!
+                    courseNode.position.y + 0.2,
+                    courseNode.position.z + node.position.z * 0.5)
+            case 3:
+                globalBallNode.position = SCNVector3(courseNode.position.x + node.position.x * 0.5, //course3 -works!
+                    courseNode.position.y + 0.52,
+                    courseNode.position.z - node.position.z * 0.5)
+            default:
+                print("We have no level 4")
+            }
         }
-      }
+    }
     }
   
   private func penaltyStroke(){
