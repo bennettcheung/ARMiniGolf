@@ -26,16 +26,17 @@ class VictoryViewController: UIViewController {
         nextHoleButton.layer.cornerRadius = 10
 
       //start playing background music
-      let path = Bundle.main.path(forResource: "victory.mp3", ofType:nil)!
-      let url = URL(fileURLWithPath: path)
-      do {
-        backgroundMusicPlayer = try AVAudioPlayer(contentsOf: url)
-        backgroundMusicPlayer?.volume = 0.4
-        backgroundMusicPlayer?.play()
-        
-      } catch {
-        print(" couldn't load file ")
-      }
+        if let path = Bundle.main.path(forResource: "victory.mp3", ofType:nil){
+          let url = URL(fileURLWithPath: path)
+          do {
+            backgroundMusicPlayer = try AVAudioPlayer(contentsOf: url)
+            backgroundMusicPlayer?.volume = 0.4
+            backgroundMusicPlayer?.play()
+            
+          } catch {
+            print(" couldn't load file ")
+          }
+        }
       scoreLabel.text = score.description
     }
     

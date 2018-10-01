@@ -245,13 +245,14 @@ class ViewController: UIViewController {
                 print ("\(printPhysicsShape.description)")
             }
             
-            if node.name == "redTube" || node.name == "interiorRightTube" || node.name == "interiorLeftTube" || node.name == "exteriorWalls"  ,
-                let physicsBody = node.physicsBody, let geometry = node.geometry{
+            if let physicsBody = node.physicsBody, let geometry = node.geometry{
+                if node.name == "redTube" || node.name == "interiorRightTube" || node.name == "interiorLeftTube" || node.name == "exteriorWalls"
+                {
                     physicsBody.physicsShape = SCNPhysicsShape(geometry: geometry, options: [SCNPhysicsShape.Option.scale: SCNVector3(level.scale, level.scale, level.scale), SCNPhysicsShape.Option.type: SCNPhysicsShape.ShapeType.concavePolyhedron])
-            }
-            if node.name != "floor",
-                let physicsBody = node.physicsBody, let geometry = node.geometry{
-                physicsBody.physicsShape = SCNPhysicsShape(geometry: geometry, options: [SCNPhysicsShape.Option.scale: SCNVector3(level.scale, level.scale, level.scale)])
+                }
+                else if node.name != "floor"{
+                    physicsBody.physicsShape = SCNPhysicsShape(geometry: geometry, options: [SCNPhysicsShape.Option.scale: SCNVector3(level.scale, level.scale, level.scale)])
+                }
             }
         }
     }
@@ -417,23 +418,24 @@ class ViewController: UIViewController {
       physicsBody.angularVelocity = SCNVector4(0, 0, 0, 0)
     
       //grab the game level offset
-      let level = gameManager.currentLevelNum
+      let level = gameManager.getCurrentLevel()
+      let levelNum = gameManager.currentLevelNum
     
     for node in courseNode.childNodes{
         if node.name == "tee" {
-            switch level {
+            switch levelNum {
             case 1:
-                globalBallNode.position = SCNVector3(courseNode.position.x + node.position.x * 0.5, //course1 - works!
+                globalBallNode.position = SCNVector3(courseNode.position.x + node.position.x * level.scale, //course1 - works!
                     courseNode.position.y + 0.2,
-                    courseNode.position.z + node.position.z * 0.5)
+                    courseNode.position.z + node.position.z * level.scale)
             case 2:
-                globalBallNode.position = SCNVector3(courseNode.position.x + node.position.x * 0.5, //course2 - works!
+                globalBallNode.position = SCNVector3(courseNode.position.x + node.position.x * level.scale, //course2 - works!
                     courseNode.position.y + 0.2,
-                    courseNode.position.z + node.position.z * 0.5)
+                    courseNode.position.z + node.position.z * level.scale)
             case 3:
-                globalBallNode.position = SCNVector3(courseNode.position.x + node.position.x * 0.5, //course3 -works!
+                globalBallNode.position = SCNVector3(courseNode.position.x + node.position.x * level.scale, //course3 -works!
                     courseNode.position.y + 0.52,
-                    courseNode.position.z - node.position.z * 0.5)
+                    courseNode.position.z - node.position.z * level.scale)
             default:
                 print("We have no level 4")
             }
