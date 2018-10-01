@@ -44,6 +44,7 @@ class ViewController: UIViewController {
         sceneView.debugOptions = [.showFeaturePoints, .showPhysicsShapes]
         addGesturesToSceneView()
         configureLighting()
+        ballHitForceProgressView.alpha = 0
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -166,7 +167,7 @@ class ViewController: UIViewController {
         scoreLabel.text = "0"
         scoreLabel.alpha = 0.7
         resetGameButton.alpha = 1
-        ballHitForceProgressView.alpha = 0
+        
         
         // get tap location
         let tapLocation = recognizer.location(in: sceneView)
