@@ -78,7 +78,7 @@ class ViewController: UIViewController {
             touchTheScreenImageView.layer.removeAllAnimations()
             touchTheScreenImageView.removeFromSuperview()
         }
-        //sceneView.debugOptions = []
+        sceneView.debugOptions = []
         
         //hide all the tracking nodes
         for node in planeNodes{
@@ -392,7 +392,7 @@ class ViewController: UIViewController {
                         courseNode.position.z + node.position.z * level.scale)
                 case 3:
                     globalBallNode.position = SCNVector3(courseNode.position.x + node.position.x * level.scale, //course3 -works!
-                        courseNode.position.y + 0.52,
+                        courseNode.position.y + 0.07,
                         courseNode.position.z - node.position.z * level.scale)
                 default:
                     print("We have no level 4")
