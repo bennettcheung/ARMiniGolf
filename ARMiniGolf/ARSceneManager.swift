@@ -47,7 +47,7 @@ class ARSceneManager: NSObject {
     
     func displayDebugInfo() {
         //sceneView?.showsStatistics = true
-        sceneView?.debugOptions = [ARSCNDebugOptions.showFeaturePoints]
+        sceneView?.debugOptions = [ARSCNDebugOptions.showFeaturePoints, .showPhysicsShapes, .showPhysicsFields]
     }
   
     func hideDebugInfo() {
@@ -101,13 +101,13 @@ extension ARSceneManager: ARSCNViewDelegate {
         // we only care about planes
         guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
         
-      
-      print("Found plane anchor: \(planeAnchor.identifier) x - \(planeAnchor.center.x) y - \(planeAnchor.center.y) z - \(planeAnchor.center.z)  ")
+//      
+//      print("Found plane anchor: \(planeAnchor.identifier) x - \(planeAnchor.center.x) y - \(planeAnchor.center.y) z - \(planeAnchor.center.z)  ")
       
         let plane = Plane(anchor: planeAnchor)
         plane.opacity = showPlanes ? 1 : 0
       
-      print("plane coordincates: \(plane.position.x) , \(plane.position.y), \(plane.position.z)")
+//      print("plane coordincates: \(plane.position.x) , \(plane.position.y), \(plane.position.z)")
       // store a local reference to the plane
         
         // store a local reference to the plane
@@ -124,10 +124,10 @@ extension ARSceneManager: ARSCNViewDelegate {
         if let plane = planes[planeAnchor.identifier] {
             plane.updateWith(anchor: planeAnchor)
           
-          print("updated plane anchor: \(planeAnchor.identifier) x - \(planeAnchor.center.x) y - \(planeAnchor.center.y) z - \(planeAnchor.center.z)  ")
-            print("updated plane: \(plane.position.x) , \(plane.position.y), \(plane.position.z)")
+//          print("updated plane anchor: \(planeAnchor.identifier) x - \(planeAnchor.center.x) y - \(planeAnchor.center.y) z - \(planeAnchor.center.z)  ")
+//            print("updated plane: \(plane.position.x) , \(plane.position.y), \(plane.position.z)")
         }
-            print ("plane count is \(planes.count)")
+//            print ("plane count is \(planes.count)")
     }
     
     func renderer(_ renderer: SCNSceneRenderer, didRemove node: SCNNode, for anchor: ARAnchor) {

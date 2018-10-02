@@ -45,10 +45,10 @@ class ViewController: UIViewController {
 
         addGesturesToSceneView()
         sceneManager.attach(to: sceneView)
-      
+      sceneView.debugOptions = [.showFeaturePoints, .showPhysicsShapes]
         sceneManager.displayDebugInfo()
         sceneManager.startPlaneDetection()
-      
+       sceneView.scene.physicsWorld.contactDelegate = self
         /*
          Prevent the screen from being dimmed after a while as users will likely
          have long periods of interaction without touching the screen or buttons.
@@ -82,8 +82,8 @@ class ViewController: UIViewController {
             touchTheScreenImageView.removeFromSuperview()
         }
         
-//       sceneManager.stopPlaneDetection()
-//       sceneManager.showPlanes = false
+       sceneManager.stopPlaneDetection()
+       sceneManager.showPlanes = false
 //       sceneManager.hideDebugInfo()
     }
     
@@ -171,17 +171,12 @@ class ViewController: UIViewController {
         let tapLocation = gesture.location(ofTouch: 0, in: sceneView)
         let hitTestResults = sceneView.hitTest(tapLocation, types: .existingPlaneUsingGeometry)
         guard let hitTestResult = hitTestResults.first else { return }
-        if let anchor = hitTestResult.anchor{
-          
-          print ("hit test result \(hitTestResult) ")
-        }
+
         // get level
         let level = gameManager.getCurrentLevel()
 
         // drop the course at the location
-//          let position = SCNVector3Make(hitTestResult.worldTransform.columns.3.x + level.initialCourseOffset.x,
-//                                        hitTestResult.worldTransform.columns.3.y + level.initialCourseOffset.y,
-//                                        hitTestResult.worldTransform.columns.3.z + level.initialCourseOffset.z)
+
         let position = SCNVector3Make(hitTestResult.worldTransform.columns.3.x ,
                 hitTestResult.worldTransform.columns.3.y ,
                 hitTestResult.worldTransform.columns.3.z )
@@ -209,20 +204,29 @@ class ViewController: UIViewController {
             else { return }
         courseNode = courseScene.rootNode.childNode(withName: "course", recursively: false)
     
-        courseNode.transform = transform
+        //TO DO courseNode.transform = transform
         // MARK: Physics Body Scaling
         
         if level.scale != 1 {
             courseNode.scale = SCNVector3(level.scale, level.scale, level.scale)
             for node in courseNode.childNodes{
+                print("\(node.name ?? "No node name") \(node.geometry?.description ?? "No node geometry") ")
+                if let printPhysicsBody = node.physicsBody, let printPhysicsShape = printPhysicsBody.physicsShape {
+                  print ("\(printPhysicsShape.description)")
+                }
                 if let physicsBody = node.physicsBody, let geometry = node.geometry{
                     if node.name == "redTube" || node.name == "interiorRightTube" || node.name == "interiorLeftTube" || node.name == "exteriorWalls"
                     {
                         physicsBody.physicsShape = SCNPhysicsShape(geometry: geometry, options: [SCNPhysicsShape.Option.scale: SCNVector3(level.scale, level.scale, level.scale), SCNPhysicsShape.Option.type: SCNPhysicsShape.ShapeType.concavePolyhedron])
                     }
+                    else if node.name == "flagPole"{
+                        physicsBody.physicsShape = SCNPhysicsShape(geometry: geometry, options: [SCNPhysicsShape.Option.scale: SCNVector3(level.scale, level.scale, level.scale), SCNPhysicsShape.Option.type: SCNPhysicsShape.ShapeType.convexHull])
+                    }
                     else if node.name != "floor"{
                         physicsBody.physicsShape = SCNPhysicsShape(geometry: geometry, options: [SCNPhysicsShape.Option.scale: SCNVector3(level.scale, level.scale, level.scale)])
                     }
+
+                  print ("category \(physicsBody.categoryBitMask) collision \(physicsBody.collisionBitMask) contact \(physicsBody.contactTestBitMask)")
                 }
             }
         }
@@ -245,6 +249,10 @@ class ViewController: UIViewController {
         globalBallNode = ballNode
         sceneView.scene.rootNode.addChildNode(ballNode)
         globalBallNode.physicsBody?.continuousCollisionDetectionThreshold = 0.1
+      
+      if let physicsBody = globalBallNode.physicsBody{
+      print ("category \(physicsBody.categoryBitMask) collision \(physicsBody.collisionBitMask) contact \(physicsBody.contactTestBitMask)")
+      }
         resetBallToInitialLocation()
     }
     
@@ -378,7 +386,7 @@ class ViewController: UIViewController {
                 switch levelNum {
                 case 1:
                     globalBallNode.position = SCNVector3(courseNode.position.x + node.position.x * level.scale, //course1 - works!
-                        courseNode.position.y + 0.2,
+                        courseNode.position.y,
                         courseNode.position.z + node.position.z * level.scale)
                 case 2:
                     globalBallNode.position = SCNVector3(courseNode.position.x + node.position.x * level.scale, //course2 - works!
