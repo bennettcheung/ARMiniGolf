@@ -17,10 +17,15 @@ class VictoryViewController: UIViewController {
   var backgroundMusicPlayer: AVAudioPlayer?
   var score: Int = 0
   var delegate: VictoryViewControllerDelegate?
-  @IBOutlet weak var nextHoleButton: UIButton!
+
   @IBOutlet weak var scoreLabel: UILabel!
-  
-  
+    @IBOutlet weak var nextHoleButton: UIButton!
+    @IBOutlet weak var quitGameButton: UIButton!
+    
+    @IBOutlet weak var nextHoleCenterXConstraint: NSLayoutConstraint!
+    @IBOutlet weak var quitGameCenterXConstraint: NSLayoutConstraint!
+    
+    
   override func viewDidLoad() {
         super.viewDidLoad()
         nextHoleButton.layer.cornerRadius = 10
@@ -38,6 +43,29 @@ class VictoryViewController: UIViewController {
           }
         }
       scoreLabel.text = score.description
+    
+    quitGameButton.layer.borderColor = UIColor.white.cgColor
+    quitGameButton.layer.borderWidth = 1.5
+    quitGameButton.layer.cornerRadius = 20
+    quitGameButton.imageView?.contentMode = UIView.ContentMode.scaleAspectFill
+    nextHoleButton.layer.borderColor = UIColor.white.cgColor
+    nextHoleButton.layer.borderWidth = 1.5
+    nextHoleButton.layer.cornerRadius = 20
+    nextHoleButton.imageView?.contentMode = UIView.ContentMode.scaleAspectFill
+   
+    
+    //animate the selection buttons in from the side
+    
+    DispatchQueue.main.async {[unowned self] in
+        UIView.animate(withDuration: 1.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 5, animations: {
+            self.nextHoleCenterXConstraint.constant = 0
+            self.view.layoutIfNeeded()
+        })
+        UIView.animate(withDuration: 1.5, delay: 0.5, usingSpringWithDamping: 0.5, initialSpringVelocity: 5, animations: {
+            self.quitGameCenterXConstraint.constant = 0
+            self.view.layoutIfNeeded()
+        })
+    }
     }
     
   @IBAction func nextHoldPressed(_ sender: Any) {
