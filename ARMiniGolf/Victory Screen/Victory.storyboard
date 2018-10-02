@@ -21,7 +21,7 @@
                                 <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Score" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xJP-Nq-YpS">
-                                <rect key="frame" x="119" y="200" width="137" height="67"/>
+                                <rect key="frame" x="119.5" y="200" width="136.5" height="66.5"/>
                                 <fontDescription key="fontDescription" name="DINAlternate-Bold" family="DIN Alternate" pointSize="57"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -32,16 +32,29 @@
                                 <color key="textColor" red="0.053271193869999997" green="1" blue="0.071601488020000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8LX-JK-2w2">
-                                <rect key="frame" x="126" y="559" width="123" height="48"/>
-                                <color key="backgroundColor" red="0.5140930829" green="0.64710423409999995" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                                <state key="normal" title="Next hole">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <button opaque="NO" clipsSubviews="YES" alpha="0.45000000000000001" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dfQ-R7-vKa" userLabel="quitGameButton">
+                                <rect key="frame" x="67.5" y="525" width="240" height="128"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="240" id="Eic-F6-g13"/>
+                                    <constraint firstAttribute="height" constant="128" id="Nfy-UD-Prs"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="ChalkboardSE-Bold" family="Chalkboard SE" pointSize="35"/>
+                                <state key="normal" title="Quit Game">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
-                                <connections>
-                                    <action selector="nextHoldPressed:" destination="OhN-Bz-X8T" eventType="touchUpInside" id="YpG-RH-yOK"/>
-                                </connections>
+                            </button>
+                            <button opaque="NO" clipsSubviews="YES" alpha="0.45000000000000001" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hWy-3Z-oLf" userLabel="nextHoleButton">
+                                <rect key="frame" x="67.5" y="389" width="240" height="128"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="128" id="Ilh-GP-fIM"/>
+                                    <constraint firstAttribute="width" constant="240" id="ySD-aF-ZCP"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="ChalkboardSE-Bold" family="Chalkboard SE" pointSize="35"/>
+                                <state key="normal" title="Next Hole">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -50,23 +63,28 @@
                             <constraint firstItem="xJP-Nq-YpS" firstAttribute="top" secondItem="wit-X0-ThE" secondAttribute="top" constant="180" id="Fj7-7F-RGC"/>
                             <constraint firstItem="Kcb-TB-TBe" firstAttribute="top" secondItem="wit-X0-ThE" secondAttribute="top" id="VGZ-aL-PKK"/>
                             <constraint firstItem="zBO-4X-e5t" firstAttribute="centerX" secondItem="9CR-56-NVi" secondAttribute="centerX" id="WSm-bi-htp"/>
-                            <constraint firstItem="8LX-JK-2w2" firstAttribute="centerX" secondItem="9CR-56-NVi" secondAttribute="centerX" id="YVD-KN-Ook"/>
-                            <constraint firstItem="wit-X0-ThE" firstAttribute="bottom" secondItem="8LX-JK-2w2" secondAttribute="bottom" constant="60" id="dtH-iQ-8zp"/>
+                            <constraint firstItem="wit-X0-ThE" firstAttribute="bottom" secondItem="dfQ-R7-vKa" secondAttribute="bottom" constant="14" id="YCZ-MQ-YSR"/>
+                            <constraint firstItem="hWy-3Z-oLf" firstAttribute="centerX" secondItem="9CR-56-NVi" secondAttribute="centerX" id="ZhT-6F-l7L"/>
                             <constraint firstItem="wit-X0-ThE" firstAttribute="trailing" secondItem="Kcb-TB-TBe" secondAttribute="trailing" id="eKA-cl-L1w"/>
                             <constraint firstItem="xJP-Nq-YpS" firstAttribute="centerX" secondItem="9CR-56-NVi" secondAttribute="centerX" id="f0w-Tg-2OW"/>
+                            <constraint firstItem="dfQ-R7-vKa" firstAttribute="centerX" secondItem="9CR-56-NVi" secondAttribute="centerX" id="fnq-Kn-RwI"/>
                             <constraint firstItem="zBO-4X-e5t" firstAttribute="centerY" secondItem="9CR-56-NVi" secondAttribute="centerY" id="gra-VC-cWa"/>
                             <constraint firstItem="wit-X0-ThE" firstAttribute="bottom" secondItem="Kcb-TB-TBe" secondAttribute="bottom" id="sEL-5Q-Xgm"/>
+                            <constraint firstItem="dfQ-R7-vKa" firstAttribute="top" secondItem="hWy-3Z-oLf" secondAttribute="bottom" constant="8" id="z7X-ed-plX"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="wit-X0-ThE"/>
                     </view>
                     <connections>
-                        <outlet property="nextHoleButton" destination="8LX-JK-2w2" id="Fxw-PE-2W4"/>
+                        <outlet property="nextHoleButton" destination="hWy-3Z-oLf" id="gm2-Hh-OCI"/>
+                        <outlet property="nextHoleCenterXConstraint" destination="ZhT-6F-l7L" id="vSH-OD-Kz4"/>
+                        <outlet property="quitGameButton" destination="dfQ-R7-vKa" id="DXQ-QL-xdm"/>
+                        <outlet property="quitGameCenterXConstraint" destination="fnq-Kn-RwI" id="0Qh-gP-0MZ"/>
                         <outlet property="scoreLabel" destination="zBO-4X-e5t" id="LMc-vq-LPJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Vrt-GW-wO1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="257" y="154"/>
+            <point key="canvasLocation" x="256.80000000000001" y="153.37331334332833"/>
         </scene>
     </scenes>
     <resources>
