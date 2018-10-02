@@ -82,9 +82,9 @@ class ViewController: UIViewController {
             touchTheScreenImageView.removeFromSuperview()
         }
         
-       sceneManager.stopPlaneDetection()
-       sceneManager.showPlanes = false
-       sceneManager.hideDebugInfo()
+//       sceneManager.stopPlaneDetection()
+//       sceneManager.showPlanes = false
+//       sceneManager.hideDebugInfo()
     }
     
     // MARK: Phone Animations
@@ -171,15 +171,23 @@ class ViewController: UIViewController {
         let tapLocation = gesture.location(ofTouch: 0, in: sceneView)
         let hitTestResults = sceneView.hitTest(tapLocation, types: .existingPlaneUsingGeometry)
         guard let hitTestResult = hitTestResults.first else { return }
-        
+        if let anchor = hitTestResult.anchor{
+          
+          print ("hit test result \(hitTestResult) ")
+        }
         // get level
         let level = gameManager.getCurrentLevel()
 
         // drop the course at the location
-          let position = SCNVector3Make(hitTestResult.worldTransform.columns.3.x + level.initialCourseOffset.x,
-                                        hitTestResult.worldTransform.columns.3.y + level.initialCourseOffset.y,
-                                        hitTestResult.worldTransform.columns.3.z + level.initialCourseOffset.z)
-        addCourseAtPosition(position)
+//          let position = SCNVector3Make(hitTestResult.worldTransform.columns.3.x + level.initialCourseOffset.x,
+//                                        hitTestResult.worldTransform.columns.3.y + level.initialCourseOffset.y,
+//                                        hitTestResult.worldTransform.columns.3.z + level.initialCourseOffset.z)
+        let position = SCNVector3Make(hitTestResult.worldTransform.columns.3.x ,
+                hitTestResult.worldTransform.columns.3.y ,
+                hitTestResult.worldTransform.columns.3.z )
+        
+        let transform = SCNMatrix4(hitTestResult.anchor!.transform)
+        addCourseAtPosition(position, transform)
         addBallToScene()
         
         //start game, remove the detecting plane node
@@ -189,7 +197,7 @@ class ViewController: UIViewController {
       }
     }
   
-  private func addCourseAtPosition(_ position: SCNVector3){
+  private func addCourseAtPosition(_ position: SCNVector3, _ transform: SCNMatrix4){
         //if we are advancing to a different level
         if courseNode != nil{
             courseNode.removeFromParentNode()
@@ -200,7 +208,8 @@ class ViewController: UIViewController {
         guard let courseScene = SCNScene(named: level.sceneFile)
             else { return }
         courseNode = courseScene.rootNode.childNode(withName: "course", recursively: false)
-        
+    
+        courseNode.transform = transform
         // MARK: Physics Body Scaling
         
         if level.scale != 1 {
@@ -491,7 +500,8 @@ extension ViewController: VictoryViewControllerDelegate{
         print("Advance to next level")
         gameManager.advanceLevel()
         let oldPosition = courseNode.position
-        addCourseAtPosition(oldPosition)
+        let oldTransform = courseNode.transform
+        addCourseAtPosition(oldPosition, oldTransform)
         resetBallToInitialLocation()
         scoreLabel.text = "0"
         loadBackgroundMusic()
