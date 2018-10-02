@@ -1,9 +1,10 @@
 //
 //  GridMaterial.swift
-//  ARPlaneDetector
+//  ARMiniGolf
 //
-//  Created by Ben Lambert on 2/9/18.
-//  Copyright © 2018 collectiveidea. All rights reserved.
+//  Created by Bennett on 2018-09-20.
+//  Copyright © 2018 iNomad Studio. All rights reserved.
+//
 //
 
 import ARKit

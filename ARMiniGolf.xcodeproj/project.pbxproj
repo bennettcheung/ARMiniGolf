@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		7D2FCBEF2161955E007F2D36 /* Victory.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D2FCBED2161955E007F2D36 /* Victory.storyboard */; };
 		7D2FCBF02161955E007F2D36 /* VictoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2FCBEE2161955E007F2D36 /* VictoryViewController.swift */; };
-		7D2FCBF22161AE66007F2D36 /* victory.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7D2FCBF12161AE66007F2D36 /* victory.mp3 */; };
 		910D5E70215580B600F06577 /* GameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910D5E6F215580B600F06577 /* GameManager.swift */; };
 		911C1B24215D7A7A00383FA2 /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911C1B23215D7A7A00383FA2 /* Level.swift */; };
 		911C1B26215D7C1400383FA2 /* background2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 911C1B25215D7C1300383FA2 /* background2.mp3 */; };
@@ -29,6 +28,10 @@
 		912C0779215440BD009704B2 /* ARMiniGolfUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912C0778215440BD009704B2 /* ARMiniGolfUITests.swift */; };
 		916795862160351000C4C7F4 /* mainmenu.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 916795852160351000C4C7F4 /* mainmenu.mp3 */; };
 		916795882160351600C4C7F4 /* background3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 916795872160351600C4C7F4 /* background3.mp3 */; };
+		918BF0032162C5020037A7BC /* victory.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 918BF0022162C5020037A7BC /* victory.mp3 */; };
+		918BF0052162F6230037A7BC /* ARSceneManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 918BF0042162F6220037A7BC /* ARSceneManager.swift */; };
+		918BF0072162F62E0037A7BC /* GridMaterial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 918BF0062162F62D0037A7BC /* GridMaterial.swift */; };
+		918BF0092162F6360037A7BC /* Plane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 918BF0082162F6360037A7BC /* Plane.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,7 +54,6 @@
 /* Begin PBXFileReference section */
 		7D2FCBED2161955E007F2D36 /* Victory.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Victory.storyboard; sourceTree = "<group>"; };
 		7D2FCBEE2161955E007F2D36 /* VictoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VictoryViewController.swift; sourceTree = "<group>"; };
-		7D2FCBF12161AE66007F2D36 /* victory.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = victory.mp3; path = ../../../../../Downloads/victory.mp3; sourceTree = "<group>"; };
 		910D5E6F215580B600F06577 /* GameManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameManager.swift; sourceTree = "<group>"; };
 		911C1B23215D7A7A00383FA2 /* Level.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level.swift; sourceTree = "<group>"; };
 		911C1B25215D7C1300383FA2 /* background2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = background2.mp3; sourceTree = "<group>"; };
@@ -77,6 +79,10 @@
 		912C077A215440BD009704B2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		916795852160351000C4C7F4 /* mainmenu.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = mainmenu.mp3; sourceTree = "<group>"; };
 		916795872160351600C4C7F4 /* background3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = background3.mp3; sourceTree = "<group>"; };
+		918BF0022162C5020037A7BC /* victory.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = victory.mp3; sourceTree = "<group>"; };
+		918BF0042162F6220037A7BC /* ARSceneManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARSceneManager.swift; sourceTree = "<group>"; };
+		918BF0062162F62D0037A7BC /* GridMaterial.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridMaterial.swift; sourceTree = "<group>"; };
+		918BF0082162F6360037A7BC /* Plane.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Plane.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,8 +136,8 @@
 				91293C2C2157573E005F6E70 /* background.mp3 */,
 				911C1B25215D7C1300383FA2 /* background2.mp3 */,
 				916795872160351600C4C7F4 /* background3.mp3 */,
+				918BF0022162C5020037A7BC /* victory.mp3 */,
 				916795852160351000C4C7F4 /* mainmenu.mp3 */,
-				7D2FCBF12161AE66007F2D36 /* victory.mp3 */,
 				911C1B27215D86C900383FA2 /* ballInHole.wav */,
 			);
 			path = Sounds;
@@ -175,6 +181,9 @@
 				912C0756215440BA009704B2 /* AppDelegate.swift */,
 				912C0758215440BA009704B2 /* art.scnassets */,
 				912C075A215440BA009704B2 /* ViewController.swift */,
+				918BF0062162F62D0037A7BC /* GridMaterial.swift */,
+				918BF0082162F6360037A7BC /* Plane.swift */,
+				918BF0042162F6220037A7BC /* ARSceneManager.swift */,
 				912C075C215440BA009704B2 /* Main.storyboard */,
 				912C075F215440BD009704B2 /* Assets.xcassets */,
 				912C0761215440BD009704B2 /* LaunchScreen.storyboard */,
@@ -309,7 +318,7 @@
 				916795862160351000C4C7F4 /* mainmenu.mp3 in Resources */,
 				916795882160351600C4C7F4 /* background3.mp3 in Resources */,
 				911C1B28215D86C900383FA2 /* ballInHole.wav in Resources */,
-				7D2FCBF22161AE66007F2D36 /* victory.mp3 in Resources */,
+				918BF0032162C5020037A7BC /* victory.mp3 in Resources */,
 				912C0759215440BA009704B2 /* art.scnassets in Resources */,
 				91293C3321581010005F6E70 /* MainMenu.storyboard in Resources */,
 				7D2FCBEF2161955E007F2D36 /* Victory.storyboard in Resources */,
@@ -345,10 +354,13 @@
 			files = (
 				911C1B24215D7A7A00383FA2 /* Level.swift in Sources */,
 				91293C3521581273005F6E70 /* MainMenuViewController.swift in Sources */,
+				918BF0092162F6360037A7BC /* Plane.swift in Sources */,
 				7D2FCBF02161955E007F2D36 /* VictoryViewController.swift in Sources */,
+				918BF0052162F6230037A7BC /* ARSceneManager.swift in Sources */,
 				912C075B215440BA009704B2 /* ViewController.swift in Sources */,
 				912C0757215440BA009704B2 /* AppDelegate.swift in Sources */,
 				91293C3121580836005F6E70 /* Player.swift in Sources */,
+				918BF0072162F62E0037A7BC /* GridMaterial.swift in Sources */,
 				910D5E70215580B600F06577 /* GameManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -526,7 +538,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = W7K9Q4Z2Y3;
+				DEVELOPMENT_TEAM = 4MNU75ZBC4;
 				INFOPLIST_FILE = ARMiniGolf/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -546,7 +558,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = W7K9Q4Z2Y3;
+				DEVELOPMENT_TEAM = 4MNU75ZBC4;
 				INFOPLIST_FILE = ARMiniGolf/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

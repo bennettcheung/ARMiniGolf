@@ -30,6 +30,7 @@ class ViewController: UIViewController {
     var courseNode: SCNNode!
     var longPressGestureRecognizer = UILongPressGestureRecognizer()
     var tapGestureRecognizer = UITapGestureRecognizer()
+    var rotationGestureRecognizer = UIGestureRecognizer()
     var ballExists = false
     var pressStartTime:Date?
     var timeSinceLastHaptic: Date?
@@ -38,18 +39,28 @@ class ViewController: UIViewController {
     var sounds:[String:SCNAudioSource] = [:]
     var gameManager = GameManager()
     let courseNodeName = "course"
+    let sceneManager = ARSceneManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        sceneView.debugOptions = [.showFeaturePoints, .showPhysicsShapes]
+
         addGesturesToSceneView()
-        configureLighting()
+        sceneManager.attach(to: sceneView)
+      
+        sceneManager.displayDebugInfo()
+        sceneManager.startPlaneDetection()
+      
+        /*
+         Prevent the screen from being dimmed after a while as users will likely
+         have long periods of interaction without touching the screen or buttons.
+         */
+        UIApplication.shared.isIdleTimerDisabled = true
+      
         ballHitForceProgressView.alpha = 0
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setUpSceneView()
         showPhoneMovementDemo()
     }
     
@@ -61,14 +72,7 @@ class ViewController: UIViewController {
     func setLevel(_ level: Int){
         gameManager.setLevel(level)
     }
-    
-    func setUpSceneView() {
-        let configuration = ARWorldTrackingConfiguration()
-        configuration.planeDetection = .horizontal
-        sceneView.session.run(configuration)
-        sceneView.delegate = self
-        sceneView.scene.physicsWorld.contactDelegate = self
-    }
+
     
     // MARK: Turn Off Debugging
     
@@ -78,12 +82,10 @@ class ViewController: UIViewController {
             touchTheScreenImageView.layer.removeAllAnimations()
             touchTheScreenImageView.removeFromSuperview()
         }
-        //sceneView.debugOptions = []
         
-        //hide all the tracking nodes
-        for node in planeNodes{
-            node.opacity = 0
-        }
+       sceneManager.stopPlaneDetection()
+       sceneManager.showPlanes = false
+       sceneManager.hideDebugInfo()
     }
     
     // MARK: Phone Animations
@@ -116,10 +118,6 @@ class ViewController: UIViewController {
         }
     }
     
-    func configureLighting() {
-        sceneView.autoenablesDefaultLighting = true
-        sceneView.automaticallyUpdatesLighting = true
-    }
     
     // MARK: Setup Music/Sound
     
@@ -153,11 +151,33 @@ class ViewController: UIViewController {
         longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(ViewController.applyForceToBall(withGestureRecognizer:)))
         longPressGestureRecognizer.minimumPressDuration = 0.5
         sceneView.addGestureRecognizer(self.longPressGestureRecognizer)
+      
+      rotationGestureRecognizer = UIRotationGestureRecognizer(target: self, action: #selector(handleRotation(_:)))
+      sceneView.addGestureRecognizer(rotationGestureRecognizer)
+    }
+  
+  @objc func handleRotation(_ gesture: UIRotationGestureRecognizer) {
+    //Don't continue if game already started
+    if gameManager.gameStarted()  {
+      return
+    }
+    guard let planeNode = planeNodes.first else{
+      return
     }
     
+    if planeNode.eulerAngles.x > .pi / 2 {
+      planeNode.simdEulerAngles.y += Float(gesture.rotation)
+    } else {
+      planeNode.simdEulerAngles.y -= Float(gesture.rotation)
+    }
+    
+    gesture.rotation = 0
+    
+    
+  }
     // MARK:  Setup, Add course / Start Game
     
-    @objc func addCourseToSceneView(withGestureRecognizer recognizer: UIGestureRecognizer) {
+    @objc func addCourseToSceneView(withGestureRecognizer gesture: UIGestureRecognizer) {
         //Don't continue if game already started
         if gameManager.gameStarted()  {
             return
@@ -168,39 +188,30 @@ class ViewController: UIViewController {
         scoreLabel.alpha = 0.7
         resetGameButton.alpha = 1
         
-        
+      if gesture.state == .ended{
         // get tap location
-        let tapLocation = recognizer.location(in: sceneView)
-        let hitTestResults = sceneView.hitTest(tapLocation, types: .existingPlaneUsingExtent)
+        let tapLocation = gesture.location(ofTouch: 0, in: sceneView)
+        let hitTestResults = sceneView.hitTest(tapLocation, types: .existingPlaneUsingGeometry)
         guard let hitTestResult = hitTestResults.first else { return }
-        let translation = hitTestResult.worldTransform.translation
-        
-        // Get a transformation matrix with the euler angle of the camera
-        let rotate = simd_float4x4(SCNMatrix4MakeRotation(sceneView.session.currentFrame!.camera.eulerAngles.y, 0, 1, 0))
-        
-        // Combine both transformation matrices
-        let finalTransform = simd_mul(hitTestResult.worldTransform, rotate)
-        print("camera rotation \(rotate)")
-        
-        // Use the resulting matrix to position the anchor
-        sceneView.session.add(anchor: ARAnchor(transform: finalTransform))
         
         // get level
         let level = gameManager.getCurrentLevel()
-        let x = translation.x + level.initialCourseOffset.x
-        let y = translation.y + level.initialCourseOffset.y
-        let z = translation.z + level.initialCourseOffset.z
-        
+
         // drop the course at the location
-        addCourseAtPosition(SCNVector3(x,y,z))
+          let position = SCNVector3Make(hitTestResult.worldTransform.columns.3.x + level.initialCourseOffset.x,
+                                        hitTestResult.worldTransform.columns.3.y + level.initialCourseOffset.y,
+                                        hitTestResult.worldTransform.columns.3.z + level.initialCourseOffset.z)
+        addCourseAtPosition(position)
         addBallToScene()
         
         //start game, remove the detecting plane node
         turnoffARPlaneTracking()
         setupSounds()
         gameManager.startGame()
+      }
     }
-    private func addCourseAtPosition(_ position: SCNVector3){
+  
+  private func addCourseAtPosition(_ position: SCNVector3){
         //if we are advancing to a different level
         if courseNode != nil{
             courseNode.removeFromParentNode()
@@ -218,9 +229,9 @@ class ViewController: UIViewController {
             courseNode.scale = SCNVector3(level.scale, level.scale, level.scale)
             for node in courseNode.childNodes{
                 print("\(node.name ?? "No node name") \(node.geometry?.description ?? "No node geometry") ")
-                if let printPhysicsBody = node.physicsBody, let printPhysicsShape = printPhysicsBody.physicsShape {
-                    print ("\(printPhysicsShape.description)")
-                }
+//                if let printPhysicsBody = node.physicsBody, let printPhysicsShape = printPhysicsBody.physicsShape {
+//                   print ("\(printPhysicsShape.description)")
+//                }
                 if let physicsBody = node.physicsBody, let geometry = node.geometry{
                     if node.name == "redTube" || node.name == "interiorRightTube" || node.name == "interiorLeftTube" || node.name == "exteriorWalls"
                     {
@@ -233,9 +244,10 @@ class ViewController: UIViewController {
             }
         }
         courseNode.position = position
-        //courseNode.simdTransform = planeNode.simdTransform
+
         courseNode.name = courseNodeName
-        sceneView.scene.rootNode.addChildNode(courseNode)
+    
+       sceneView.scene.rootNode.addChildNode(courseNode)
     }
     
     // MARK: Add Ball To Scene
@@ -511,92 +523,5 @@ extension ViewController: VictoryViewControllerDelegate{
         scoreLabel.text = "0"
         loadBackgroundMusic()
         gameManager.startGame()
-    }
-}
-
-// MARK: Plane Rendering
-
-extension ViewController: ARSCNViewDelegate {
-    
-    func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
-        //get anchor
-        guard  let planeAnchor = anchor as? ARPlaneAnchor else { return }
-        
-        //create variables with the width and height of anchor
-        let width = CGFloat(planeAnchor.extent.x)
-        let height = CGFloat(planeAnchor.extent.z)
-        
-        //create plane with white color
-        let plane = SCNPlane(width: width, height: height)
-        plane.materials.first?.diffuse.contents = UIColor.transparentWhite
-        
-        //create node matching new plane
-        var planeNode = SCNNode(geometry: plane)
-        
-        //create variable with the plane anchor center
-        let x = CGFloat(planeAnchor.center.x)
-        let y = CGFloat(planeAnchor.center.y)
-        let z = CGFloat(planeAnchor.center.z)
-    
-        //update plane node with anchor center
-        planeNode.position = SCNVector3(x,y,z)
-        
-        //turn plane node from vertical to horizontal
-        planeNode.eulerAngles.x = -.pi / 2
-        
-        // Update plane node
-        update(&planeNode, withGeometry: plane, type: .static)
-        if !gameManager.gameStarted(){
-            node.addChildNode(planeNode)
-            
-            // Append plane node to plane nodes array if appropriate
-            planeNodes.append(planeNode)
-            DispatchQueue.main.async {
-                self.showPhoneWithClickingDemo()
-            }
-        }
-    }
-    
-    func renderer(_ renderer: SCNSceneRenderer, didRemove node: SCNNode, for anchor: ARAnchor) {
-        guard anchor is ARPlaneAnchor,
-            let planeNode = node.childNodes.first
-            else { return }
-        planeNodes = planeNodes.filter { $0 != planeNode }
-    }
-    
-    func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
-        guard let planeAnchor = anchor as?  ARPlaneAnchor,
-            var planeNode = node.childNodes.first,
-            let plane = planeNode.geometry as? SCNPlane
-            else { return }
-        let width = CGFloat(planeAnchor.extent.x)
-        let height = CGFloat(planeAnchor.extent.z)
-        plane.width = width
-        plane.height = height
-        
-        let x = CGFloat(planeAnchor.center.x)
-        let y = CGFloat(planeAnchor.center.y)
-        let z = CGFloat(planeAnchor.center.z)
-        planeNode.position = SCNVector3(x, y, z)
-        update(&planeNode, withGeometry: plane, type: .static)
-    }
-    
-    func update(_ node: inout SCNNode, withGeometry geometry: SCNGeometry, type: SCNPhysicsBodyType) {
-        //    let shape = SCNPhysicsShape(geometry: geometry, options: nil)
-        //    let physicsBody = SCNPhysicsBody(type: type, shape: shape)
-        //    node.physicsBody = physicsBody
-    }
-}
-
-extension float4x4 {
-    var translation: float3 {
-        let translation = self.columns.3
-        return float3(translation.x, translation.y, translation.z)
-    }
-}
-
-extension UIColor {
-    open class var transparentWhite: UIColor {
-        return UIColor.white.withAlphaComponent(0.40)
     }
 }

@@ -1,9 +1,10 @@
 //
 //  ARSceneManager.swift
-//  ARPlaneDetector
+//  ARMiniGolf
 //
-//  Created by Ben Lambert on 2/8/18.
-//  Copyright © 2018 collectiveidea. All rights reserved.
+//  Created by Bennett on 2018-09-20.
+//  Copyright © 2018 iNomad Studio. All rights reserved.
+//
 //
 
 import Foundation
@@ -40,16 +41,20 @@ class ARSceneManager: NSObject {
         startPlaneDetection()
         configuration.isLightEstimationEnabled = true
         
-        sceneView.scene.physicsWorld.gravity = SCNVector3(0, -3.0, 0)
     }
     
-    func displayDegubInfo() {
-        sceneView?.showsStatistics = true
-        sceneView?.debugOptions = [ARSCNDebugOptions.showFeaturePoints, ARSCNDebugOptions.showWorldOrigin]
+    func displayDebugInfo() {
+        //sceneView?.showsStatistics = true
+        sceneView?.debugOptions = [ARSCNDebugOptions.showFeaturePoints]
     }
-    
+  
+    func hideDebugInfo() {
+      sceneView?.showsStatistics = false
+      sceneView?.debugOptions = []
+    }
+  
     func startPlaneDetection() {
-        configuration.planeDetection = [.horizontal, .vertical]
+        configuration.planeDetection = [.horizontal]
         sceneView?.session.run(configuration)
     }
     
