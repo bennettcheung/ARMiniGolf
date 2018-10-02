@@ -228,7 +228,7 @@ class ViewController: UIViewController {
         if level.scale != 1 {
             courseNode.scale = SCNVector3(level.scale, level.scale, level.scale)
             for node in courseNode.childNodes{
-                print("\(node.name ?? "No node name") \(node.geometry?.description ?? "No node geometry") ")
+                //print("\(node.name ?? "No node name") \(node.geometry?.description ?? "No node geometry") ")
 //                if let printPhysicsBody = node.physicsBody, let printPhysicsShape = printPhysicsBody.physicsShape {
 //                   print ("\(printPhysicsShape.description)")
 //                }
