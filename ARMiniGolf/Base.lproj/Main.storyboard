@@ -87,7 +87,7 @@
                         <outlet property="sceneView" destination="BrB-h1-WRS" id="5nT-qQ-ynl"/>
                         <outlet property="scoreLabel" destination="7Qt-HT-GHT" id="KaY-d7-n5f"/>
                         <outlet property="touchTheScreenImageView" destination="7r2-Ba-4PN" id="ba4-li-Y44"/>
-                        <segue destination="XzN-va-U0L" kind="presentation" identifier="segueToVictoryScreen" id="TTC-mr-7ww"/>
+                        <segue destination="XzN-va-U0L" kind="presentation" identifier="segueToVictoryScreen" modalTransitionStyle="coverVertical" id="TTC-mr-7ww"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>

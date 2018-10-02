@@ -172,9 +172,6 @@ class ViewController: UIViewController {
         let hitTestResults = sceneView.hitTest(tapLocation, types: .existingPlaneUsingGeometry)
         guard let hitTestResult = hitTestResults.first else { return }
 
-        // get level
-        let level = gameManager.getCurrentLevel()
-
         // drop the course at the location
 
         let position = SCNVector3Make(hitTestResult.worldTransform.columns.3.x ,
@@ -219,9 +216,9 @@ class ViewController: UIViewController {
                     {
                         physicsBody.physicsShape = SCNPhysicsShape(geometry: geometry, options: [SCNPhysicsShape.Option.scale: SCNVector3(level.scale, level.scale, level.scale), SCNPhysicsShape.Option.type: SCNPhysicsShape.ShapeType.concavePolyhedron])
                     }
-                    else if node.name == "flagPole"{
-                        physicsBody.physicsShape = SCNPhysicsShape(geometry: geometry, options: [SCNPhysicsShape.Option.scale: SCNVector3(level.scale, level.scale, level.scale), SCNPhysicsShape.Option.type: SCNPhysicsShape.ShapeType.convexHull])
-                    }
+//                    else if node.name == "flagPole"{
+//                        physicsBody.physicsShape = SCNPhysicsShape(geometry: geometry, options: [SCNPhysicsShape.Option.scale: SCNVector3(level.scale, level.scale, level.scale), SCNPhysicsShape.Option.type: SCNPhysicsShape.ShapeType.convexHull])
+//                    }
                     else if node.name != "floor"{
                         physicsBody.physicsShape = SCNPhysicsShape(geometry: geometry, options: [SCNPhysicsShape.Option.scale: SCNVector3(level.scale, level.scale, level.scale)])
                     }
@@ -514,5 +511,15 @@ extension ViewController: VictoryViewControllerDelegate{
         scoreLabel.text = "0"
         loadBackgroundMusic()
         gameManager.startGame()
+    }
+    
+    func returnToMainMenu(){
+        print("quit game")
+        gameManager.endGame()
+        sceneView.session.pause()
+
+        courseNode.removeAllAudioPlayers()
+        self.dismiss(animated: true) {
+        }
     }
 }

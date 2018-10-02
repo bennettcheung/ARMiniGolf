@@ -42,7 +42,7 @@
                                 </constraints>
                                 <state key="normal" title="Button" image="goodWindmill"/>
                                 <connections>
-                                    <segue destination="JkF-MF-A1W" kind="show" identifier="hole2Button" id="NBP-Wa-iWx"/>
+                                    <segue destination="JkF-MF-A1W" kind="presentation" identifier="hole2Button" modalPresentationStyle="fullScreen" id="NBP-Wa-iWx"/>
                                 </connections>
                             </button>
                             <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mb6-RN-UHw" userLabel="hole3Button">
@@ -106,6 +106,6 @@
         <image name="launchscreen" width="2000" height="1333"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Oqn-RQ-2L8"/>
+        <segue reference="NBP-Wa-iWx"/>
     </inferredMetricsTieBreakers>
 </document>

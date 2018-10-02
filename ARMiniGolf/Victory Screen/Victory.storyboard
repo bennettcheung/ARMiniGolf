@@ -43,6 +43,9 @@
                                 <state key="normal" title="Quit Game">
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
+                                <connections>
+                                    <action selector="quitGamePressed:" destination="OhN-Bz-X8T" eventType="touchUpInside" id="TxA-3C-gcy"/>
+                                </connections>
                             </button>
                             <button opaque="NO" clipsSubviews="YES" alpha="0.45000000000000001" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hWy-3Z-oLf" userLabel="nextHoleButton">
                                 <rect key="frame" x="567.5" y="389" width="240" height="128"/>
@@ -55,6 +58,9 @@
                                 <state key="normal" title="Next Hole">
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
+                                <connections>
+                                    <action selector="nextHolePressed:" destination="OhN-Bz-X8T" eventType="touchUpInside" id="CLj-1G-TVE"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -84,7 +90,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Vrt-GW-wO1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-177" y="166"/>
+            <point key="canvasLocation" x="-586" y="156"/>
         </scene>
     </scenes>
     <resources>

@@ -11,7 +11,9 @@ import AVFoundation
 
 protocol VictoryViewControllerDelegate {
   func advanceToNextLevel()
+  func returnToMainMenu()
 }
+
 
 class VictoryViewController: UIViewController {
   var backgroundMusicPlayer: AVAudioPlayer?
@@ -68,7 +70,7 @@ class VictoryViewController: UIViewController {
     }
     }
     
-  @IBAction func nextHoldPressed(_ sender: Any) {
+  @IBAction func nextHolePressed(_ sender: Any) {
     
     backgroundMusicPlayer?.stop()
     if let delegate = delegate{
@@ -78,6 +80,18 @@ class VictoryViewController: UIViewController {
       self.delegate = nil
     }
   }
+    
+    @IBAction func quitGamePressed(_ sender: Any) {
+        
+        backgroundMusicPlayer?.stop()
+
+        self.dismiss(animated: true) {
+            self.delegate = nil
+            if let delegate = self.delegate{
+                delegate.returnToMainMenu()
+            }
+        }
+    }
   
 
 }
