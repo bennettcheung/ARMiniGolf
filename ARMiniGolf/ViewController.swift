@@ -30,7 +30,6 @@ class ViewController: UIViewController {
     var courseNode: SCNNode!
     var longPressGestureRecognizer = UILongPressGestureRecognizer()
     var tapGestureRecognizer = UITapGestureRecognizer()
-    var rotationGestureRecognizer = UIGestureRecognizer()
     var ballExists = false
     var pressStartTime:Date?
     var timeSinceLastHaptic: Date?
@@ -151,30 +150,9 @@ class ViewController: UIViewController {
         longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(ViewController.applyForceToBall(withGestureRecognizer:)))
         longPressGestureRecognizer.minimumPressDuration = 0.5
         sceneView.addGestureRecognizer(self.longPressGestureRecognizer)
-      
-      rotationGestureRecognizer = UIRotationGestureRecognizer(target: self, action: #selector(handleRotation(_:)))
-      sceneView.addGestureRecognizer(rotationGestureRecognizer)
+
     }
-  
-  @objc func handleRotation(_ gesture: UIRotationGestureRecognizer) {
-    //Don't continue if game already started
-    if gameManager.gameStarted()  {
-      return
-    }
-    guard let planeNode = planeNodes.first else{
-      return
-    }
-    
-    if planeNode.eulerAngles.x > .pi / 2 {
-      planeNode.simdEulerAngles.y += Float(gesture.rotation)
-    } else {
-      planeNode.simdEulerAngles.y -= Float(gesture.rotation)
-    }
-    
-    gesture.rotation = 0
-    
-    
-  }
+
     // MARK:  Setup, Add course / Start Game
     
     @objc func addCourseToSceneView(withGestureRecognizer gesture: UIGestureRecognizer) {
@@ -228,10 +206,6 @@ class ViewController: UIViewController {
         if level.scale != 1 {
             courseNode.scale = SCNVector3(level.scale, level.scale, level.scale)
             for node in courseNode.childNodes{
-                //print("\(node.name ?? "No node name") \(node.geometry?.description ?? "No node geometry") ")
-//                if let printPhysicsBody = node.physicsBody, let printPhysicsShape = printPhysicsBody.physicsShape {
-//                   print ("\(printPhysicsShape.description)")
-//                }
                 if let physicsBody = node.physicsBody, let geometry = node.geometry{
                     if node.name == "redTube" || node.name == "interiorRightTube" || node.name == "interiorLeftTube" || node.name == "exteriorWalls"
                     {
@@ -273,7 +247,6 @@ class ViewController: UIViewController {
         if let frame = self.sceneView.session.currentFrame {
             let mat = SCNMatrix4(frame.camera.transform) // 4x4 transform matrix describing camera in world space
             var direction = SCNVector3(-1 * mat.m31, -1 * mat.m32, -1 * mat.m33) // orientation of camera in world space
-            //let pos = SCNVector3(mat.m41, mat.m42, mat.m43) // location of camera in world space
             direction.y = 0 //negate height
             return (direction)
         }

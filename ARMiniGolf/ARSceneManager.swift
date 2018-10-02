@@ -15,7 +15,8 @@ class ARSceneManager: NSObject {
     private var planes = [UUID: Plane]()
     
     var sceneView: ARSCNView?
-    
+    var rotationGestureRecognizer = UIGestureRecognizer()
+  
     var showPlanes: Bool = true {
         didSet {
             if showPlanes == false {
@@ -31,6 +32,7 @@ class ARSceneManager: NSObject {
     }
     
     let configuration = ARWorldTrackingConfiguration()
+  
     
     func attach(to sceneView: ARSCNView) {
         self.sceneView = sceneView
@@ -56,12 +58,40 @@ class ARSceneManager: NSObject {
     func startPlaneDetection() {
         configuration.planeDetection = [.horizontal]
         sceneView?.session.run(configuration)
+        addGestureRecognizers()
     }
     
     func stopPlaneDetection() {
         configuration.planeDetection = []
         sceneView?.session.run(configuration)
+        removeGestureRecognizers()
     }
+  
+  func addGestureRecognizers(){
+    
+    rotationGestureRecognizer = UIRotationGestureRecognizer(target: self, action: #selector(handleRotation(_:)))
+    guard let sceneView = sceneView else{ return}
+    sceneView.addGestureRecognizer(rotationGestureRecognizer)
+  }
+  
+  func removeGestureRecognizers(){
+    guard let sceneView = sceneView else{ return}
+    sceneView.removeGestureRecognizer(rotationGestureRecognizer)
+  }
+  
+  @objc func handleRotation(_ gesture: UIRotationGestureRecognizer) {
+
+    for plane in planes{
+      if plane.value.eulerAngles.x > .pi / 2 {
+        plane.value.simdEulerAngles.y += Float(gesture.rotation)
+      } else {
+        plane.value.simdEulerAngles.y -= Float(gesture.rotation)
+      }
+    }
+    gesture.rotation = 0
+    
+    
+  }
     
 }
 
