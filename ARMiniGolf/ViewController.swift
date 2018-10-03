@@ -164,7 +164,7 @@ class ViewController: UIViewController {
         messageLabel.text = ""
         scoreLabel.text = "0"
         scoreLabel.alpha = 0.7
-        resetGameButton.alpha = 1
+        //resetGameButton.alpha = 1
         
       if gesture.state == .ended{
         // get tap location
@@ -217,9 +217,9 @@ class ViewController: UIViewController {
                     {
                         physicsBody.physicsShape = SCNPhysicsShape(geometry: geometry, options: [SCNPhysicsShape.Option.scale: SCNVector3(level.scale, level.scale, level.scale), SCNPhysicsShape.Option.type: SCNPhysicsShape.ShapeType.concavePolyhedron])
                     }
-//                    else if node.name == "flagPole"{
-//                        physicsBody.physicsShape = SCNPhysicsShape(geometry: geometry, options: [SCNPhysicsShape.Option.scale: SCNVector3(level.scale, level.scale, level.scale), SCNPhysicsShape.Option.type: SCNPhysicsShape.ShapeType.convexHull])
-//                    }
+                    else if node.name == "waterPlane"{
+                        physicsBody.physicsShape = SCNPhysicsShape(geometry: geometry, options: [SCNPhysicsShape.Option.scale: SCNVector3(level.scale, level.scale, level.scale), SCNPhysicsShape.Option.type: SCNPhysicsShape.ShapeType.convexHull])
+                    }
                     else if node.name != "floor"{
                         physicsBody.physicsShape = SCNPhysicsShape(geometry: geometry, options: [SCNPhysicsShape.Option.scale: SCNVector3(level.scale, level.scale, level.scale)])
                     }
