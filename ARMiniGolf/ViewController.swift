@@ -65,7 +65,7 @@ class ViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        sceneView.session.pause()
+        //sceneView.session.pause()
     }
     
     func setLevel(_ level: Int){
