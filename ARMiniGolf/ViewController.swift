@@ -84,7 +84,7 @@ class ViewController: UIViewController {
         
        sceneManager.stopPlaneDetection()
        sceneManager.showPlanes = false
-//       sceneManager.hideDebugInfo()
+      sceneManager.hideDebugInfo()
     }
     
     // MARK: Phone Animations
@@ -228,6 +228,8 @@ class ViewController: UIViewController {
             }
         }
         courseNode.position = position
+//        courseNode.position.z = position.z - 0.5
+//        courseNode.position.y = position.y - 0.5
 
         courseNode.name = courseNodeName
     
