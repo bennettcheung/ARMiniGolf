@@ -206,6 +206,7 @@ class ViewController: UIViewController {
         
         if level.scale != 1 {
             courseNode.scale = SCNVector3(level.scale, level.scale, level.scale)
+          
             for node in courseNode.childNodes{
                 print("\(node.name ?? "No node name") \(node.geometry?.description ?? "No node geometry") ")
                 if let printPhysicsBody = node.physicsBody, let printPhysicsShape = printPhysicsBody.physicsShape {
@@ -246,8 +247,13 @@ class ViewController: UIViewController {
             let ballNode = ballScene.rootNode.childNode(withName: "ball", recursively: false)
             else { return }
         globalBallNode = ballNode
+        let level = gameManager.getCurrentLevel()
+        if level.scale != 1 {
+        globalBallNode.scale = SCNVector3(level.scale*2, level.scale*2, level.scale*2)
+        }
         sceneView.scene.rootNode.addChildNode(ballNode)
-        globalBallNode.physicsBody?.continuousCollisionDetectionThreshold = 0.1
+        
+        globalBallNode.physicsBody?.continuousCollisionDetectionThreshold = 0.01
       
       if let physicsBody = globalBallNode.physicsBody{
       print ("category \(physicsBody.categoryBitMask) collision \(physicsBody.collisionBitMask) contact \(physicsBody.contactTestBitMask)")
@@ -297,7 +303,20 @@ class ViewController: UIViewController {
             globalBallNode.runAction(SCNAction.playAudio(puttSound, waitForCompletion: false))
             globalBallNode.geometry?.firstMaterial?.diffuse.contents = UIColor.white
             self.ballHitForceProgressView.alpha = 0
-            let forceMultiplier = force * 0.05 //adjust the distance the ball is hit
+            
+            //-------------------------
+            
+            let level = gameManager.getCurrentLevel()
+            var forceMultiplier = force
+            if level.scale != 1 {
+            forceMultiplier = force * 0.05
+            }else{
+                forceMultiplier = force * 0.05 * level.scale
+            }//adjust the distance the ball is hit
+            
+            //-------------------------
+            
+        
             direction.x = direction.x * forceMultiplier
             direction.z = direction.z * forceMultiplier
             physicsBody.applyForce(direction, asImpulse: true)

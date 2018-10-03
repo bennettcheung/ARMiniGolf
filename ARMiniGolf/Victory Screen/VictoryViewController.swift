@@ -86,10 +86,11 @@ class VictoryViewController: UIViewController {
         backgroundMusicPlayer?.stop()
 
         self.dismiss(animated: true) {
-            self.delegate = nil
             if let delegate = self.delegate{
                 delegate.returnToMainMenu()
             }
+        self.delegate = nil
+
         }
     }
   
