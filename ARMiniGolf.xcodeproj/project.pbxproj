@@ -175,20 +175,17 @@
 		912C0755215440BA009704B2 /* ARMiniGolf */ = {
 			isa = PBXGroup;
 			children = (
+				91293C362158127A005F6E70 /* Main Menu */,
+				91F1870B2168A40500544A46 /* Main Screen */,
 				7D2FCBEC2161954A007F2D36 /* Victory Screen */,
 				911C1B29215DA4B700383FA2 /* Model */,
 				91293C2921575696005F6E70 /* Sounds */,
 				912C0756215440BA009704B2 /* AppDelegate.swift */,
 				912C0758215440BA009704B2 /* art.scnassets */,
-				912C075A215440BA009704B2 /* ViewController.swift */,
-				918BF0062162F62D0037A7BC /* GridMaterial.swift */,
-				918BF0082162F6360037A7BC /* Plane.swift */,
-				918BF0042162F6220037A7BC /* ARSceneManager.swift */,
 				912C075C215440BA009704B2 /* Main.storyboard */,
 				912C075F215440BD009704B2 /* Assets.xcassets */,
 				912C0761215440BD009704B2 /* LaunchScreen.storyboard */,
 				912C0764215440BD009704B2 /* Info.plist */,
-				91293C362158127A005F6E70 /* Main Menu */,
 			);
 			path = ARMiniGolf;
 			sourceTree = "<group>";
@@ -209,6 +206,17 @@
 				912C077A215440BD009704B2 /* Info.plist */,
 			);
 			path = ARMiniGolfUITests;
+			sourceTree = "<group>";
+		};
+		91F1870B2168A40500544A46 /* Main Screen */ = {
+			isa = PBXGroup;
+			children = (
+				912C075A215440BA009704B2 /* ViewController.swift */,
+				918BF0082162F6360037A7BC /* Plane.swift */,
+				918BF0062162F62D0037A7BC /* GridMaterial.swift */,
+				918BF0042162F6220037A7BC /* ARSceneManager.swift */,
+			);
+			path = "Main Screen";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -538,7 +546,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = W7K9Q4Z2Y3;
+				DEVELOPMENT_TEAM = 4MNU75ZBC4;
 				INFOPLIST_FILE = ARMiniGolf/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -558,7 +566,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = W7K9Q4Z2Y3;
+				DEVELOPMENT_TEAM = 4MNU75ZBC4;
 				INFOPLIST_FILE = ARMiniGolf/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
